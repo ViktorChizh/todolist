@@ -23,10 +23,10 @@ function App() {
     }
 
     const tasksForToDoList = filterValue === 'active'
-                                ? tasks.filter(t => t.isDone === false)
-                                : filterValue === 'completed'
-                                    ? tasks.filter(t => t.isDone === true)
-                                    : tasks
+                            ? tasks.filter(t => t.isDone === false)
+                            : filterValue === 'completed'
+                                ? tasks.filter(t => t.isDone === true)
+                                : tasks
 
     return (
         <div className="App">
