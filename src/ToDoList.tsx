@@ -6,10 +6,12 @@ import {Button} from './Button';
 type ToDoListPropsType = {
     title: string
     tasks: Array<TaskType>
+    filterValue: FilterValuesType
 
     addTask: (title: string) => void
     removeTask: (taskId: string) => void
     changeToDoListFilter: (filterValue: FilterValuesType) => void
+    changeTaskStatus: (taskId: string, newIsDone: boolean) => void
 }
 export const ToDoList: FC<ToDoListPropsType> = (
     {
@@ -17,7 +19,9 @@ export const ToDoList: FC<ToDoListPropsType> = (
         tasks,
         addTask,
         removeTask,
-        changeToDoListFilter
+        changeToDoListFilter,
+        changeTaskStatus,
+        filterValue
     }) => {
     // const ListItems: Array<JSX.Element> = []          // такое может быть вместо .map()
     //
@@ -33,24 +37,29 @@ export const ToDoList: FC<ToDoListPropsType> = (
         ?   <ul>{tasks.map(task => {
                     const onCLickHandler = () => removeTask(task.id)
                     return (
-                        <li>
-                            <input type="checkbox" checked={task.isDone} />
+                        <li key={task.id} className={task.isDone ? 'task-done' : 'task'}>
+                            <input
+                                type="checkbox"
+                                checked={task.isDone}
+                                onChange = {(e) => changeTaskStatus(task.id, e.currentTarget.checked)}
+                            />
                             <span>{task.title} </span>
                             <button onClick={onCLickHandler}>X</button>
                         </li>
-                    )})}
-            </ul>
+                    )})}</ul>
         :  <span>Tasks list is empty</span>
 
     const [taskTitle, setTaskTitle] = useState('')
+    const [inputError, setInputError] = useState(false)
     const onChangeEvent = (e: ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(e.currentTarget.value)
+        inputError && setInputError(false)  // если есть ошибка - скинь ее
     }
     const addTaskOnClickHandler = () => {
         if(taskTitle.trim()){ // проверка, если ввели одни пробелы .trim() удаляет пробелы
             addTask(taskTitle)
         } else {
-            alert ('It`s only gaps here')
+            setInputError(true)
         }
         setTaskTitle('')
     }
@@ -67,16 +76,30 @@ export const ToDoList: FC<ToDoListPropsType> = (
                     value={taskTitle}
                     onChange={onChangeEvent}
                     onKeyDown={onEnterPressHandler}
+                    className={inputError ? 'input-error' : ''}
                 />
                 <Button onClickHandler={addTaskOnClickHandler} isDisabled={!taskTitle} title={'+'} />
+                {inputError && <div style={{color: 'red'}}>Error: title is required</div>}
             </div>
             <ul>
                 {taskList}
             </ul>
             <div>
-                <Button onClickHandler={()=>changeToDoListFilter('all')} title={'All'} />
-                <Button onClickHandler={()=>changeToDoListFilter('active')} title={'Active'} />
-                <Button onClickHandler={()=>changeToDoListFilter('completed')} title={'Completed'} />
+                <Button
+                    onClickHandler={()=>changeToDoListFilter('all')}
+                    classes={ filterValue=== 'all' ? 'btn-active' : ''}
+                    title={'All'}
+                />
+                <Button
+                    onClickHandler={()=>changeToDoListFilter('active')}
+                    classes={ filterValue=== 'active' ? 'btn-active' : ''}
+                    title={'Active'}
+                />
+                <Button
+                    onClickHandler={()=>changeToDoListFilter('completed')}
+                    classes={ filterValue=== 'completed' ? 'btn-active' : ''}
+                    title={'Completed'}
+                />
             </div>
         </div>
     )

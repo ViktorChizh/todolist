@@ -44,13 +44,22 @@ function App() {
         //  setTasks([{id: v1(),title,isDone: false}, ...tasks]) - тоже самое в одну строку
     }
 
+    const changeTaskStatus = (taskId: string, newIsDone: boolean) => {
+        const nextState: Array<TaskType> = tasks.map(
+            t => t.id === taskId ? {...t, isDone: newIsDone} : t)
+        setTasks((nextState))
+    }
+
     return (
         <div className="App">
             <ToDoList title={toDoListTitle}
                       tasks={tasksForToDoList}
                       addTask={addTask}
                       removeTask={removeTask}
-                      changeToDoListFilter={changeToDoListFilter}/>
+                      changeToDoListFilter={changeToDoListFilter}
+                      changeTaskStatus={changeTaskStatus}
+                      filterValue={filterValue}
+                    />
         </div>
     )
 }
