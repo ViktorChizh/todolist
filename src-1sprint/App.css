@@ -1,0 +1,36 @@
+.App {
+  padding: 30px;
+  display: flex;
+}
+
+.App > div {
+  margin-right: 50px;
+}
+
+.todoList {
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: bisque;
+  padding: 5px;
+}
+
+.task {
+  font-weight: bold;
+}
+
+.task-done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.btn-active {
+  background-color: blueviolet;
+  color: white;
+  border-color: blueviolet;
+  border-radius: 2px;
+}
+
+.input-error {
+  border: 2px solid red;
+  outline: none;
+}
