@@ -1,5 +1,6 @@
 {
   "name": "it-incubator-todolist-ts",
+  "homepage": "https://ViktorChizh.github.io/1-todolist",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
