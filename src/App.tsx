@@ -101,15 +101,17 @@ function App() {
 
     return (
         <div className="App">
+            <h3>Add Todolist</h3>
             <AddItemForm callBack={addTodolist}/>
+            <div style={{display:'flex', flexDirection:'row'}}>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id];
                     let tasksForTodolist = allTodolistTasks;
-                    if (tl.filter === "active") {
+                    if (tl.filter === 'active') {
                         tasksForTodolist = allTodolistTasks.filter(t => t.isDone === false);
                     }
-                    if (tl.filter === "completed") {
+                    if (tl.filter === 'completed') {
                         tasksForTodolist = allTodolistTasks.filter(t => t.isDone === true);
                     }
                     return <Todolist
@@ -128,6 +130,7 @@ function App() {
                     />
                 })
             }
+            </div>
         </div>
     )
 }
