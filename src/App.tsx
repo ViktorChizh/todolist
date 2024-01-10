@@ -101,9 +101,11 @@ function App() {
 
     return (
         <div className="App">
-            <h3>Add Todolist</h3>
-            <AddItemForm callBack={addTodolist}/>
-            <div style={{display:'flex', flexDirection:'row'}}>
+            <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+                <h3 style={{marginRight:'25px'}}>Add Todolist</h3>
+                <AddItemForm callBack={addTodolist}/>
+            </div>
+            <div style={{display:'flex', flexDirection:'row', gap:'25px'}}>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id];
