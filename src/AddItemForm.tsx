@@ -1,4 +1,6 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react'
+import IconButton from '@mui/material/IconButton'
+import QueueSharpIcon from '@mui/icons-material/QueueSharp';
 
 type AddItemProps = {
     callBack: (title: string) => void
@@ -14,7 +16,7 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
-        if (e.charCode === 13) {
+        if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают!
             addTask();
         }
     }
@@ -34,7 +36,9 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
                     onKeyPress = {onKeyPressHandler}
                     className = {error ? 'error' : ''}
             />
-            < button onClick = {addTask} >+</button>
+            <IconButton color="primary" aria-label="add item" onClick = {addTask} >
+                <QueueSharpIcon />
+            </IconButton>
             { error && <div className = 'error-message' > {error} </div>}
         </div>
     )
