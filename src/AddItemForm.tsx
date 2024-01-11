@@ -4,10 +4,11 @@ import QueueSharpIcon from '@mui/icons-material/QueueSharp';
 
 type AddItemProps = {
     callBack: (title: string) => void
+    placeholder: string
 }
 
 export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
-    let [title, setTitle] = useState("")
+    let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,24 +23,25 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
     }
     const addTask = () => {
         let newTitle = title.trim();
-        if (newTitle !== "") {
+        if (newTitle !== '') {
             props.callBack(newTitle);
-            setTitle("");
+            setTitle('');
         } else {
-            setError("Title is required");
+            setError('Title is required');
         }
     }
     return (
         <div>
-            <input value = {title}
-                    onChange = {onChangeHandler}
-                    onKeyPress = {onKeyPressHandler}
-                    className = {error ? 'error' : ''}
+            <input placeholder={props.placeholder}
+                   value={title}
+                   onChange={onChangeHandler}
+                   onKeyPress={onKeyPressHandler}
+                   className={error ? 'error' : ''}
             />
-            <IconButton color="primary" aria-label="add item" onClick = {addTask} >
-                <QueueSharpIcon />
+            <IconButton color="primary" aria-label="add item" onClick={addTask}>
+                <QueueSharpIcon/>
             </IconButton>
-            { error && <div className = 'error-message' > {error} </div>}
+            {error && <div className="error-message"> {error} </div>}
         </div>
     )
 }

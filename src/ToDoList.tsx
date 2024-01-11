@@ -45,7 +45,7 @@ export function Todolist(props: PropsType) {
                 <DeleteIcon />
             </IconButton>
         </h3>
-        <AddItemForm callBack={addTaskHandler}/>
+        <AddItemForm callBack={addTaskHandler} placeholder={'add new task'}/>
         <ul>
             {
                 props.tasks.map(t => {

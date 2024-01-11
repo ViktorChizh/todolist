@@ -103,7 +103,7 @@ function App() {
         <div className="App">
             <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
                 <h3 style={{marginRight:'25px'}}>Add Todolist</h3>
-                <AddItemForm callBack={addTodolist}/>
+                <AddItemForm callBack={addTodolist} placeholder={'add new todolist'}/>
             </div>
             <div style={{display:'flex', flexDirection:'row', gap:'25px'}}>
             {
