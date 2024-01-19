@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "storybook": "storybook dev -p 6009",
+    "storybook": "storybook dev -p 6006",
     "build": "react-scripts build"
   },
   "archiveScripts": {
@@ -35,15 +35,8 @@
   },
   "eslintConfig": {
     "extends": [
-      "r",
-      "e",
-      "a",
-      "c",
-      "t",
-      "-",
-      "a",
-      "p",
-      "p",
+      "react-app",
+      "react-app/jest",
       "plugin:storybook/recommended"
     ]
   },

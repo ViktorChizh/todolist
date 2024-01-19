@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 type AddItemProps = {
     callBack: (title: string) => void
     placeholder: string
-    style?:{[key: string]: string}
 }
 
 export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
@@ -52,7 +51,6 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
                        error={!!error}
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
-                       style={props.style}
                        // className={error ? 'error' : ''}
             />
             <IconButton style={styles}

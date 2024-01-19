@@ -1,13 +1,13 @@
 
-/*.App {*/
-/*  padding: 30px;*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*}*/
+.App {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
 
-/*.App > div {*/
-/*  margin-right: 50px;*/
-/*}*/
+.App > div {
+  margin-right: 50px;
+}
 
 .error {
   border: red 1px solid;

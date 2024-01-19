@@ -104,12 +104,12 @@ function App() {
     return (
         <div className="App">
             <ButtonAppBar/>
-            <Container fixed style={{maxWidth: '95%'}}>
+            <Container fixed>
                 {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
-                <Grid container>
-                    <Paper elevation={5} style={{width:'25%', padding: '20px', margin: '20px auto'}}>
-                        <h3 style={{textAlign:'center'}}>Add Todolist</h3>
-                        <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width: '92%'}}/>
+                <Grid container style={{margin: '20px 0'}}>
+                    <Paper elevation={5} style={{padding: '20px'}}>
+                        <h3 style={{marginRight: '25px'}}>Add Todolist</h3>
+                        <AddItemForm callBack={addTodolist} placeholder={'add new todolist'}/>
                     </Paper>
                 </Grid>
                 {/*</div>*/}
