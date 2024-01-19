@@ -104,17 +104,17 @@ function App() {
     return (
         <div className="App">
             <ButtonAppBar/>
-            <Container fixed style={{maxWidth: '95%'}}>
+            <Container fixed style={{width:'100%',maxWidth: '100%'}}>
                 {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
                 <Grid container>
-                    <Paper elevation={5} style={{width:'25%', padding: '20px', margin: '20px auto'}}>
+                    <Paper elevation={5} style={{width:'25%', padding: '20px 0px 20px 60px', margin: '20px auto'}}>
                         <h3 style={{textAlign:'center'}}>Add Todolist</h3>
                         <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width: '92%'}}/>
                     </Paper>
                 </Grid>
                 {/*</div>*/}
                 {/*<div style={{display: 'flex', flexDirection: 'row', gap: '25px'}}>*/}
-                <Grid container spacing={3}>
+                <Grid container spacing={3} style={{width:'100%', justifyContent:'center'}}>
                     {
                         todolists.map(tl => {
                             let allTodolistTasks = tasks[tl.id];
