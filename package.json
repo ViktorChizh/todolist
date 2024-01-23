@@ -26,10 +26,10 @@
   "scripts": {
     "start": "react-scripts start",
     "storybook": "storybook dev -p 6006",
+    "test": "react-scripts test",
     "build": "react-scripts build"
   },
   "archiveScripts": {
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build-storybook": "storybook build"
   },

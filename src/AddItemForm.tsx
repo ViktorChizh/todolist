@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 type AddItemProps = {
     callBack: (title: string) => void
     placeholder: string
-    style?:{[key: string]: string}
+    style?: { [key: string]: string }
 }
 
 export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
@@ -14,13 +14,12 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
     let [error, setError] = useState<string | null>(null)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        //@ts-ignore
         setTitle(e.currentTarget.value)
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
-        if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают!
+        if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
             addTask();
         }
     }
@@ -53,7 +52,7 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
                        style={props.style}
-                       // className={error ? 'error' : ''}
+                // className={error ? 'error' : ''}
             />
             <IconButton style={styles}
                         color="primary" aria-label="add item" onClick={addTask}>

@@ -18,7 +18,7 @@ export const tasksReducer = (state: TaskType[], action: TaskReducerType):TaskTyp
     }
 }
 
-type TaskReducerType = removeTaskACType | AddTaskACType// по мере добавления редьюсеров через  |  добавляем их типизацию
+type TaskReducerType = removeTaskACType | AddTaskACType// по мере добавления редьюсеров через | добавляем их типизацию
 
 type removeTaskACType = ReturnType<typeof removeTaskAC>
 //ReturnType типизирует только то, что возвращает (ретурнит) функция
