@@ -5,7 +5,6 @@ import {EditableSpan} from './EditableSpan';
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import {Checkbox} from './Checkbox';
 
 export type TaskType = {
     id: string
@@ -41,9 +40,6 @@ export function Todolist(props: PropsType) {
     const updateTodolistHandler = (title: string) => {
         props.updateTodolist(props.id, title)
     }
-    const onChangeHandler = (id: string, newIsDoneValue: boolean) => {
-        props.changeTaskStatus(id, newIsDoneValue, props.id);
-    }
     return <div>
         <h3><EditableSpan oldTitle={props.title} callBack={updateTodolistHandler}/>
             <IconButton color="primary" aria-label="delete" onClick={removeTodolist}>
@@ -55,14 +51,16 @@ export function Todolist(props: PropsType) {
             {
                 props.tasks.map(t => {
                     const onClickHandler = () => props.removeTask(t.id, props.id)
-
+                    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                        let newIsDoneValue = e.currentTarget.checked;
+                        props.changeTaskStatus(t.id, newIsDoneValue, props.id);
+                    }
                     const updateTaskHandler = (title: string) => {
                         props.updateTask(props.id, t.id, title)
                     }
 
                     return <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                        {/*<input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>*/}
-                        <Checkbox onChange={(checked: boolean)=>onChangeHandler(t.id, checked)} checked={t.isDone}/>
+                        <input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>
                         <EditableSpan oldTitle={t.title} callBack={updateTaskHandler}/>
                         <IconButton color="primary" aria-label="delete" onClick={onClickHandler}>
                             <DeleteIcon/>

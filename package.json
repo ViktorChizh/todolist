@@ -66,5 +66,6 @@
     "prop-types": "15.8.1",
     "storybook": "7.6.8",
     "webpack": "5.89.0"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }

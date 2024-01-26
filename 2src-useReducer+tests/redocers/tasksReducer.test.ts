@@ -1,5 +1,5 @@
 import {TasksStateType} from '../App';
-import {addTaskAC, changeStatusAC, removeTaskAC, TasksReducer, updateTaskAC} from './tasksReducer';
+import {addNewTaskslistAC, addTaskAC, changeStatusAC, removeTaskAC, TasksReducer} from './tasksReducer';
 import {v1} from 'uuid';
 
 let state: TasksStateType = {
@@ -13,22 +13,16 @@ let state: TasksStateType = {
     ]
 }
 
-test('add empty tasks list for new todoList by todolistId', () => {
+test('add new tasks list by id', () => {
     // action
-    const todolistId = v1()
-
-    const action = {
-        type: 'ADD-NEW-TASKSLIST' as const,
-        payload: {id: todolistId}
-    }
-
-    const endState = TasksReducer(state, action)
+    const newTasksId = v1()
+    const endState = TasksReducer(state, addNewTaskslistAC(newTasksId))
     // expect result
     expect(endState['todolistId1'].length).toBe(2)
-    expect(endState[todolistId].length).toBe(0)
+    expect(endState[newTasksId].length).toBe(0)
 })
 
-test('remove task by id', () => {
+test('remove tasks list by id', () => {
     // action
     const endState = TasksReducer(state, removeTaskAC('id2','todolistId1'))
     // expect result
@@ -37,7 +31,7 @@ test('remove task by id', () => {
     expect(endState['todolistId2'].length).toBe(2)
 })
 
-test('add task by id', () => {
+test('add tasks list by id', () => {
     // action
     const endState = TasksReducer(state, addTaskAC('todolistId1', 'newTask'))
     // expect result
@@ -53,13 +47,4 @@ test('change task status by id', () => {
     expect(endState['todolistId1'].length).toBe(2)
     expect(endState['todolistId1'][0].isDone).toBe(false)
     expect(endState['todolistId2'][1].isDone).toBe(true)
-})
-
-test('update task', () => {
-    // action
-    const endState = TasksReducer(state, updateTaskAC('id1', 'todolistId1', 'react'))
-    // expect result
-    expect(endState['todolistId1'].length).toBe(2)
-    expect(endState['todolistId1'][0].title).toBe('react')
-    expect(endState['todolistId1'][1].title).toBe('JS')
 })
