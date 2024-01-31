@@ -16,7 +16,7 @@ import {
     addNewTaskslistAC,
     addTaskAC,
     changeStatusAC,
-    removeTaskAC,
+    removeTaskAC, removeTaskslistAC,
     TasksReducer,
     updateTaskAC
 } from './redocers/tasksReducer';
@@ -120,6 +120,7 @@ function App() {
         // // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
         // setTasks({...tasks});
         dispatchTodoLists(removeTodolistAC(id))
+        dispatchTasks(removeTaskslistAC(id))
     }
 
     const addTodolist = (title: string) => {
@@ -146,9 +147,9 @@ function App() {
             <Container fixed style={{width:'100%',maxWidth: '100%'}}>
                 {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
                 <Grid container>
-                    <Paper elevation={5} style={{width:'25%', padding: '20px 0px 20px 60px', margin: '20px auto'}}>
+                    <Paper elevation={5} style={{width:'25%', padding: '10px', margin: '20px auto'}}>
                         <h3 style={{textAlign:'center'}}>Add Todolist</h3>
-                        <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width: '92%'}}/>
+                        <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width: '87%'}}/>
                         {!todoLists.length &&
                             <span style={{color:'red',display: 'block', marginTop: '10px'}}>todoLists are empty</span>}
                     </Paper>
