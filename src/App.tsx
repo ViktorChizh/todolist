@@ -53,10 +53,14 @@ function App() {
     const [tasks, dispatchTasks] = useReducer(tasksReducer, {
         [todolistId1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true}
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'TS', isDone: true},
+            {id: v1(), title: 'PHP', isDone: false}
         ],
         [todolistId2]: [
-            {id: v1(), title: 'Milk', isDone: true},
+            {id: v1(), title: 'Milk', isDone: false},
+            {id: v1(), title: 'Fish', isDone: true},
+            {id: v1(), title: 'Meat', isDone: true},
             {id: v1(), title: 'React Book', isDone: true}
         ]
     })
@@ -78,7 +82,7 @@ function App() {
         // // перезапишем в этом объекте массив для нужного тудулиста копией, добавив в начало новую таску:
         // tasks[todolistId] = [task, ...todolistTasks];
         // // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-        // setTasks({...tasks});
+        // setTasks({...tasks});s
         dispatchTasks(addTaskAC(todolistId, title))
     }
 
