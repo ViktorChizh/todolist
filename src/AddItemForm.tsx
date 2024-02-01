@@ -41,7 +41,7 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
     }
 
     return (
-        <div>
+        <div style={{width:'100%',maxWidth: '100%', marginLeft:'-5wh', display: 'flex', flexDirection:'row', flexWrap:'nowrap'}}>
             <TextField placeholder={props.placeholder}
                        id="outlined-basic"
                        label={error ? error : props.placeholder}
