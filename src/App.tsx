@@ -9,17 +9,10 @@ import {
     addTodolistAC,
     changeFilterAC,
     removeTodolistAC,
-    TodoListsReducer,
+    todoListsReducer,
     updateTodolistAC
 } from './redocers/todoListsReducer';
-import {
-    addNewTaskslistAC,
-    addTaskAC,
-    changeStatusAC,
-    removeTaskAC, removeTaskslistAC,
-    TasksReducer,
-    updateTaskAC
-} from './redocers/tasksReducer';
+import {addTaskAC, changeStatusAC, removeTaskAC, tasksReducer, updateTaskAC} from './redocers/tasksReducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistType = {
@@ -41,7 +34,7 @@ function App() {
     //     {id: todolistId2, title: 'What to buy', filter: 'all'}
     // ])
 
-    const [todoLists, dispatchTodoLists] = useReducer(TodoListsReducer, [
+    const [todoLists, dispatchTodoLists] = useReducer(todoListsReducer, [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ])
@@ -57,7 +50,7 @@ function App() {
     //     ]
     // })
 
-    const [tasks, dispatchTasks] = useReducer(TasksReducer, {
+    const [tasks, dispatchTasks] = useReducer(tasksReducer, {
         [todolistId1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true}
@@ -119,16 +112,19 @@ function App() {
         // delete tasks[id]; // Удаляем св-во из объекта... значением которого являлся массив тасок
         // // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
         // setTasks({...tasks});
+
+        // по аналогии с добавлением тудулиста, пользуемся одним экшнкриэйтером в двух редюсерах
         dispatchTodoLists(removeTodolistAC(id))
-        dispatchTasks(removeTaskslistAC(id))
+        dispatchTasks(removeTodolistAC(id))
     }
 
     const addTodolist = (title: string) => {
         const todolistId = v1()
-        // const newTodolist: TodolistType = {id: todolistId, title, filter: 'all'}
-        // setTodolists([newTodolist, ...todolists])
-        dispatchTasks(addNewTaskslistAC(todolistId))
+        //  в этом варианте создаются 2 экшнкриэйтора, вместо одного, что есть почти дублирование
+        // dispatchTasks(addNewTaskslistAC(todolistId))
         dispatchTodoLists(addTodolistAC(todolistId, title))
+        // можно просто addTodolistAC передать и в dispatchTasks, создав там соответствующую логику
+        dispatchTasks(addTodolistAC(todolistId, title))
     }
 
     const updateTask = (todolistId: string, taskId: string, title: string) => {
@@ -147,7 +143,7 @@ function App() {
             <Container fixed style={{width:'100%',maxWidth: '100%'}}>
                 {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
                 <Grid container>
-                    <Paper elevation={5} style={{width:'25%', padding: '10px', margin: '20px auto'}}>
+                    <Paper elevation={5} style={{width:'25%', padding: '20px  6px 20px 20px', margin: '20px auto'}}>
                         <h3 style={{textAlign:'center'}}>Add Todolist</h3>
                         <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width: '87%'}}/>
                         {!todoLists.length &&
