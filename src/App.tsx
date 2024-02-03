@@ -20,7 +20,6 @@ export type TodolistType = {
     title: string
     filter: FilterValuesType
 }
-
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
@@ -74,7 +73,6 @@ function App() {
         // setTasks({...tasks});
         dispatchTasks(removeTaskAC(id, todolistId))
     }
-
     function addTask(title: string, todolistId: string) {
         // let task = {id: v1(), title: title, isDone: false};
         // //достанем нужный массив по todolistId:
@@ -85,7 +83,6 @@ function App() {
         // setTasks({...tasks});s
         dispatchTasks(addTaskAC(todolistId, title))
     }
-
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
         // //достанем нужный массив по todolistId:
         // let todolistTasks = tasks[todolistId];
@@ -99,14 +96,17 @@ function App() {
         // }
         dispatchTasks(changeStatusAC(id, todolistId, isDone))
     }
-
     function changeFilter(todolistId: string, value: FilterValuesType) {
         // let todolist = todolists.find(tl => tl.id === todolistId);
         // if (todolist) {
         //     todolist.filter = value;
         //     setTodolists([...todolists])
         // }
-        dispatchTodoLists(changeFilterAC( todolistId, value))
+        dispatchTodoLists(changeFilterAC(todolistId, value))
+    }
+    const updateTask = (todolistId: string, taskId: string, title: string) => {
+        // setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title} : t)})
+        dispatchTasks(updateTaskAC(taskId, todolistId, title))
     }
 
     function removeTodolist(id: string) {
@@ -121,7 +121,6 @@ function App() {
         dispatchTodoLists(removeTodolistAC(id))
         dispatchTasks(removeTodolistAC(id))
     }
-
     const addTodolist = (title: string) => {
         const todolistId = v1()
         //  в этом варианте создаются 2 экшнкриэйтора, вместо одного, что есть почти дублирование
@@ -130,12 +129,6 @@ function App() {
         // можно просто addTodolistAC передать и в dispatchTasks, создав там соответствующую логику
         dispatchTasks(addTodolistAC(todolistId, title))
     }
-
-    const updateTask = (todolistId: string, taskId: string, title: string) => {
-        // setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title} : t)})
-        dispatchTasks(updateTaskAC(taskId, todolistId, title))
-    }
-
     const updateTodolist = (todolistId: string, title: string) => {
         // setTodolists(todolists.map(t => t.id === todolistId ? {...t, title} : t))
         dispatchTodoLists(updateTodolistAC(todolistId, title))
@@ -144,19 +137,23 @@ function App() {
     return (
         <div className="App">
             <ButtonAppBar/>
-            <Container fixed style={{width:'100%',maxWidth: '100%'}}>
+            <Container fixed style={{width: '100%', maxWidth: '100%'}}>
                 {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
                 <Grid container>
-                    <Paper elevation={5} style={{width:'25%', padding: '20px  6px 20px 20px', margin: '20px auto'}}>
-                        <h3 style={{textAlign:'center'}}>Add Todolist</h3>
-                        <AddItemForm callBack={addTodolist} placeholder={'add new todolist'} style={{width:'100%',maxWidth: '100%'}}/>
+                    <Paper elevation={5} style={{width: '25%', padding: '20px  6px 20px 20px', margin: '20px auto'}}>
+                        <h3 style={{textAlign: 'center'}}>Add Todolist</h3>
+                        <AddItemForm callBack={addTodolist}
+                                     placeholder={'add new todolist'}
+                                     style={{width: '100%', maxWidth: '100%'}}/>
                         {!todoLists.length &&
-                            <span style={{color:'red',display: 'block', marginTop: '10px'}}>todoLists are empty</span>}
+                            <span style={{color: 'red', display: 'block', marginTop: '10px'}}>
+                                todoLists are empty
+                            </span>}
                     </Paper>
                 </Grid>
                 {/*</div>*/}
                 {/*<div style={{display: 'flex', flexDirection: 'row', gap: '25px'}}>*/}
-                <Grid container spacing={3} style={{width:'100%', justifyContent:'center', marginLeft:'-0.5vw'}}>
+                <Grid container spacing={3} style={{width: '100%', justifyContent: 'center', marginLeft: '-0.5vw'}}>
                     {
                         todoLists.map(tl => {
                             let allTodolistTasks = tasks[tl.id];
@@ -191,7 +188,6 @@ function App() {
                 </Grid>
                 {/*</div>*/}
             </Container>
-
         </div>
     )
 }

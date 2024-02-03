@@ -71,7 +71,7 @@ export function Todolist(props: PropsType) {
                 })
             }
         </ul>
-        {!props.tasks.length && <span style={{color:'red',display: 'block', margin: '10px'}}>tasksList are empty</span>}
+        {!props.tasks.length && <span style={{color:'red',display: 'block', margin: '10px'}}>tasksList is empty</span>}
         <div>
             <Button style={{marginLeft: '5px'}} size="small"
                     variant={props.filter === 'all' ? 'outlined' : 'contained'} color="success"
