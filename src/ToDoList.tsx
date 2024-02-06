@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {AddItemForm} from './AddItemForm';
 import {FilterValuesType} from './App';
 import {EditableSpan} from './EditableSpan';
@@ -61,7 +61,6 @@ export function Todolist(props: PropsType) {
                     }
 
                     return <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                        {/*<input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>*/}
                         <Checkbox onChange={(checked: boolean)=>onChangeHandler(t.id, checked)} checked={t.isDone}/>
                         <EditableSpan oldTitle={t.title} callBack={updateTaskHandler}/>
                         <IconButton color="primary" aria-label="delete" onClick={onClickHandler}>

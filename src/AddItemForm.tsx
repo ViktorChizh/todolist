@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react'
+import React, {ChangeEvent, FC, KeyboardEvent, memo, useCallback, useState} from 'react'
 import IconButton from '@mui/material/IconButton'
 import QueueSharpIcon from '@mui/icons-material/QueueSharp';
 import TextField from '@mui/material/TextField';
@@ -9,21 +9,20 @@ type AddItemProps = {
     style?: { [key: string]: string }
 }
 
-export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
+export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
-    }
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)},[])
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
         if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
             addTask();
         }
-    }
-    const addTask = () => {
+    },[title])
+    const addTask = useCallback(() => {
         let newTitle = title.trim();
         if (newTitle !== '') {
             props.callBack(newTitle);
@@ -31,7 +30,7 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
         } else {
             setError('Title is required');
         }
-    }
+    },[title])
 
     const styles = {
         maxWidth: '40px',
@@ -61,4 +60,4 @@ export const AddItemForm: FC<AddItemProps> = (props: AddItemProps) => {
             {/*{error && <div className="error-message"> {error} </div>}*/}
         </div>
     )
-}
+})

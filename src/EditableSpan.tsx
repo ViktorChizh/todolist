@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react'
+import React, {ChangeEvent, memo, useCallback, useMemo, useState} from 'react'
 import TextField from '@mui/material/TextField';
 
 type EditableSpanProps = {
@@ -6,21 +6,21 @@ type EditableSpanProps = {
     callBack: (newTitle: string) => void
 }
 
-export const EditableSpan = (props: EditableSpanProps) => {
+export const EditableSpan = memo((props: EditableSpanProps) => {
 
     const [edit, setEdit] = useState(false)
     const [newTitle, setNewTitle] = useState(props.oldTitle)
-    const editFoo = () => {
-        setEdit(!edit)
+    const editFoo = useMemo(() => { // чисто для пробы вместо useCallback
+       return () => { setEdit(!edit)
         edit && addTask()
-    }
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        //@ts-ignore
-        setNewTitle(e.currentTarget.value);
-    }
+    }},[edit,newTitle])
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setNewTitle(e.currentTarget.value)},[])
+
     const addTask = () => {
         props.callBack(newTitle)
     }
+
 
     return (
         edit
@@ -32,4 +32,4 @@ export const EditableSpan = (props: EditableSpanProps) => {
                 onBlur={editFoo} value={newTitle} onChange={onChangeHandler} autoFocus/>
             : <span onDoubleClick={editFoo}>{props.oldTitle}</span>
     )
-} 
+})
