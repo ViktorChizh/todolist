@@ -5214,6 +5214,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/hoist-non-react-statics@npm:^3.3.0":
+  version: 3.3.5
+  resolution: "@types/hoist-non-react-statics@npm:3.3.5"
+  dependencies:
+    "@types/react": "npm:*"
+    hoist-non-react-statics: "npm:^3.3.0"
+  checksum: 2a3b64bf3d9817d7830afa60ee314493c475fb09570a64e7737084cd482d2177ebdddf888ce837350bac51741278b077683facc9541f052d4bbe8487b4e3e618
+  languageName: node
+  linkType: hard
+
 "@types/html-minifier-terser@npm:^6.0.0":
   version: 6.1.0
   resolution: "@types/html-minifier-terser@npm:6.1.0"
@@ -5429,6 +5439,18 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 74dba11a1b8156f3a763f3fca1fb4ec1dcd349153279b8bf79210024a69f994bf2cf0728198c047f8130c5318420ea56281b0a4ef84c8ae943cd9a0cac705220
+  languageName: node
+  linkType: hard
+
+"@types/react-redux@npm:^7.1.33":
+  version: 7.1.33
+  resolution: "@types/react-redux@npm:7.1.33"
+  dependencies:
+    "@types/hoist-non-react-statics": "npm:^3.3.0"
+    "@types/react": "npm:*"
+    hoist-non-react-statics: "npm:^3.3.0"
+    redux: "npm:^4.0.0"
+  checksum: e17a2fea00c6ab5f22868e927b4da7b7cf8dc7c85102638fa0f87e12ae0ec13335d9b3bf75098b3316dd8d2a18c99fe08bed22daa989a13f3710c4530f7b979e
   languageName: node
   linkType: hard
 
@@ -10354,7 +10376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.1":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -11302,6 +11324,7 @@ __metadata:
     "@types/node": "npm:^18.11.0"
     "@types/react": "npm:^18.0.21"
     "@types/react-dom": "npm:^18.0.6"
+    "@types/react-redux": "npm:^7.1.33"
     "@types/uuid": "npm:^8.3.4"
     eslint-plugin-storybook: "npm:^0.6.15"
     prop-types: "npm:15.8.1"
@@ -15447,6 +15470,15 @@ __metadata:
     indent-string: "npm:^4.0.0"
     strip-indent: "npm:^3.0.0"
   checksum: d64a6b5c0b50eb3ddce3ab770f866658a2b9998c678f797919ceb1b586bab9259b311407280bd80b804e2a7c7539b19238ae6a2a20c843f1a7fcff21d48c2eae
+  languageName: node
+  linkType: hard
+
+"redux@npm:^4.0.0":
+  version: 4.2.1
+  resolution: "redux@npm:4.2.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.9.2"
+  checksum: 136d98b3d5dbed1cd6279c8c18a6a74c416db98b8a432a46836bdd668475de6279a2d4fd9d1363f63904e00f0678a8a3e7fa532c897163340baf1e71bb42c742
   languageName: node
   linkType: hard
 

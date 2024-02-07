@@ -1,21 +1,37 @@
 import {TasksStateType} from '../App';
 import {v1} from 'uuid';
 import {addTodolistACType, removeTodolistACType} from './todoListsReducer';
+// import {addTodolistACType, removeTodolistACType, todolistId1, todolistId2} from './todoListsReducer';
+// const initialState: TasksStateType = {
+//     [todolistId1]: [
+//         {id: v1(), title: 'HTML&CSS', isDone: true},
+//         {id: v1(), title: 'JS', isDone: true},
+//         {id: v1(), title: 'TS', isDone: true},
+//         {id: v1(), title: 'PHP', isDone: false}
+//     ],
+//     [todolistId2]: [
+//         {id: v1(), title: 'Milk', isDone: false},
+//         {id: v1(), title: 'Fish', isDone: true},
+//         {id: v1(), title: 'Meat', isDone: true},
+//         {id: v1(), title: 'React Book', isDone: true}
+//     ]
+// }
+const initialState: TasksStateType = {}
 
-export const tasksReducer = (state: TasksStateType, action: TasksReducerActionType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType = initialState, action: TasksReducerActionType): TasksStateType => {
     switch (action.type) {
         case 'ADD-TODOLIST': {
             return {...state, [action.payload.id]: []}
         }
         case 'REMOVE-TODOLIST': {
             // обычный способ:
-
+            //
             // const stateCopy = {...state}
             // delete stateCopy[action.payload.id]
             // return stateCopy
-
+            //
             // удаление свойства с помощью деструктуризации ([] - просто от балды, главное выделить ключ):
-
+            //
             const {[action.payload.id]: [], ...rest} = state
             return rest
         }
@@ -46,7 +62,7 @@ export const tasksReducer = (state: TasksStateType, action: TasksReducerActionTy
     }
 }
 
-export type TasksReducerActionType =  removeTaskACType | addTaskACType | changeStatusACType
+export type TasksReducerActionType = removeTaskACType | addTaskACType | changeStatusACType
     | updateTaskACType | addTodolistACType | removeTodolistACType
 
 // или не создавая лишних типов:
