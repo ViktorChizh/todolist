@@ -1,18 +1,26 @@
-import React, {useCallback, useReducer} from 'react';
+import React, {Reducer, useCallback, useReducer} from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
+import {TodolistBeforeRedux} from './TodolistBeforeRedux';
 import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
 import ButtonAppBar from './ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
 import {
+    TodoListsReducerActionType,
     addTodolistAC,
     changeFilterAC,
     removeTodolistAC,
     todoListsReducer,
     updateTodolistAC
 } from './reducers/todoListsReducer';
-import {addTaskAC, changeStatusAC, removeTaskAC, tasksReducer, updateTaskAC} from './reducers/tasksReducer';
+import {
+    TasksReducerActionType,
+    addTaskAC,
+    changeStatusAC,
+    removeTaskAC,
+    tasksReducer,
+    updateTaskAC, TaskType
+} from './reducers/tasksReducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistType = {
@@ -28,12 +36,14 @@ function App() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    const [todoLists, dispatchTodoLists] = useReducer(todoListsReducer, [
+    const [todoLists, dispatchTodoLists] = useReducer<Reducer<TodolistType[], TodoListsReducerActionType>>
+    (todoListsReducer, [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ])
 
-    const [tasks, dispatchTasks] = useReducer(tasksReducer, {
+    const [tasks, dispatchTasks] = useReducer<Reducer<TasksStateType, TasksReducerActionType>>
+    (tasksReducer, {
         [todolistId1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -71,8 +81,8 @@ function App() {
     }, [])
     const addTodolist = useCallback((title: string) => {
         const todolistId = v1()
-        dispatchTodoLists(addTodolistAC(todolistId, title))
-        dispatchTasks(addTodolistAC(todolistId, title))
+        dispatchTodoLists(addTodolistAC(title))
+        dispatchTasks(addTodolistAC(title))
     }, [])
     const updateTodolist = useCallback((todolistId: string, title: string) => {
         dispatchTodoLists(updateTodolistAC(todolistId, title))
@@ -108,7 +118,7 @@ function App() {
                             return (
                                 <Grid item spacing={3}>
                                     <Paper elevation={5} style={{padding: '20px'}}>
-                                        <Todolist
+                                        <TodolistBeforeRedux
                                             key={tl.id}
                                             id={tl.id}
                                             title={tl.title}

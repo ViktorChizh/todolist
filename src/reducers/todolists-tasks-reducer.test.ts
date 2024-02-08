@@ -1,6 +1,5 @@
-import {TasksStateType, TodolistType} from '../App';
-import {addTodolistAC, todoListsReducer} from './todoListsReducer';
-import {tasksReducer} from './tasksReducer';
+import {addTodolistAC, todoListsReducer, TodolistType} from './todoListsReducer';
+import {tasksReducer, TasksStateType} from './tasksReducer';
 import {v1} from 'uuid';
 
 // тесты для случаев, когда работают 2 редюсера одновременно
@@ -10,7 +9,7 @@ test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodolistsState: Array<TodolistType> = [];
 
-    const action = addTodolistAC(v1(), "new todolist");
+    const action = addTodolistAC("new todolist");
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodolistsState = todoListsReducer(startTodolistsState, action)

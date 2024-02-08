@@ -1,39 +1,26 @@
-import {TasksStateType} from '../App';
 import {v1} from 'uuid';
 import {addTodolistACType, removeTodolistACType} from './todoListsReducer';
-// import {addTodolistACType, removeTodolistACType, todolistId1, todolistId2} from './todoListsReducer';
-// const initialState: TasksStateType = {
-//     [todolistId1]: [
-//         {id: v1(), title: 'HTML&CSS', isDone: true},
-//         {id: v1(), title: 'JS', isDone: true},
-//         {id: v1(), title: 'TS', isDone: true},
-//         {id: v1(), title: 'PHP', isDone: false}
-//     ],
-//     [todolistId2]: [
-//         {id: v1(), title: 'Milk', isDone: false},
-//         {id: v1(), title: 'Fish', isDone: true},
-//         {id: v1(), title: 'Meat', isDone: true},
-//         {id: v1(), title: 'React Book', isDone: true}
-//     ]
-// }
+
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+export type TasksStateType = {
+    [key: string]: Array<TaskType>
+}
+
 const initialState: TasksStateType = {}
 
-export const tasksReducer = (state: TasksStateType = initialState, action: TasksReducerActionType): TasksStateType => {
+export const tasksReducer = (state = initialState, action: TasksReducerActionType): TasksStateType => {
     switch (action.type) {
         case 'ADD-TODOLIST': {
             return {...state, [action.payload.id]: []}
         }
         case 'REMOVE-TODOLIST': {
-            // обычный способ:
-            //
-            // const stateCopy = {...state}
-            // delete stateCopy[action.payload.id]
-            // return stateCopy
-            //
-            // удаление свойства с помощью деструктуризации ([] - просто от балды, главное выделить ключ):
-            //
-            const {[action.payload.id]: [], ...rest} = state
-            return rest
+            const stateCopy = {...state}
+            delete stateCopy[action.payload.id]
+            return stateCopy
         }
         case 'REMOVE-TASK': {
             return ({
@@ -65,15 +52,6 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Tasks
 export type TasksReducerActionType = removeTaskACType | addTaskACType | changeStatusACType
     | updateTaskACType | addTodolistACType | removeTodolistACType
 
-// или не создавая лишних типов:
-// type TasksReducerActionType = ReturnType<typeof addNewTaskslistAC>
-//     | ReturnType<typeof removeTaskAC>
-//     | ReturnType<typeof addTaskAC>
-//     | ReturnType<typeof changeStatusAC>
-//     | ReturnType<typeof updateTaskAC>
-//     | ReturnType<typeof removeTaskslistAC>
-
-
 export const removeTaskslistAC = (id: string) => ({
     type: 'REMOVE-TASKSLIST' as const,
     payload: {id}
@@ -98,7 +76,7 @@ export const changeStatusAC = (id: string, todolistId: string, isDone: boolean) 
 })
 
 type updateTaskACType = ReturnType<typeof updateTaskAC>
-export const updateTaskAC = (id: string, todolistId: string, title: string) => ({
+export const updateTaskAC = (todolistId: string, id: string, title: string) => ({
     type: 'UPDATE-TASK' as const,
-    payload: {id, todolistId, title}
+    payload: {todolistId, id, title}
 })

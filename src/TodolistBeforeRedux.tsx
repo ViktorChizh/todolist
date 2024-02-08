@@ -5,41 +5,39 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import {Checkbox} from './Checkbox';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppStoreType} from './reducers/Store';
-import {addTaskAC, changeStatusAC, removeTaskAC, TaskType, updateTaskAC} from './reducers/tasksReducer';
-import {changeFilterAC, FilterValuesType, removeTodolistAC, updateTodolistAC} from './reducers/todoListsReducer';
+import {FilterValuesType} from './reducers/todoListsReducer';
+import { TaskType } from './reducers/tasksReducer';
 
 type PropsType = {
     id: string
     title: string
+    tasks: Array<TaskType>
+    removeTask: (taskId: string, todolistId: string) => void
+    changeFilter: (todolistId: string, value: FilterValuesType) => void
+    addTask: (title: string, todolistId: string) => void
+    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
+    removeTodolist: (id: string) => void
+    updateTask: (todolistId: string, taskId: string, title: string) => void
+    updateTodolist: (todolistId: string, title: string) => void
     filter: FilterValuesType
 }
 
-export function Todolist(props: PropsType) {
-    let tasks = useSelector<AppStoreType, TaskType[]> (state => state.tasks[props.id])
-    const dispatch = useDispatch()
+export function TodolistBeforeRedux(props: PropsType) {
 
-    if (props.filter === 'active') {
-        tasks = tasks.filter(t => t.isDone === false);
-    }
-    if (props.filter === 'completed') {
-        tasks = tasks.filter(t => t.isDone === true);
-    }
-    const removeTodolist = () => dispatch(removeTodolistAC(props.id))
+    const removeTodolist = () => props.removeTodolist(props.id)
 
-    const onAllClickHandler = () => dispatch(changeFilterAC(props.id, 'all'))
-    const onActiveClickHandler = () => dispatch(changeFilterAC(props.id, 'active'))
-    const onCompletedClickHandler = () => dispatch(changeFilterAC(props.id, 'completed'))
+    const onAllClickHandler = () => props.changeFilter(props.id, 'all');
+    const onActiveClickHandler = () => props.changeFilter(props.id, 'active');
+    const onCompletedClickHandler = () => props.changeFilter(props.id, 'completed');
 
     const addTaskHandler = (title: string) => {
-        dispatch(addTaskAC(props.id, title))
+        props.addTask(title, props.id)
     }
     const updateTodolistHandler = (title: string) => {
-        dispatch(updateTodolistAC(props.id, title))
+        props.updateTodolist(props.id, title)
     }
     const onChangeHandler = (id: string, newIsDoneValue: boolean) => {
-        dispatch(changeStatusAC(id, props.id, newIsDoneValue))
+        props.changeTaskStatus(id, newIsDoneValue, props.id);
     }
     return <div>
         <h3><EditableSpan oldTitle={props.title} callBack={updateTodolistHandler}/>
@@ -50,11 +48,11 @@ export function Todolist(props: PropsType) {
         <AddItemForm callBack={addTaskHandler} placeholder={'add new task'}/>
         <ul>
             {
-               tasks.map(t => {
-                    const onClickHandler = () => dispatch(removeTaskAC(t.id, props.id))
+                props.tasks.map(t => {
+                    const onClickHandler = () => props.removeTask(t.id, props.id)
 
                     const updateTaskHandler = (title: string) => {
-                        dispatch(updateTaskAC(props.id, t.id, title))
+                        props.updateTask(props.id, t.id, title)
                     }
 
                     return <li key={t.id} className={t.isDone ? 'is-done' : ''}>
@@ -67,7 +65,7 @@ export function Todolist(props: PropsType) {
                 })
             }
         </ul>
-        {!tasks.length && <span style={{color:'red',display: 'block', margin: '10px'}}>tasksList is empty</span>}
+        {!props.tasks.length && <span style={{color:'red',display: 'block', margin: '10px'}}>tasksList is empty</span>}
         <div>
             <Button style={{marginLeft: '5px'}} size="small"
                     variant={props.filter === 'all' ? 'outlined' : 'contained'} color="success"
