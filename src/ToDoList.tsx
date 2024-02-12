@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC, memo} from 'react';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import IconButton from '@mui/material/IconButton'
@@ -16,15 +16,15 @@ type PropsType = {
     filter: FilterValuesType
 }
 
-export function Todolist(props: PropsType) {
-    let tasks = useSelector<AppStoreType, TaskType[]> (state => state.tasks[props.id])
+export const Todolist: FC<PropsType> = memo((props) => {
+    let tasks = useSelector<AppStoreType, TaskType[]>(state => state.tasks[props.id])
     const dispatch = useDispatch()
 
     if (props.filter === 'active') {
-        tasks = tasks.filter(t => t.isDone === false);
+        tasks = tasks.filter(t => t.isDone === false)
     }
     if (props.filter === 'completed') {
-        tasks = tasks.filter(t => t.isDone === true);
+        tasks = tasks.filter(t => t.isDone === true)
     }
     const removeTodolist = () => dispatch(removeTodolistAC(props.id))
 
@@ -50,7 +50,7 @@ export function Todolist(props: PropsType) {
         <AddItemForm callBack={addTaskHandler} placeholder={'add new task'}/>
         <ul>
             {
-               tasks.map(t => {
+                tasks.map(t => {
                     const onClickHandler = () => dispatch(removeTaskAC(t.id, props.id))
 
                     const updateTaskHandler = (title: string) => {
@@ -58,7 +58,7 @@ export function Todolist(props: PropsType) {
                     }
 
                     return <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                        <Checkbox onChange={(checked: boolean)=>onChangeHandler(t.id, checked)} checked={t.isDone}/>
+                        <Checkbox onChange={(checked: boolean) => onChangeHandler(t.id, checked)} checked={t.isDone}/>
                         <EditableSpan oldTitle={t.title} callBack={updateTaskHandler}/>
                         <IconButton color="primary" aria-label="delete" onClick={onClickHandler}>
                             <DeleteIcon/>
@@ -67,7 +67,7 @@ export function Todolist(props: PropsType) {
                 })
             }
         </ul>
-        {!tasks.length && <span style={{color:'red',display: 'block', margin: '10px'}}>tasksList is empty</span>}
+        {!tasks.length && <span style={{color: 'red', display: 'block', margin: '10px'}}>tasksList is empty</span>}
         <div>
             <Button style={{marginLeft: '5px'}} size="small"
                     variant={props.filter === 'all' ? 'outlined' : 'contained'} color="success"
@@ -83,6 +83,6 @@ export function Todolist(props: PropsType) {
             </Button>
         </div>
     </div>
-}
+})
 
 

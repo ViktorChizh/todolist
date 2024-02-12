@@ -1,6 +1,5 @@
-import React, {useCallback} from 'react';
+import React, {FC, memo} from 'react';
 import './App.css';
-import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
 import ButtonAppBar from './ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
@@ -10,14 +9,14 @@ import {AppStoreType} from './reducers/Store';
 import {Todolist} from './Todolist';
 
 
-function App() {
+const App: FC = memo(() => {
 
     const dispatch = useDispatch()
     const todoLists = useSelector<AppStoreType, TodolistType[]> (state => state.todolists)
 
-    const addTodolist = useCallback((title: string) => {
+    const addTodolist = (title: string) => {
         dispatch(addTodolistAC(title))
-    }, [])
+    }
 
     return (
         <div className="App">
@@ -50,6 +49,6 @@ function App() {
             </Container>
         </div>
     )
-}
+})
 
 export default App;

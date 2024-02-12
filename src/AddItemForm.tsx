@@ -51,6 +51,7 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
                        style={props.style}
+                       autoComplete='of'
                 // className={error ? 'error' : ''}
             />
             <IconButton style={styles}
