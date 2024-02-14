@@ -1,4 +1,4 @@
-import {removeTaskAC, TaskType, updateTaskAC} from './reducers/tasksReducer';
+import {removeTaskAC, TaskType, updateTaskAC} from '../reducers/tasksReducer';
 import React, {FC, memo, useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import {Checkbox} from './Checkbox';
@@ -19,7 +19,7 @@ export const Task: FC<TaskPropsType> = memo(({task, todolistId, onChangeHandler}
         dispatch(updateTaskAC(todolistId, task.id, title))
     },[dispatch, todolistId, task.id])
 
-    return <li key={task.id} className={task.isDone ? 'is-done' : ''}>
+    return <li className={task.isDone ? 'is-done' : ''}>
         <Checkbox onChange={(checked: boolean) => onChangeHandler(task.id, checked)} checked={task.isDone}/>
         <EditableSpan oldTitle={task.title} callBack={updateTaskHandler}/>
         <IconButton color="primary" aria-label="delete" onClick={onClickHandler}>
