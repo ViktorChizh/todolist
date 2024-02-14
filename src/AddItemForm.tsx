@@ -13,15 +13,6 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
-    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)},[])
-
-    const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
-            addTask();
-        }
-    },[title])
     const addTask = useCallback(() => {
         let newTitle = title.trim();
         if (newTitle !== '') {
@@ -31,6 +22,14 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
             setError('Title is required');
         }
     },[title])
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)},[])
+    const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+        error && setError(null);
+        if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
+            addTask();
+        }
+    },[title, addTask])
 
     const styles = {
         maxWidth: '40px',
@@ -52,13 +51,11 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
                        onKeyPress={onKeyPressHandler}
                        style={props.style}
                        autoComplete='of'
-                // className={error ? 'error' : ''}
             />
             <IconButton style={styles}
                         color="primary" aria-label="add item" onClick={addTask}>
                 <QueueSharpIcon/>
             </IconButton>
-            {/*{error && <div className="error-message"> {error} </div>}*/}
         </div>
     )
 })

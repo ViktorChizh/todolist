@@ -10,17 +10,16 @@ export const EditableSpan = memo((props: EditableSpanProps) => {
 
     const [edit, setEdit] = useState(false)
     const [newTitle, setNewTitle] = useState(props.oldTitle)
+
+    const addTask = useCallback(() => {
+        props.callBack(newTitle)
+    },[newTitle])
     const editFoo = useMemo(() => { // чисто для пробы вместо useCallback
        return () => { setEdit(!edit)
         edit && addTask()
-    }},[edit,newTitle])
+    }},[edit,addTask])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)},[])
-
-    const addTask = () => {
-        props.callBack(newTitle)
-    }
-
 
     return (
         edit
