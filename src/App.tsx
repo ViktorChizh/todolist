@@ -22,7 +22,7 @@ const App: FC = memo(() => {
             <ButtonAppBar/>
             <Container fixed style={{width: '100%', maxWidth: '100%'}}>
                 <Grid container>
-                    <Paper elevation={5} style={{width: '96%', padding: '20px  6px 20px 20px', margin: '20px auto'}}>
+                    <Paper elevation={5} style={{width: '100%', padding: '20px  6px 20px 20px', margin: '20px auto'}}>
                         <h3 style={{textAlign: 'center'}}>Add Todolist</h3>
                         <AddItemForm callBack={addTodolist}
                                      placeholder={'add new todolist'}

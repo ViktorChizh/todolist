@@ -43,9 +43,6 @@ export const Todolist: FC<PropsType> = memo(({idTDL, title, filter}) => {
     const updateTodolistHandler = useCallback((title: string) => {
         dispatch(updateTodolistAC(idTDL, title))
     }, [dispatch, idTDL])
-    const onChangeHandler = useCallback((id: string, newIsDoneValue: boolean) => {
-        dispatch(changeStatusAC(id, idTDL, newIsDoneValue))
-    }, [dispatch, idTDL])
 
     return (
         <div>
@@ -56,7 +53,7 @@ export const Todolist: FC<PropsType> = memo(({idTDL, title, filter}) => {
             </h3>
             <AddItemForm callBack={addTaskHandler} placeholder={'add new task'}/>
             <ul>
-                {tasks.map(t => <Task key={t.id} task={t} todolistId={idTDL} onChangeHandler={onChangeHandler}/>)}
+                {tasks.map(t => <Task key={t.id} task={t} todolistId={idTDL} />)}
             </ul>
             {!tasks.length && <span style={{color: 'red', display: 'block', margin: '10px'}}>tasksList is empty</span>}
             <div

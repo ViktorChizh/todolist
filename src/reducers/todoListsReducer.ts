@@ -6,6 +6,7 @@ export type TodolistType = {
     title: string
     filter: FilterValuesType
 }
+
 const initialState: TodolistType[] = []
 
 export const todoListsReducer = (state = initialState, action: TodoListsReducerActionType): TodolistType[] => {

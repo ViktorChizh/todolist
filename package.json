@@ -9,6 +9,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@mui/styled-engine-sc": "^6.0.0-alpha.16",
+    "@storybook/addon-storysource": "^7.6.17",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
@@ -29,9 +30,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 9009",
     "test": "react-scripts test",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "jest:integration": "jest -c integration/jest.config.js",
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
   },
   "archiveScripts": {
     "eject": "react-scripts eject",
@@ -68,7 +71,12 @@
     "@storybook/test": "7.6.8",
     "eslint-plugin-storybook": "^0.6.15",
     "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-image-snapshot": "^6.4.0",
+    "jest-puppeteer": "^10.0.1",
     "prop-types": "15.8.1",
+    "puppeteer": "^22.1.0",
+    "start-server-and-test": "^2.0.3",
     "storybook": "7.6.8",
     "webpack": "5.89.0"
   }

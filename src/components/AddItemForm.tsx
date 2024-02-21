@@ -9,19 +9,19 @@ type AddItemProps = {
     style?: { [key: string]: string }
 }
 
-export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
+export const AddItemForm: FC<AddItemProps> = memo(({callBack, placeholder, style}) => {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
     const addTask = useCallback(() => {
         let newTitle = title.trim();
         if (newTitle !== '') {
-            props.callBack(newTitle);
+            callBack(newTitle);
             setTitle('');
         } else {
             setError('Title is required');
         }
-    },[title])
+    },[title, callBack])
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)},[])
     const onKeyPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
         if (e.charCode === 13) { // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
             addTask();
         }
-    },[title, addTask])
+    },[addTask, error])
 
     const styles = {
         maxWidth: '40px',
@@ -40,16 +40,16 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
 
     return (
         <div style={{width:'100%',maxWidth: '100%', marginLeft:'-5wh', display: 'flex', flexDirection:'row', flexWrap:'nowrap'}}>
-            <TextField placeholder={props.placeholder}
+            <TextField placeholder={placeholder}
                        id="outlined-basic"
-                       label={error ? error : props.placeholder}
+                       label={error ? error : placeholder}
                        variant="outlined"
                        size="small"
                        value={title}
                        error={!!error}
                        onChange={onChangeHandler}
                        onKeyPress={onKeyPressHandler}
-                       style={props.style}
+                       style={style}
                        autoComplete='of'
             />
             <IconButton style={styles}
