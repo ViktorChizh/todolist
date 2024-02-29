@@ -1,7 +1,7 @@
 import React from 'react'
-import {StoriesProviderDecorator} from './components/StoriesProviderDecorator';
+import {StoriesProviderDecorator} from './components/StoriesProviderDecorator'
 import {Meta} from '@storybook/react'
-import App from './App';
+import App from './App'
 
 const meta: Meta<typeof App> = {
     title: 'App component',
@@ -11,12 +11,9 @@ const meta: Meta<typeof App> = {
         layout: 'centered'
     },
     tags: ['autodocs'],
-    argTypes: {
-    }
+    argTypes: {}
 }
 
 export default meta;
 
-export const AddItemFormReturnExample = () => {
-    return <App />
-}
+export const AppExample = () => <App />
