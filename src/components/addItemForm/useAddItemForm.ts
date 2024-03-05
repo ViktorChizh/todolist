@@ -1,9 +1,7 @@
 import {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
-
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
  */
-
 export const useAddItemForm = (callBack: (title: string) => void) => {
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)

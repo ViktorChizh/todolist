@@ -1,12 +1,12 @@
 import React, {FC, memo, useCallback} from 'react';
 import './App.css';
-import {AddItemForm} from './components/AddItemForm/AddItemForm';
+import {AddItemForm} from './components/addItemForm/AddItemForm';
 import ButtonAppBar from './components/ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
 import {addTodolistAC, TodolistType} from './reducers/todoListsReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStoreType} from './reducers/Store';
-import {Todolist} from './components/Todolist';
+import {Todolist} from './components/todolist/Todolist';
 
 const App: FC = memo(() => {
 

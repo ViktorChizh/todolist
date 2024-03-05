@@ -4,6 +4,7 @@ type CheckBoxType = {
     checked: boolean
     onChange: (checked: boolean) => void
 }
+
 export const Checkbox: FC<CheckBoxType> = memo(({checked, onChange}) => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

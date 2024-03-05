@@ -1,11 +1,11 @@
 import React from 'react'
 import {AddItemForm} from './AddItemForm';
-import {StoriesProviderDecorator} from '../StoriesProviderDecorator';
+import {StoriesProviderDecorator} from '../../stories/StoriesProviderDecorator';
 import {action} from'@storybook/addon-actions'
 import {Meta, StoryObj} from '@storybook/react'
 
 const meta: Meta<typeof AddItemForm> = {
-    title: 'AddItemForm component',
+    title: 'addItemForm component',
     component: AddItemForm,
     decorators: [StoriesProviderDecorator],
     parameters: {

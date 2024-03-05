@@ -1,8 +1,8 @@
 import React from 'react'
 import {Task} from './Task';
-import {AppStoreType, StoriesProviderDecorator} from './StoriesProviderDecorator';
+import {AppStoreType, StoriesProviderDecorator} from '../../stories/StoriesProviderDecorator';
 import { useSelector } from 'react-redux';
-import { TaskType } from '../reducers/tasksReducer';
+import { TaskType } from '../../reducers/tasksReducer';
 import { v1 } from 'uuid';
 import {Meta} from '@storybook/react'
 

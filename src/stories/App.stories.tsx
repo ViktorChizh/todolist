@@ -1,7 +1,7 @@
 import React from 'react'
-import {StoriesProviderDecorator} from './components/StoriesProviderDecorator'
+import {StoriesProviderDecorator} from './StoriesProviderDecorator'
 import {Meta} from '@storybook/react'
-import App from './App'
+import App from '../App'
 
 const meta: Meta<typeof App> = {
     title: 'App component',
