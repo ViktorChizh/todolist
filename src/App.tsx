@@ -1,6 +1,6 @@
 import React, {FC, memo, useCallback} from 'react';
 import './App.css';
-import {AddItemForm} from './components/AddItemForm';
+import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import ButtonAppBar from './components/ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
 import {addTodolistAC, TodolistType} from './reducers/todoListsReducer';

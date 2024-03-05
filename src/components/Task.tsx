@@ -9,7 +9,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 type TaskPropsType = {
     task: TaskType
     todolistId: string
-  
 }
 
 export const Task: FC<TaskPropsType> = memo(({task, todolistId}) => {
@@ -20,7 +19,6 @@ export const Task: FC<TaskPropsType> = memo(({task, todolistId}) => {
     },[dispatch, todolistId, task.id])
     const  onChangeHandler = useCallback((e: boolean)=> {
         dispatch(changeStatusAC(task.id, todolistId, e))}, [dispatch,task.id, todolistId])
-    
 
     return <li className={task.isDone ? 'is-done' : ''}>
         <Checkbox onChange={onChangeHandler} checked={task.isDone}/>
