@@ -1,5 +1,4 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatchType, AppStoreType} from '../../reducers/Store';
+import {useAppDispatch, useAppSelector} from '../../reducers/Store';
 import {addTaskTC} from '../../reducers/tasksReducer';
 import {useCallback, useMemo} from 'react';
 import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from '../../reducers/todoListsReducer';
@@ -10,8 +9,8 @@ import {TaskType} from '../../api/todolists-api';
  */
 
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
-    let tasks = useSelector<AppStoreType, TaskType[]>(state => state.tasks[idTDL])
-    const dispatch = useDispatch<AppDispatchType>()
+    let tasks = useAppSelector<TaskType[]>(state => state.tasks[idTDL])
+    const dispatch = useAppDispatch()
     useMemo(() => {
         if (filter === 'active') {
             tasks = tasks.filter(t => t.status === 0)

@@ -4,14 +4,13 @@ import {AddItemForm} from './components/addItemForm/AddItemForm';
 import ButtonAppBar from './components/ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
 import {addTodolistTC, fetchTodolistTC, TodolistType} from './reducers/todoListsReducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppDispatchType, AppStoreType} from './reducers/Store';
+import {useAppDispatch, useAppSelector} from './reducers/Store';
 import {Todolist} from './components/todolist/Todolist';
 
 const App: FC = memo(() => {
 
-    const dispatch: AppDispatchType = useDispatch()
-    const todoLists = useSelector<AppStoreType, TodolistType[]>(state => state.todolists)
+    const dispatch = useAppDispatch()
+    const todoLists = useAppSelector<TodolistType[]>(state => state.todolists)
 
     const addTodolist = useCallback((title: string) => {
         dispatch(addTodolistTC(title))

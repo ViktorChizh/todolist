@@ -7,10 +7,8 @@ import Button from '@mui/material/Button';
 import {FilterValuesType} from '../../reducers/todoListsReducer';
 import {Task} from '../task/Task';
 import {useTodolist} from './useTodolist';
-import {useDispatch} from 'react-redux';
-import {ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from 'redux';
 import {fetchTasksTC} from '../../reducers/tasksReducer';
+import {useAppDispatch} from '../../reducers/Store';
 
 type PropsType = {
     idTDL: string
@@ -22,7 +20,7 @@ export const Todolist: FC<PropsType> = memo(({idTDL, title, filter}) => {
 
     const {tasks, removeTodolist, onAllClickHandler, onActiveClickHandler,
         onCompletedClickHandler, addTaskHandler, updateTodolistHandler} = useTodolist(idTDL, filter)
-    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(fetchTasksTC(idTDL))

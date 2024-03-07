@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 
 const settings = {
     withCredentials: true,
@@ -75,8 +75,12 @@ export const api = {
     getTasks(todolistId: string) {
         return instanse.get<ResponseTasksType>(`todo-lists/${todolistId}/tasks`)
     },
+    // если надо указать типизацию третьего параметра, то надо указывать все три (но чаще хватит только первого)
+    // при указании второго и третьего параметра, типизация первого игнорируется в пользу второго
     createTask(todolistId: string, title: string) {
-        return instanse.post<ResponseType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks/`, {title: title})
+        return instanse.post<ResponseType<{item: TaskType}>,
+            AxiosResponse<ResponseType<{item: TaskType}>>,
+            {title: string}>(`todo-lists/${todolistId}/tasks/`, {title: title})
     },
     deleteTask(todolistId: string, id: string) {
         return instanse.delete<TaskType>(`todo-lists/${todolistId}/tasks/${id}`)

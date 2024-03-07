@@ -41,7 +41,7 @@ export const tasksReducer = (state = initialState, action: TasksReducerActionTyp
         case 'UPDATE-TASK': {
             return ({
                 ...state, [action.payload.idTDL]: state[action.payload.idTDL]
-                    .map(t => t.id === action.payload.taskId ? {...t, ...action.payload.updateTask} : t)
+                    .map(t => t.id === action.payload.taskId ? {...t, ...action.payload.model} : t)
             });
         }
         default:
@@ -66,10 +66,6 @@ export type UpdateTaskType = {
     deadline?: Date
 }
 
-export const removeTaskslistAC = (id: string) => ({
-    type: 'REMOVE-TASKSLIST' as const,
-    payload: {id}
-})
 export const removeTaskAC = (idTDL: string, taskId: string) => ({
     type: 'REMOVE-TASK' as const,
     payload: {idTDL, taskId}
@@ -78,9 +74,9 @@ export const addTaskAC = (task: TaskType) => ({
     type: 'ADD-TASK' as const,
     payload: {task}
 })
-export const updateTaskAC = (idTDL: string, taskId: string, updateTask: UpdateTaskType) => ({
+export const updateTaskAC = (idTDL: string, taskId: string, model: UpdateTaskType) => ({
     type: 'UPDATE-TASK' as const,
-    payload: {idTDL, taskId, updateTask}
+    payload: {idTDL, taskId, model}
 })
 export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({
     type: 'SET-TASKS' as const,
@@ -105,22 +101,20 @@ export const addTaskTC = (idTDL: string, title: string) => {
             .then(res => dispatch(addTaskAC(res.data.data.item)))
     }
 }
-export const updateTaskTC = (idTDL: string, taskId: string, updateTask: UpdateTaskType) => {
+export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskType) => {
     return (dispatch: Dispatch, getState: () => AppStoreType) => {
         let task = getState().tasks[idTDL].find(t => t.id === taskId)
-        if (!task) {
-            return
-        }
-        let updTask = {
+        if (!task) return
+        let updateTask = {
             title: task.title,
             description: task.description,
             status: task.status,
             priority: task.priority,
             startDate: task.startDate,
             deadline: task.deadline,
-            ...updateTask
+            ...model
         }
-        api.updateTask(idTDL, taskId, updTask)
-            .then(res => dispatch(updateTaskAC(idTDL, taskId, updateTask)))
+        api.updateTask(idTDL, taskId, updateTask)
+            .then(res => dispatch(updateTaskAC(idTDL, taskId, model)))
     }
 }
