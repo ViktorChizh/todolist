@@ -12,27 +12,49 @@ const rootReducer = combineReducers({
 
 export type AppStoreType = ReturnType<typeof rootReducer>
 
-const initialState = {
+const initialState: AppStoreType = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all'},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all'}
+        {
+            id: 'todolistId1', title: 'What to learn',
+            addedDate: new Date(), order: 0, filter: 'all'
+        },
+        {
+            id: 'todolistId2', title: 'What to buy',
+            addedDate: new Date(), order: 0, filter: 'all'
+        }
     ],
     tasks: {
-            'todolistId1': [
-                {id: v1(), title: 'HTML&CSS', isDone: true},
-                {id: v1(), title: 'JS', isDone: true}
-            ],
-            'todolistId2': [
-                {id: v1(), title: 'Milk', isDone: true},
-                {id: v1(), title: 'React Book', isDone: false}
-            ]
-        }
+        'todolistId1': [
+            {
+                id: v1(), todoListId: 'todolistId1', title: 'HTML&CSS', status: 1,
+                addedDate: new Date(), order: 0, startDate: null, deadline: null,
+                description: '', priority: 0
+            },
+            {
+                id: v1(), todoListId: 'todolistId1', title: 'JS', status: 1,
+                addedDate: new Date(), order: 0, startDate: null, deadline: null,
+                description: '', priority: 0
+            }
+        ],
+        'todolistId2': [
+            {
+                id: v1(), todoListId: 'todolistId2', title: 'Milk', status: 1,
+                addedDate: new Date(), order: 0, startDate: null, deadline: null,
+                description: '', priority: 0
+            },
+            {
+                id: v1(), todoListId: 'todolistId2', title: 'React Book', status: 0,
+                addedDate: new Date(), order: 0, startDate: null, deadline: null,
+                description: '', priority: 0
+            }
+        ]
+    }
 }
 
 let storeStorebook = legacy_createStore(rootReducer, initialState as AppStoreType & undefined)
 
 export const StoriesProviderDecorator = (story: any) => {
-   return (
+    return (
         <Provider store={storeStorebook}>
             {story()}
         </Provider>

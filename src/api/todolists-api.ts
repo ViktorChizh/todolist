@@ -6,13 +6,11 @@ const settings = {
         'API-KEY': '48b5fe2e-10a0-4ad2-b6ed-950dedf8110b'
     }
 }
-
 const instanse = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     ...settings
 })
-
-export type TodoListType = {
+export type TodolistServerType = {
     id:string
     title:string
     addedDate: Date
@@ -23,17 +21,36 @@ type ResponseType<T = {}> = {
     messages: string[]
     data: T
 }
+
+export enum status {
+    new = 0,
+    completed = 1
+}
+export enum priority {
+    low = 0,
+    normal = 1,
+    hi = 2
+}
+
 export type TaskType = {
-    description?: string
+    description: string
     title: string
-    status?: number
-    priority?: number
-    startDate?: Date
-    deadline?: Date
-    id?: string
-    todoListId?: string
-    order?: number
-    addedDate?: Date
+    status: status
+    priority: priority
+    startDate: Date | null
+    deadline: Date | null
+    id: string
+    todoListId: string
+    order: number
+    addedDate: Date
+}
+export type UpdateServerTaskType = {
+    title: string
+    description: string
+    status: status
+    priority: priority
+    startDate: Date | null
+    deadline: Date | null
 }
 type ResponseTasksType= {
     items: TaskType[]
@@ -43,10 +60,10 @@ type ResponseTasksType= {
 
 export const api = {
     getTodolists() {
-        return instanse.get<TodoListType[]>('todo-lists')
+        return instanse.get<TodolistServerType[]>('todo-lists')
     },
     createTodolist(title: string) {
-        return instanse.post<ResponseType<{item: TodoListType}>>('todo-lists', {title: title})
+        return instanse.post<ResponseType<{item: TodolistServerType}>>('todo-lists', {title: title})
     },
     deleteTodolist(id: string) {
         return instanse.delete<ResponseType>(`todo-lists/${id}`)
@@ -64,7 +81,7 @@ export const api = {
     deleteTask(todolistId: string, id: string) {
         return instanse.delete<TaskType>(`todo-lists/${todolistId}/tasks/${id}`)
     },
-    updateTask(todolistId: string, id: string, title: string) {
-        return instanse.put<TaskType>(`todo-lists/${todolistId}/tasks/${id}`, {title: title})
+    updateTask(todolistId: string, id: string, updateTask: UpdateServerTaskType) {
+        return instanse.put<TaskType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
     }
 }

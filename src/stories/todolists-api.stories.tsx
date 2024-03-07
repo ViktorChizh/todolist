@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
-import {api} from '../api/todolists-api';
+import {api, TaskType} from '../api/todolists-api';
+import {todolistId1} from '../reducers/todoListsReducer.test';
 
 export default {
     title: 'API',
@@ -121,9 +122,12 @@ export const UpdateTask = () => {
     const [state, setState] = useState<any>(null)
     const [todolistId, setTodolistId] = useState('')
     const [taskId, setTaskId] = useState('')
-    const [title, setTitle] = useState('')
+    const [task, setTask] = useState<TaskType>({
+        id: 'id1', title: 'HTML&CSS', status: 1, addedDate: new Date(), deadline: null,
+        order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1
+    })
     const onClickHandler = () => {
-        todolistId && taskId && title && api.updateTask(todolistId, taskId, title)
+        todolistId && taskId && task && api.updateTask(todolistId, taskId, task)
             .then((res) => setState(res.data))
     }
     return (<>
@@ -132,7 +136,7 @@ export const UpdateTask = () => {
                onChange={(e) => setTodolistId(e.currentTarget.value)} placeholder="todolistId"/>
         <input style={{width:'15%'}} value={taskId}
                onChange={(e) => setTaskId(e.currentTarget.value)} placeholder="taskId"/>
-        <input value={title} onChange={(e) => setTitle(e.currentTarget.value)} placeholder="title"/>
+        <input value={task.title} onChange={(e) => setTask({...task, title: e.currentTarget.value})} placeholder="title"/>
         <button onClick={onClickHandler}>UPDATE TASK</button>
     </>)
 }

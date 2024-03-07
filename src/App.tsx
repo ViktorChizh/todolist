@@ -1,21 +1,27 @@
-import React, {FC, memo, useCallback} from 'react';
+import React, {FC, memo, useCallback, useEffect} from 'react';
 import './App.css';
 import {AddItemForm} from './components/addItemForm/AddItemForm';
 import ButtonAppBar from './components/ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
-import {addTodolistAC, TodolistType} from './reducers/todoListsReducer';
+import {addTodolistTC, fetchTodolistTC, TodolistType} from './reducers/todoListsReducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStoreType} from './reducers/Store';
 import {Todolist} from './components/todolist/Todolist';
+import {ThunkDispatch} from 'redux-thunk';
+import {AnyAction} from 'redux';
 
 const App: FC = memo(() => {
 
-    const dispatch = useDispatch()
+    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
     const todoLists = useSelector<AppStoreType, TodolistType[]>(state => state.todolists)
 
     const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistAC(title))
+        dispatch(addTodolistTC(title))
     }, [dispatch])
+
+    useEffect(() => {
+        dispatch(fetchTodolistTC())
+    }, []);
 
     return (
         <div className="App">

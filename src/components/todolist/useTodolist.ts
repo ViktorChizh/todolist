@@ -1,8 +1,11 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {AppStoreType} from '../../reducers/Store';
-import {addTaskAC, TaskType} from '../../reducers/tasksReducer';
+import {addTaskTC} from '../../reducers/tasksReducer';
 import {useCallback, useMemo} from 'react';
-import {changeFilterAC, FilterValuesType, removeTodolistAC, updateTodolistAC} from '../../reducers/todoListsReducer';
+import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from '../../reducers/todoListsReducer';
+import {TaskType} from '../../api/todolists-api';
+import {ThunkDispatch} from 'redux-thunk';
+import {AnyAction} from 'redux';
 
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
@@ -10,29 +13,29 @@ import {changeFilterAC, FilterValuesType, removeTodolistAC, updateTodolistAC} fr
 
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
     let tasks = useSelector<AppStoreType, TaskType[]>(state => state.tasks[idTDL])
-    const dispatch = useDispatch()
+    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
     useMemo(() => {
         if (filter === 'active') {
-            tasks = tasks.filter(t => t.isDone === false)
+            tasks = tasks.filter(t => t.status === 0)
         }
         if (filter === 'completed') {
-            tasks = tasks.filter(t => t.isDone === true)
+            tasks = tasks.filter(t => t.status === 1)
         }
         return tasks
     }, [filter, tasks]) // МОЖНО И БЕЗ ПЕРЕМЕННОЙ
     // если через переменную: tasks = useMemo( () => {тот же код},[filter, tasks])
 
-    const removeTodolist = useCallback(() => dispatch(removeTodolistAC(idTDL)), [dispatch, idTDL])
+    const removeTodolist = useCallback(() => dispatch(removeTodolistTC(idTDL)), [dispatch, idTDL])
     const onAllClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, 'all')), [dispatch, idTDL])
     const onActiveClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, 'active')), [dispatch, idTDL])
     const onCompletedClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, 'completed')), [dispatch, idTDL])
     const addTaskHandler = useMemo(() => {
         return (title: string) => {
-            dispatch(addTaskAC(idTDL, title))
+            dispatch(addTaskTC(idTDL, title))
         }
     }, [dispatch, idTDL])//чисто попробовать useMemo
     const updateTodolistHandler = useCallback((title: string) => {
-        dispatch(updateTodolistAC(idTDL, title))
+        dispatch(updateTodolistTC(idTDL, title))
     }, [dispatch, idTDL])
 
     return {tasks, removeTodolist, onAllClickHandler, onActiveClickHandler,

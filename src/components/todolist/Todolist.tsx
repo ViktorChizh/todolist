@@ -1,4 +1,4 @@
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import {AddItemForm} from '../addItemForm/AddItemForm';
 import {EditableSpan} from '../editableSpan/EditableSpan';
 import IconButton from '@mui/material/IconButton'
@@ -7,6 +7,10 @@ import Button from '@mui/material/Button';
 import {FilterValuesType} from '../../reducers/todoListsReducer';
 import {Task} from '../task/Task';
 import {useTodolist} from './useTodolist';
+import {useDispatch} from 'react-redux';
+import {ThunkDispatch} from 'redux-thunk';
+import {AnyAction} from 'redux';
+import {fetchTasksTC} from '../../reducers/tasksReducer';
 
 type PropsType = {
     idTDL: string
@@ -18,6 +22,11 @@ export const Todolist: FC<PropsType> = memo(({idTDL, title, filter}) => {
 
     const {tasks, removeTodolist, onAllClickHandler, onActiveClickHandler,
         onCompletedClickHandler, addTaskHandler, updateTodolistHandler} = useTodolist(idTDL, filter)
+    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(idTDL))
+    }, []);
 
     return (
         <div>
