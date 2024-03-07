@@ -1,11 +1,9 @@
 import {useDispatch, useSelector} from 'react-redux';
-import {AppStoreType} from '../../reducers/Store';
+import {AppDispatchType, AppStoreType} from '../../reducers/Store';
 import {addTaskTC} from '../../reducers/tasksReducer';
 import {useCallback, useMemo} from 'react';
 import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from '../../reducers/todoListsReducer';
 import {TaskType} from '../../api/todolists-api';
-import {ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from 'redux';
 
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
@@ -13,7 +11,7 @@ import {AnyAction} from 'redux';
 
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
     let tasks = useSelector<AppStoreType, TaskType[]>(state => state.tasks[idTDL])
-    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
+    const dispatch = useDispatch<AppDispatchType>()
     useMemo(() => {
         if (filter === 'active') {
             tasks = tasks.filter(t => t.status === 0)

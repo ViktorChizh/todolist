@@ -5,14 +5,12 @@ import ButtonAppBar from './components/ButtonAppBar';
 import {Container, Grid, Paper} from '@mui/material';
 import {addTodolistTC, fetchTodolistTC, TodolistType} from './reducers/todoListsReducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppStoreType} from './reducers/Store';
+import {AppDispatchType, AppStoreType} from './reducers/Store';
 import {Todolist} from './components/todolist/Todolist';
-import {ThunkDispatch} from 'redux-thunk';
-import {AnyAction} from 'redux';
 
 const App: FC = memo(() => {
 
-    const dispatch: ThunkDispatch<any, any, AnyAction> = useDispatch()
+    const dispatch: AppDispatchType = useDispatch()
     const todoLists = useSelector<AppStoreType, TodolistType[]>(state => state.todolists)
 
     const addTodolist = useCallback((title: string) => {
