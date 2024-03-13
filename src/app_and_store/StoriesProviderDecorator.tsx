@@ -1,26 +1,34 @@
 import {Provider} from 'react-redux';
 import React from 'react';
-import {todoListsReducer} from '../features/pageTodolists/todolist/todoListsReducer';
-import {tasksReducer} from '../features/pageTodolists/todolist/task/tasksReducer';
-import {combineReducers, legacy_createStore} from 'redux';
+import {todoListsReducer} from '../features/pageTodolists/todolist/TodoListsReducer';
+import {tasksReducer} from '../features/pageTodolists/todolist/task/TasksReducer';
+import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {v1} from 'uuid';
+import {appReducer} from './AppReducer';
+import {thunk} from 'redux-thunk';
+import {AppStoreType} from './Store';
 
 const rootReducer = combineReducers({
     todolists: todoListsReducer,
-    tasks: tasksReducer
+    tasks: tasksReducer,
+    app: appReducer
 })
 
-export type AppStoreType = ReturnType<typeof rootReducer>
-
 const initialState: AppStoreType = {
+    app:  {
+        status: 'idle',
+        error: null
+    },
     todolists: [
         {
             id: 'todolistId1', title: 'What to learn',
-            addedDate: new Date(), order: 0, filter: 'all'
+            addedDate: new Date(), order: 0,
+            filter: 'all', todoStatus: 'idle'
         },
         {
             id: 'todolistId2', title: 'What to buy',
-            addedDate: new Date(), order: 0, filter: 'all'
+            addedDate: new Date(), order: 0,
+            filter: 'all', todoStatus: 'idle'
         }
     ],
     tasks: {
@@ -51,7 +59,7 @@ const initialState: AppStoreType = {
     }
 }
 
-let storeStorebook = legacy_createStore(rootReducer, initialState as AppStoreType & undefined)
+let storeStorebook = legacy_createStore(rootReducer, initialState, applyMiddleware(thunk))
 
 export const StoriesProviderDecorator = (story: any) => {
     return (

@@ -1,5 +1,5 @@
-import {addTodolistAC, todoListsReducer, TodolistType} from '../features/pageTodolists/todolist/todoListsReducer';
-import {tasksReducer, TasksStateType} from '../features/pageTodolists/todolist/task/tasksReducer';
+import {addTodolistAC, todoListsReducer, TodolistType} from '../features/pageTodolists/todolist/TodoListsReducer';
+import {tasksReducer, TasksStateType} from '../features/pageTodolists/todolist/task/TasksReducer';
 import {todolistId1} from './todoListsReducer.test';
 // тесты для случаев, когда работают 2 редюсера одновременно
 test('ids should be equals', () => {

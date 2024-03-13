@@ -1,7 +1,9 @@
-import {addTodolistACType, removeTodolistACType, setTodolistACType} from '../todoListsReducer';
-import {api, TaskType, status, priority} from '../../../../api/todolists-api';
+import {addTodolistACType, removeTodolistACType, setTodolistACType} from '../TodoListsReducer';
+import {api, priority, status, TaskType} from '../../../../api/todolists-api';
 import {Dispatch} from 'redux';
 import {AppStoreType} from '../../../../app_and_store/Store';
+import {AppReducerActionType, setStatusAC} from '../../../../app_and_store/AppReducer';
+import {NetWorkErrorHandler, ServerErrorHandler} from '../../../../utility/ErrorsHandler';
 
 export const tasksReducer = (state = {} as TasksStateType, action: TasksReducerActionType): TasksStateType => {
     switch (action.type) {
@@ -43,6 +45,7 @@ export type TasksReducerActionType =
     | removeTodolistACType
     | addTodolistACType
     | setTodolistACType
+    | AppReducerActionType
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
@@ -73,16 +76,52 @@ export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({
 })
 //thunks
 export const fetchTasksTC = (idTDL: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    api.getTasks(idTDL)
-        .then(res => dispatch(setTasksAC(res.data.items, idTDL)))
+    dispatch(setStatusAC('loading'))
+    setTimeout(() => {
+        api.getTasks(idTDL)
+            .then(res => {
+                dispatch(setTasksAC(res.data.items, idTDL))
+                dispatch(setStatusAC('successed'))
+            })
+            .catch(error => {
+                NetWorkErrorHandler(error, dispatch)
+            })
+    }, 1000)
+
 }
 export const removeTaskTC = (idTDL: string, taskId: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    api.deleteTask(idTDL, taskId)
-        .then(_ => dispatch(removeTaskAC(idTDL, taskId)))
+    dispatch(setStatusAC('loading'))
+    setTimeout(() => {
+        api.deleteTask(idTDL, taskId)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(removeTaskAC(idTDL, taskId))
+                    dispatch(setStatusAC('successed'))
+                } else {
+                    ServerErrorHandler(res.data, dispatch)
+                }
+            })
+            .catch(error => {
+                NetWorkErrorHandler(error, dispatch)
+            })
+    }, 1000)
 }
 export const addTaskTC = (idTDL: string, title: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    api.createTask(idTDL, title)
-        .then(res => dispatch(addTaskAC(res.data.data.item)))
+    dispatch(setStatusAC('loading'))
+    setTimeout(() => {
+        api.createTask(idTDL, title)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(addTaskAC(res.data.data.item))
+                    dispatch(setStatusAC('successed'))
+                } else {
+                    ServerErrorHandler(res.data, dispatch)
+                }
+            })
+            .catch(error => {
+                NetWorkErrorHandler(error, dispatch)
+            })
+    }, 1000)
 }
 export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskType) =>
     (dispatch: Dispatch<TasksReducerActionType>, getState: () => AppStoreType) => {
@@ -97,7 +136,20 @@ export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskTyp
             deadline: task.deadline,
             ...model
         }
+        dispatch(setStatusAC('loading'))
+        setTimeout(() => {
         api.updateTask(idTDL, taskId, updateTask)
-            .then(_ => dispatch(updateTaskAC(idTDL, taskId, model)))
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                dispatch(updateTaskAC(idTDL, taskId, model))
+                    dispatch(setStatusAC('successed'))
+                } else {
+                    ServerErrorHandler(res.data, dispatch)
+                }
+            })
+            .catch(error => {
+                NetWorkErrorHandler(error, dispatch)
+            })
+        }, 1000)
     }
 

@@ -1,22 +1,22 @@
 import {
     addTodolistAC,
-    changeFilterAC,
+    changeFilterAC, changeTodoStatusAC,
     removeTodolistAC, setTodolistAC,
     todoListsReducer,
     TodolistType,
     updateTodolistAC
-} from '../features/pageTodolists/todolist/todoListsReducer';
+} from '../features/pageTodolists/todolist/TodoListsReducer';
 import {v1} from 'uuid';
 
 export let todolistId1 = v1()
 export let todolistId2 = v1()
 
-let state: TodolistType[] = []
+let state: TodolistType[]
 
 beforeEach(() => (
     state =  [
-        {id: todolistId1, title: 'What to learn',addedDate: new Date(), order: 0,filter: 'all'},
-        {id: todolistId2, title: 'What to buy',addedDate: new Date(), order: 0, filter: 'all'}
+        {id: todolistId1, title: 'What to learn',addedDate: new Date(), order: 0,filter: 'all', todoStatus: 'idle'},
+        {id: todolistId2, title: 'What to buy',addedDate: new Date(), order: 0, filter: 'all', todoStatus: 'idle'}
     ]))
 
 test('remove todoList by id', () => {
@@ -51,6 +51,15 @@ test('change todoList filter by id', () => {
     expect(endState.length).toBe(2)
     expect(endState[0].filter).toBe('all')
     expect(endState[1].filter).toBe('active')
+})
+
+test('change todoList todoStatus by id', () => {
+    // action
+    const endState = todoListsReducer(state, changeTodoStatusAC(todolistId2, 'loading'))
+    // expect result
+    expect(endState.length).toBe(2)
+    expect(endState[0].todoStatus).toBe('idle')
+    expect(endState[1].todoStatus).toBe('loading')
 })
 
 test('todolists should be appear', () => {

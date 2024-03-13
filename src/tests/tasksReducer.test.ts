@@ -1,9 +1,10 @@
-import {addTaskAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC} from '../features/pageTodolists/todolist/task/tasksReducer';
-import {addTodolistAC, removeTodolistAC, setTodolistAC, todoListsReducer} from '../features/pageTodolists/todolist/todoListsReducer';
+import {addTaskAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC} from '../features/pageTodolists/todolist/task/TasksReducer';
+import {addTodolistAC, removeTodolistAC, setTodolistAC, todoListsReducer} from '../features/pageTodolists/todolist/TodoListsReducer';
 import {todolistId1, todolistId2} from './todoListsReducer.test';
 
 let state: TasksStateType
 const addedDate = new Date()
+
 beforeEach(() => (
     state = {
         [todolistId1]: [

@@ -1,7 +1,7 @@
 import {useAppDispatch, useAppSelector} from '../../../app_and_store/Store';
-import {addTaskTC} from './task/tasksReducer';
+import {addTaskTC} from './task/TasksReducer';
 import {useCallback, useMemo} from 'react';
-import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from './todoListsReducer';
+import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from './TodoListsReducer';
 import {TaskType} from '../../../api/todolists-api';
 /**
  * Вынесли всю логику в кастомный хук в качестве примера

@@ -16,7 +16,7 @@ export type TodolistServerType = {
     addedDate: Date
     order:number
 }
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     resultCode: number
     messages: string[]
     data: T
@@ -83,9 +83,9 @@ export const api = {
             {title: string}>(`todo-lists/${todolistId}/tasks/`, {title: title})
     },
     deleteTask(todolistId: string, id: string) {
-        return instanse.delete<TaskType>(`todo-lists/${todolistId}/tasks/${id}`)
+        return instanse.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${id}`)
     },
     updateTask(todolistId: string, id: string, updateTask: UpdateServerTaskType) {
-        return instanse.put<TaskType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
+        return instanse.put<ResponseType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
     }
 }

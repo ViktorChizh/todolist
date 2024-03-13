@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
 import {api, TaskType} from './todolists-api';
-import {todolistId1} from '../tests/todoListsReducer.test';
 
 export default {
     title: 'API',
@@ -124,7 +123,7 @@ export const UpdateTask = () => {
     const [taskId, setTaskId] = useState('')
     const [task, setTask] = useState<TaskType>({
         id: 'id1', title: 'HTML&CSS', status: 1, addedDate: new Date(), deadline: null,
-        order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1
+        order: 0, description: '', priority: 1, startDate: null, todoListId: 'todolistId'
     })
     const onClickHandler = () => {-
         todolistId && taskId && task && api.updateTask(todolistId, taskId, task)

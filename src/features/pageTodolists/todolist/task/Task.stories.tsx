@@ -1,10 +1,11 @@
 import React from 'react'
 import {Task} from './Task';
-import {AppStoreType, StoriesProviderDecorator} from '../../../../app_and_store/StoriesProviderDecorator';
+import { StoriesProviderDecorator} from '../../../../app_and_store/StoriesProviderDecorator';
 import {useSelector} from 'react-redux';
 import {v1} from 'uuid';
 import {Meta} from '@storybook/react'
 import {TaskType} from '../../../../api/todolists-api';
+import {AppStoreType} from '../../../../app_and_store/Store';
 
 const meta: Meta<typeof Task> = {
     title: 'Task component',

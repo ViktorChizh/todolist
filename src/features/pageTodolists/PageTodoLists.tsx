@@ -1,11 +1,15 @@
 import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
-import {addTodolistTC, setTodolistTC, TodolistType} from './todolist/todoListsReducer';
-import React, {useCallback, useEffect} from 'react';
+import {addTodolistTC, setTodolistTC, TodolistType} from './todolist/TodoListsReducer';
+import React, {FC, useCallback, useEffect} from 'react';
 import {Container, Grid, Paper} from '@mui/material';
 import {AddItemForm} from '../../components/addItemForm/AddItemForm';
 import {Todolist} from './todolist/Todolist';
 
-export const PageTodoLists = () => {
+type PageTodoListsPropsType = {
+    demo?: boolean
+}
+
+export const PageTodoLists: FC<PageTodoListsPropsType> = ({demo=false}) => {
     const todoLists = useAppSelector<TodolistType[]>(state => state.todolists)
     const dispatch = useAppDispatch()
 
@@ -14,6 +18,7 @@ export const PageTodoLists = () => {
     }, [dispatch])
 
     useEffect(() => {
+        if(demo) return
         dispatch(setTodolistTC())
     }, []);
 
@@ -35,7 +40,7 @@ export const PageTodoLists = () => {
                     return (
                         <Grid key={tl.id} style={{margin: '30px 15px 0'}}>
                             <Paper elevation={5} style={{padding: '20px'}}>
-                                <Todolist idTDL={tl.id} title={tl.title} filter={tl.filter}/>
+                                <Todolist  todoList={tl} demo={demo}/>
                             </Paper>
                         </Grid>)
                 })}

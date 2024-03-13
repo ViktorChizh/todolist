@@ -1,5 +1,5 @@
 import {useCallback} from 'react';
-import {removeTaskTC, updateTaskTC} from './tasksReducer';
+import {removeTaskTC, updateTaskTC} from './TasksReducer';
 import {TaskType} from '../../../../api/todolists-api';
 import {useAppDispatch} from '../../../../app_and_store/Store';
 /**
