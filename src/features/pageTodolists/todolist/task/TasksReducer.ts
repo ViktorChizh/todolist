@@ -1,51 +1,50 @@
-import {addTodolistACType, removeTodolistACType, setTodolistACType} from '../TodoListsReducer';
-import {api, priority, status, TaskType} from '../../../../api/todolists-api';
-import {Dispatch} from 'redux';
-import {AppStoreType} from '../../../../app_and_store/Store';
-import {AppReducerActionType, setStatusAC} from '../../../../app_and_store/AppReducer';
-import {NetWorkErrorHandler, ServerErrorHandler} from '../../../../utility/ErrorsHandler';
+import {addTodolistACType, changeTodoStatusAC, removeTodolistACType, setTodolistACType} from '../TodoListsReducer';
+import {api, ErrorType, priority, resultCode, status, TaskType} from '../../../../api/api';
+import {AppThunkType} from '../../../../app_and_store/Store';
+import {AppReducerActionType, setAppStatusAC, StatusType} from '../../../../app_and_store/AppReducer';
+import {NetWorkErrorHandler, ServerErrorHandler} from '../../../../utils/ErrorsHandler';
+import axios from 'axios';
 
 export const tasksReducer = (state = {} as TasksStateType, action: TasksReducerActionType): TasksStateType => {
     switch (action.type) {
-        case 'SET-TODOLIST':
+        case 'todolist/SET-TODOLIST':
             return action.payload.todolists.reduce((acc, tl) => ({...acc, [tl.id]: []}), {...state})
-        case 'ADD-TODOLIST':
+        case 'todolist/ADD-TODOLIST':
             return {...state, [action.payload.todolist.id]: []}
-        case 'REMOVE-TODOLIST':
+        case 'todolist/REMOVE-TODOLIST':
             const stateCopy = {...state}
             delete stateCopy[action.payload.id]
             return stateCopy
-        case 'SET-TASKS':
-            return {...state, [action.payload.idTDL]: [...action.payload.tasks]}
-        case 'ADD-TASK':
+        case 'task/SET-TASKS':
+            return {...state, [action.payload.idTDL]: action.payload.tasks}
+        case 'task/ADD-TASK':
             return {
                 ...state,
-                [action.payload.task.todoListId]: [action.payload.task, ...state[action.payload.task.todoListId]]
+                [action.payload.task.todoListId]: [{...action.payload.task, taskStatus: 'idle'},
+                    ...state[action.payload.task.todoListId]]
             }
-        case 'REMOVE-TASK':
+        case 'task/REMOVE-TASK':
             return {
                 ...state,
                 [action.payload.idTDL]: state[action.payload.idTDL].filter(t => t.id !== action.payload.taskId)
             }
-        case 'UPDATE-TASK':
+        case 'task/UPDATE-TASK':
             return {
                 ...state, [action.payload.idTDL]: state[action.payload.idTDL]
                     .map(t => t.id === action.payload.taskId ? {...t, ...action.payload.model} : t)
             }
+        case 'task/CHANGE-TASKSTATUS':
+            return {
+                ...state, [action.payload.idTDL]: state[action.payload.idTDL]
+                    .map(t => t.id === action.payload.taskId ? {...t, taskStatus: action.payload.taskStatus} : t)
+            }
+        case 'task/CLEAN-TASKS':
+            return {}
         default:
             return state
     }
 }
 //types
-export type TasksReducerActionType =
-    | ReturnType<typeof removeTaskAC>
-    | ReturnType<typeof addTaskAC>
-    | ReturnType<typeof updateTaskAC>
-    | ReturnType<typeof setTasksAC>
-    | removeTodolistACType
-    | addTodolistACType
-    | setTodolistACType
-    | AppReducerActionType
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
@@ -57,74 +56,94 @@ export type UpdateTaskType = {
     startDate?: Date
     deadline?: Date
 }
+export type TasksReducerActionType =
+    | ReturnType<typeof removeTaskAC>
+    | ReturnType<typeof addTaskAC>
+    | ReturnType<typeof updateTaskAC>
+    | ReturnType<typeof setTasksAC>
+    | ReturnType<typeof changeTaskStatusAC>
+    | ReturnType<typeof cleanTasksAC>
+    | removeTodolistACType
+    | addTodolistACType
+    | setTodolistACType
+    | AppReducerActionType
 //actions
 export const removeTaskAC = (idTDL: string, taskId: string) => ({
-    type: 'REMOVE-TASK' as const,
+    type: 'task/REMOVE-TASK' as const,
     payload: {idTDL, taskId}
 })
-export const addTaskAC = (task: TaskType) => ({
-    type: 'ADD-TASK' as const,
-    payload: {task}
+export const addTaskAC = (task: TaskType) => ({type: 'task/ADD-TASK' as const, payload: {task}})
+export const changeTaskStatusAC = (idTDL: string, taskId: string, taskStatus: StatusType) => ({
+    type: 'task/CHANGE-TASKSTATUS' as const,
+    payload: {idTDL, taskId, taskStatus}
 })
 export const updateTaskAC = (idTDL: string, taskId: string, model: UpdateTaskType) => ({
-    type: 'UPDATE-TASK' as const,
+    type: 'task/UPDATE-TASK' as const,
     payload: {idTDL, taskId, model}
 })
-export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({
-    type: 'SET-TASKS' as const,
-    payload: {tasks, idTDL}
-})
+export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({type: 'task/SET-TASKS' as const, payload: {tasks, idTDL}})
+export const cleanTasksAC = () => ({type: 'task/CLEAN-TASKS' as const})
 //thunks
-export const fetchTasksTC = (idTDL: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    dispatch(setStatusAC('loading'))
-    setTimeout(() => {
-        api.getTasks(idTDL)
-            .then(res => {
-                dispatch(setTasksAC(res.data.items, idTDL))
-                dispatch(setStatusAC('successed'))
-            })
-            .catch(error => {
-                NetWorkErrorHandler(error, dispatch)
-            })
-    }, 1000)
-
+export const fetchTasksTC = (idTDL: string): AppThunkType => async dispatch => {
+    try {
+        dispatch(setAppStatusAC('loading'))
+        let res = await api.getTasks(idTDL)
+        dispatch(setTasksAC(res.data.items.map(t => ({...t, taskStatus: 'idle'})), idTDL))
+        dispatch(setAppStatusAC('succeeded'))
+    } catch (e) {
+        if (axios.isAxiosError<ErrorType>(e)) {
+            NetWorkErrorHandler(e, dispatch)
+        } else {
+            NetWorkErrorHandler(e as Error, dispatch)
+        }
+    }
 }
-export const removeTaskTC = (idTDL: string, taskId: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    dispatch(setStatusAC('loading'))
-    setTimeout(() => {
-        api.deleteTask(idTDL, taskId)
-            .then(res => {
-                if (res.data.resultCode === 0) {
-                    dispatch(removeTaskAC(idTDL, taskId))
-                    dispatch(setStatusAC('successed'))
-                } else {
-                    ServerErrorHandler(res.data, dispatch)
-                }
-            })
-            .catch(error => {
-                NetWorkErrorHandler(error, dispatch)
-            })
-    }, 1000)
-}
-export const addTaskTC = (idTDL: string, title: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    dispatch(setStatusAC('loading'))
-    setTimeout(() => {
-        api.createTask(idTDL, title)
-            .then(res => {
-                if (res.data.resultCode === 0) {
-                    dispatch(addTaskAC(res.data.data.item))
-                    dispatch(setStatusAC('successed'))
-                } else {
-                    ServerErrorHandler(res.data, dispatch)
-                }
-            })
-            .catch(error => {
-                NetWorkErrorHandler(error, dispatch)
-            })
+export const removeTaskTC = (idTDL: string, taskId: string): AppThunkType => dispatch => {
+    dispatch(setAppStatusAC('loading'))
+    dispatch(changeTaskStatusAC(idTDL, taskId, 'loading'))
+    setTimeout(async () => {
+        try {
+            let res = await api.deleteTask(idTDL, taskId)
+            if (res.data.resultCode === resultCode.SUCCEEDED) {
+                dispatch(removeTaskAC(idTDL, taskId))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                ServerErrorHandler<{}>(res.data, dispatch)
+                dispatch(changeTaskStatusAC(idTDL, taskId, 'failed'))
+            }
+        } catch (e) {
+            if (axios.isAxiosError<ErrorType>(e)) {
+                NetWorkErrorHandler(e, dispatch)
+            } else {
+                NetWorkErrorHandler(e as Error, dispatch)
+            }
+            dispatch(changeTodoStatusAC(idTDL, 'failed'))
+        }
     }, 1000)
 }
-export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskType) =>
-    (dispatch: Dispatch<TasksReducerActionType>, getState: () => AppStoreType) => {
+export const addTaskTC = (idTDL: string, title: string): AppThunkType => dispatch => {
+    dispatch(setAppStatusAC('loading'))
+    setTimeout(async () => {
+        try {
+            let res = await api.createTask(idTDL, title)
+            if (res.data.resultCode === resultCode.SUCCEEDED) {
+                dispatch(addTaskAC({...res.data.data.item, taskStatus: 'idle'}))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                ServerErrorHandler<{ item: TaskType }>(res.data, dispatch)
+            }
+        } catch (e) {
+            if (axios.isAxiosError<ErrorType>(e)) {
+                NetWorkErrorHandler(e, dispatch)
+            } else {
+                NetWorkErrorHandler(e as Error, dispatch)
+            }
+            dispatch(changeTodoStatusAC(idTDL, 'failed'))
+        }
+    }, 1000)
+}
+export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskType): AppThunkType =>
+    (dispatch, getState) => {
         let task = getState().tasks[idTDL].find(t => t.id === taskId)
         if (!task) return
         let updateTask = {
@@ -136,20 +155,27 @@ export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskTyp
             deadline: task.deadline,
             ...model
         }
-        dispatch(setStatusAC('loading'))
-        setTimeout(() => {
-        api.updateTask(idTDL, taskId, updateTask)
-            .then(res => {
-                if (res.data.resultCode === 0) {
-                dispatch(updateTaskAC(idTDL, taskId, model))
-                    dispatch(setStatusAC('successed'))
+        dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskStatusAC(idTDL, taskId, 'loading'))
+        setTimeout(async () => {
+            try {
+                let res = await api.updateTask(idTDL, taskId, updateTask)
+                if (res.data.resultCode === resultCode.SUCCEEDED) {
+                    dispatch(updateTaskAC(idTDL, taskId, model))
+                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(changeTaskStatusAC(idTDL, taskId, 'succeeded'))
                 } else {
-                    ServerErrorHandler(res.data, dispatch)
+                    ServerErrorHandler<{}>(res.data, dispatch)
+                    dispatch(changeTaskStatusAC(idTDL, taskId, 'failed'))
                 }
-            })
-            .catch(error => {
-                NetWorkErrorHandler(error, dispatch)
-            })
+            } catch (e) {
+                if (axios.isAxiosError<ErrorType>(e)) {
+                    NetWorkErrorHandler(e, dispatch)
+                } else {
+                    NetWorkErrorHandler(e as Error, dispatch)
+                }
+                dispatch(changeTodoStatusAC(idTDL, 'failed'))
+            }
         }, 1000)
     }
 

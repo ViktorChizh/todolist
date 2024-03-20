@@ -1,26 +1,21 @@
-import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
-import {addTodolistTC, setTodolistTC, TodolistType} from './todolist/TodoListsReducer';
-import React, {FC, useCallback, useEffect} from 'react';
-import {Container, Grid, Paper} from '@mui/material';
+import React, {FC} from 'react';
+import {CircularProgress, Container, Grid, Paper} from '@mui/material';
 import {AddItemForm} from '../../components/addItemForm/AddItemForm';
 import {Todolist} from './todolist/Todolist';
+import {usePageTodoList} from './usePageTodoList';
+import {useAppSelector} from '../../app_and_store/Store';
+import {Navigate} from 'react-router-dom';
 
 type PageTodoListsPropsType = {
     demo?: boolean
 }
 
-export const PageTodoLists: FC<PageTodoListsPropsType> = ({demo=false}) => {
-    const todoLists = useAppSelector<TodolistType[]>(state => state.todolists)
-    const dispatch = useAppDispatch()
-
-    const addTodolist = useCallback((title: string) => {
-        dispatch(addTodolistTC(title))
-    }, [dispatch])
-
-    useEffect(() => {
-        if(demo) return
-        dispatch(setTodolistTC())
-    }, []);
+export const PageTodoLists: FC<PageTodoListsPropsType> = ({demo = false}) => {
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    let {todoLists, addTodolist} = usePageTodoList(demo)
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <Container fixed style={{width: '100%', maxWidth: '100%'}}>
@@ -40,7 +35,7 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({demo=false}) => {
                     return (
                         <Grid key={tl.id} style={{margin: '30px 15px 0'}}>
                             <Paper elevation={5} style={{padding: '20px'}}>
-                                <Todolist  todoList={tl} demo={demo}/>
+                                <Todolist todoList={tl} demo={demo}/>
                             </Paper>
                         </Grid>)
                 })}

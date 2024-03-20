@@ -1,6 +1,6 @@
 import {useCallback} from 'react';
 import {removeTaskTC, updateTaskTC} from './TasksReducer';
-import {TaskType} from '../../../../api/todolists-api';
+import {TaskType} from '../../../../api/api';
 import {useAppDispatch} from '../../../../app_and_store/Store';
 /**
  * Вынесли всю логику в кастомный хук в качестве примера

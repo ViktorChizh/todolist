@@ -1,6 +1,14 @@
-import {addTaskAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC} from '../features/pageTodolists/todolist/task/TasksReducer';
-import {addTodolistAC, removeTodolistAC, setTodolistAC, todoListsReducer} from '../features/pageTodolists/todolist/TodoListsReducer';
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    removeTaskAC,
+    tasksReducer,
+    TasksStateType,
+    updateTaskAC
+} from '../features/pageTodolists/todolist/task/TasksReducer';
+import {addTodolistAC, removeTodolistAC, setTodolistAC} from '../features/pageTodolists/todolist/TodoListsReducer';
 import {todolistId1, todolistId2} from './todoListsReducer.test';
+import {StatusType} from '../app_and_store/AppReducer';
 
 let state: TasksStateType
 const addedDate = new Date()
@@ -10,21 +18,21 @@ beforeEach(() => (
         [todolistId1]: [
             {
                 id: 'id1', title: 'HTML&CSS', status: 1, addedDate: addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1, taskStatus: 'idle'
             },
             {
                 id: 'id2', title: 'JS', status: 1, addedDate: addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1, taskStatus: 'idle'
             }
         ],
         [todolistId2]: [
             {
-                id: 'id1', title: 'Milk', status: 1, addedDate:addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2
+                id: 'id1', title: 'Milk', status: 1, addedDate: addedDate, deadline: null,
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2, taskStatus: 'idle'
             },
             {
-                id: 'id2', title: 'React Book', status: 1, addedDate:addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2
+                id: 'id2', title: 'React Book', status: 1, addedDate: addedDate, deadline: null,
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2, taskStatus: 'idle'
             }
         ]
     }
@@ -39,18 +47,19 @@ test('remove task by id', () => {
     expect(endState[todolistId2].length).toBe(2)
     expect(endState).toEqual({ // сравнивает не ссылки объектов, а именно свойства и их значения
         [todolistId1]: [
-            {id: 'id1', title: 'HTML&CSS', status: 1, addedDate:addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1
+            {
+                id: 'id1', title: 'HTML&CSS', status: 1, addedDate: addedDate, deadline: null,
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1, taskStatus: 'idle'
             }
         ],
         [todolistId2]: [
             {
-                id: 'id1', title: 'Milk', status: 1, addedDate:addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2
+                id: 'id1', title: 'Milk', status: 1, addedDate: addedDate, deadline: null,
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2, taskStatus: 'idle'
             },
             {
-                id: 'id2', title: 'React Book', status: 1, addedDate:addedDate, deadline: null,
-                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2
+                id: 'id2', title: 'React Book', status: 1, addedDate: addedDate, deadline: null,
+                order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId2, taskStatus: 'idle'
             }
         ]
     })
@@ -59,8 +68,19 @@ test('remove task by id', () => {
 test('add task by id', () => {
     // action
     // const endState = tasksReducer(state, addTaskAC(todolistId1, 'newTask'))
-    const endState = tasksReducer(state, addTaskAC({id: 'id1', title: 'newTask', status: 0, addedDate:addedDate,
-        deadline: null, order: 0, description: '', priority: 1, startDate: null, todoListId: todolistId1}))
+    const endState = tasksReducer(state, addTaskAC({
+        id: 'id1',
+        title: 'newTask',
+        status: 0,
+        addedDate: addedDate,
+        deadline: null,
+        order: 0,
+        description: '',
+        priority: 1,
+        startDate: null,
+        todoListId: todolistId1,
+        taskStatus: 'loading'
+    }))
     // expect result
     expect(endState[todolistId1].length).toBe(3)
     expect(endState[todolistId1][0].title).toBe('newTask') // проверяем, какой title добавили в новую таску
@@ -71,16 +91,25 @@ test('add task by id', () => {
 
 test('change task status by id', () => {
     // action
-    const endState = tasksReducer(state, updateTaskAC(todolistId1, 'id1', {status:0}))
+    const endState = tasksReducer(state, updateTaskAC(todolistId1, 'id1', {status: 0}))
     // expect result
     expect(endState[todolistId1][0].status).toBe(0)
     // Два объекта с одинаковыми айди. Проверяем, что второй не изменился
     expect(endState[todolistId2][0].status).toBe(1)
 })
 
+test('change taskStatus by id', () => {
+    // action
+    const endState = tasksReducer(state, changeTaskStatusAC(todolistId1, 'id1', 'loading'))
+    // expect result
+    expect(endState[todolistId1][0].taskStatus).toBe('loading')
+    // Два объекта с одинаковыми айди. Проверяем, что второй не изменился
+    expect(endState[todolistId2][0].taskStatus).toBe('idle')
+})
+
 test('update task title by id', () => {
     // action
-    const endState = tasksReducer(state, updateTaskAC(todolistId1, 'id1', {title:'react'}))
+    const endState = tasksReducer(state, updateTaskAC(todolistId1, 'id1', {title: 'react'}))
     // expect result
     expect(endState[todolistId1].length).toBe(2)
     expect(endState[todolistId1][0].title).toBe('react')
@@ -90,7 +119,7 @@ test('update task title by id', () => {
 test('new array should be added when new todolist is added', () => {
 
 
-    const action = addTodolistAC({id: 'todolistId3', title: 'new Todolist',addedDate: new Date(), order: 0});
+    const action = addTodolistAC({id: 'todolistId3', title: 'new Todolist', addedDate: new Date(), order: 0});
 
     const endState = tasksReducer(state, action)
 
@@ -118,9 +147,9 @@ test('property with todolistId should be deleted', () => {
 test('empty tasks arrays should be appear', () => {
     // action
     const endState = tasksReducer({}, setTodolistAC([
-        {id: todolistId1, title: 'What to learn',addedDate: new Date(), order: 0},
-        {id: todolistId2, title: 'What to buy',addedDate: new Date(), order: 0}
-]))
+        {id: todolistId1, title: 'What to learn', addedDate: new Date(), order: 0},
+        {id: todolistId2, title: 'What to buy', addedDate: new Date(), order: 0}
+    ]))
     // expect result
     expect(endState[todolistId1].length).toBe(0)
     expect(endState[todolistId2]).toEqual([])

@@ -6,7 +6,7 @@ import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {v1} from 'uuid';
 import {appReducer} from './AppReducer';
 import {thunk} from 'redux-thunk';
-import {AppStoreType} from './Store';
+import {AppStateType} from './Store';
 
 const rootReducer = combineReducers({
     todolists: todoListsReducer,
@@ -14,10 +14,14 @@ const rootReducer = combineReducers({
     app: appReducer
 })
 
-const initialState: AppStoreType = {
+const initialState: AppStateType = {
     app:  {
         status: 'idle',
-        error: null
+        error: null,
+        isInitialized: false
+    },
+    auth: {
+        isLoggedIn: false,
     },
     todolists: [
         {
@@ -36,24 +40,24 @@ const initialState: AppStoreType = {
             {
                 id: v1(), todoListId: 'todolistId1', title: 'HTML&CSS', status: 1,
                 addedDate: new Date(), order: 0, startDate: null, deadline: null,
-                description: '', priority: 0
+                description: '', priority: 0, taskStatus: 'idle'
             },
             {
                 id: v1(), todoListId: 'todolistId1', title: 'JS', status: 1,
                 addedDate: new Date(), order: 0, startDate: null, deadline: null,
-                description: '', priority: 0
+                description: '', priority: 0, taskStatus: 'idle'
             }
         ],
         'todolistId2': [
             {
                 id: v1(), todoListId: 'todolistId2', title: 'Milk', status: 1,
                 addedDate: new Date(), order: 0, startDate: null, deadline: null,
-                description: '', priority: 0
+                description: '', priority: 0, taskStatus: 'idle'
             },
             {
                 id: v1(), todoListId: 'todolistId2', title: 'React Book', status: 0,
                 addedDate: new Date(), order: 0, startDate: null, deadline: null,
-                description: '', priority: 0
+                description: '', priority: 0, taskStatus: 'idle'
             }
         ]
     }

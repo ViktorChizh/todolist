@@ -2,12 +2,13 @@ import {useAppDispatch, useAppSelector} from '../../../app_and_store/Store';
 import {addTaskTC} from './task/TasksReducer';
 import {useCallback, useMemo} from 'react';
 import {changeFilterAC, FilterValuesType, removeTodolistTC, updateTodolistTC} from './TodoListsReducer';
-import {TaskType} from '../../../api/todolists-api';
+import {TaskType} from '../../../api/api';
+import {StatusType} from '../../../app_and_store/AppReducer';
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
  */
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
-    let tasks = useAppSelector<TaskType[]>(state => state.tasks[idTDL])
+    let tasks = useAppSelector(state => state.tasks[idTDL])
     const dispatch = useAppDispatch()
     useMemo(() => {
         if (filter === 'active') {

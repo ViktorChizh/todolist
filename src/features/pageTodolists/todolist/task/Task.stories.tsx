@@ -4,8 +4,8 @@ import { StoriesProviderDecorator} from '../../../../app_and_store/StoriesProvid
 import {useSelector} from 'react-redux';
 import {v1} from 'uuid';
 import {Meta} from '@storybook/react'
-import {TaskType} from '../../../../api/todolists-api';
-import {AppStoreType} from '../../../../app_and_store/Store';
+import {TaskType} from '../../../../api/api';
+import {AppStateType} from '../../../../app_and_store/Store';
 
 const meta: Meta<typeof Task> = {
     title: 'Task component',
@@ -21,12 +21,12 @@ const meta: Meta<typeof Task> = {
 export default meta;
 
 const HelpComponent = () => {
-    let task = useSelector<AppStoreType, TaskType>(state => state.tasks['todolistId1'][0])
+    let task = useSelector<AppStateType, TaskType>(state => state.tasks['todolistId1'][0])
     if (!task) {
         task = {
             id: v1(), title: 'DefaultTask', status: 0, order: 0,
             addedDate: new Date(), startDate: null, todoListId: 'newTodolistId',
-            priority: 1, description: '', deadline: null
+            priority: 1, description: '', deadline: null, taskStatus: 'idle'
         }
     }
 

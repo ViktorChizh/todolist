@@ -2,7 +2,7 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
-import {setErrorAC} from '../../app_and_store/AppReducer';
+import {setAppErrorAC} from '../../app_and_store/AppReducer';
 
 export function ErrorSnackBar() {
     const error = useAppSelector<string | null>(state => state.app.error)
@@ -11,7 +11,7 @@ export function ErrorSnackBar() {
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') return
-        dispatch(setErrorAC(null));
+        dispatch(setAppErrorAC(null));
     };
 
     return (
