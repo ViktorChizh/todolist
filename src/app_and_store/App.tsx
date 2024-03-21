@@ -1,4 +1,4 @@
-import React, {FC, memo, useEffect, useState} from 'react';
+import React, {FC, memo, useEffect} from 'react';
 import './App.css';
 import ButtonAppBar from '../features/buttonAppBar/ButtonAppBar';
 import {PageTodoLists} from '../features/pageTodolists/PageTodoLists';

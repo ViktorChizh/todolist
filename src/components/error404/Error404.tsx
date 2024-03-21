@@ -17,19 +17,15 @@ export const Error404 = () => {
     if (timeout && !isLoggedIn) {
         dispatch(setAppTimeoutAC(false))
         return <Navigate to="/login"/>
-    } else if (timeout && isLoggedIn){
+    } else if (timeout && isLoggedIn) {
         dispatch(setAppTimeoutAC(false))
         return <Navigate to="/todolists"/>
     }
 
     return (
-        <>
-
-            <div className={s.main}>
-                <h2 className={s.text}>WAIT 5 SECONDS</h2>
-                <img src={img404} alt=''/>
-            </div>
-        </>
-
+        <div className={s.main}>
+            <h2 className={s.text}>WAIT 5 SECONDS</h2>
+            <img src={img404} alt=""/>
+        </div>
     )
 }
