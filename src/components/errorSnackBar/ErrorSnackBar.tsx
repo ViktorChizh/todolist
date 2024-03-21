@@ -15,10 +15,13 @@ export function ErrorSnackBar() {
     };
 
     return (
-        <Snackbar open={error !== null} autoHideDuration={5000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" variant="filled" sx={{width: '100%'}}>
-                {error}
-            </Alert>
-        </Snackbar>
+        <div>
+            <Snackbar open={error !== null} autoHideDuration={5000} onClose={handleClose}
+                 style={{left: '31vw', right:'29vw'}}>
+                <Alert onClose={handleClose} severity="error" variant="filled" sx={{width: '100%'}}>
+                    {error}
+                </Alert>
+            </Snackbar>
+        </div>
     );
 }

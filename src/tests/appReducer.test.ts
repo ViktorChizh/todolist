@@ -7,7 +7,7 @@ beforeEach(() => (
         status: 'idle',
         error: null,
         isInitialized: false,
-        timeout: false
+        errorPageTimeout: 5000
     }
 ))
 

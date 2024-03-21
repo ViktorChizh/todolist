@@ -17,7 +17,7 @@ export const api = {
         return instanse.get<ResponseType<ResponseMeType>>('auth/me')
     },
     login(params: LoginParamsType) {
-        return instanse.post<ResponseType<{userId: number}>>('auth/login', params)
+        return instanse.post<ResponseType<{userId?: number}>>('auth/login', params)
     },
     logout() {
         return instanse.delete<ResponseType>('auth/login')

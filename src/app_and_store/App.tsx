@@ -44,7 +44,7 @@ export const App: FC<AppPropsType> = memo(({demo = false}) => {
                         <Route path={'/*'} element={<Navigate to={'/404'}/>}/>
                     </Routes>
                 </Container>
-                <ErrorSnackBar/>
+                <ErrorSnackBar />
             </div>
         </BrowserRouter>
     )

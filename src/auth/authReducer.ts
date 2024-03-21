@@ -26,12 +26,14 @@ export const meTC = (): AppThunkType  => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
         let res = await api.me()
-        dispatch(setAppIsInitializedAC(true))
+
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true))
+            dispatch(setAppStatusAC('succeeded'))
         } else {
             ServerErrorHandler<ResponseMeType>(res.data, dispatch)
         }
+        dispatch(setAppIsInitializedAC(true))
     } catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             NetWorkErrorHandler(e, dispatch)
@@ -48,7 +50,7 @@ export const loginTC = (params: LoginParamsType): AppThunkType  => async dispatc
             dispatch(setIsLoggedInAC(true))
             dispatch(setAppStatusAC('succeeded'))
         } else {
-            ServerErrorHandler<{ userId: number }>(res.data, dispatch)
+            ServerErrorHandler<{ userId?: number }>(res.data, dispatch)
         }
     } catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {

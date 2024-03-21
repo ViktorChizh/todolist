@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useCallback} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,11 +11,10 @@ import {logoutTC} from '../../auth/authReducer';
 
 function ButtonAppBar() {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const timeout = useAppSelector(state => state.app.timeout)
     const dispatch = useAppDispatch()
-    const onClickHandler = () => {
+    const onClickHandler = useCallback(() => {
         dispatch(logoutTC())
-    }
+    }, [])
 
     return (
         <Box sx={{flexGrow: 1}}>

@@ -19,7 +19,7 @@ const initialState: AppStateType = {
         status: 'idle',
         error: null,
         isInitialized: false,
-        timeout: false
+        errorPageTimeout: 5000
     },
     auth: {
         isLoggedIn: false,

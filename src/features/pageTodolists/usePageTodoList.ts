@@ -12,8 +12,7 @@ export const usePageTodoList = (demo: boolean) => {
     }, [dispatch])
 
     useEffect(() => {
-        if(demo) return
-        if (!isLoggedIn)  return
+        if(demo || !isLoggedIn) return
         dispatch(setTodolistTC())
     }, []);
 
