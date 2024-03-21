@@ -13,3 +13,6 @@
 .is-done {
     opacity: 0.5;
 }
+.App {
+    width: 100%;
+}

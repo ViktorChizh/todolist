@@ -8,13 +8,19 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
 import {logoutTC} from '../../auth/authReducer';
+import {Navigate} from 'react-router-dom';
 
 function ButtonAppBar() {
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const timeout = useAppSelector(state => state.app.timeout)
     const dispatch = useAppDispatch()
     const onClickHandler = () => {
         dispatch(logoutTC())
     }
+
+    // if (!isLoggedIn) { return <Navigate to='/login'/> }
+    // if (isLoggedIn) { return <Navigate to='/todolists'/> }
+
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">

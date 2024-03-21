@@ -4,7 +4,7 @@ import {StatusType} from '../app_and_store/AppReducer';
 const settings = {
     withCredentials: true,
     headers: {
-        'API-KEY': '48b5fe2e-10a0-4ad2-b6ed-950dedf8110b'
+        'API-KEY': '7786fc28-3a8a-4ff6-a330-c22ffae6ff54'
     }
 }
 const instanse = axios.create({
