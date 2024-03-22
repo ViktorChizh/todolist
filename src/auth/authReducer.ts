@@ -18,31 +18,31 @@ export const authReducer = (state: InitialStateType = initialState, action: Auth
 }
 // types
 type InitialStateType = typeof initialState
-export type AuthReducerActionsType =ReturnType<typeof setIsLoggedInAC> | AppReducerActionType
+export type AuthReducerActionsType = ReturnType<typeof setIsLoggedInAC> | AppReducerActionType
 // actions
 export const setIsLoggedInAC = (value: boolean) => ({type: 'auth/SET-IS-LOGGED-IN', value} as const)
 // thunks
-export const meTC = (): AppThunkType  => async dispatch => {
+export const meTC = (): AppThunkType => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
         let res = await api.me()
-
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true))
             dispatch(setAppStatusAC('succeeded'))
         } else {
             ServerErrorHandler<ResponseMeType>(res.data, dispatch)
         }
-        dispatch(setAppIsInitializedAC(true))
     } catch (e) {
         if (axios.isAxiosError<ErrorType>(e)) {
             NetWorkErrorHandler(e, dispatch)
         } else {
             NetWorkErrorHandler(e as Error, dispatch)
         }
+    } finally {
+        dispatch(setAppIsInitializedAC(true))
     }
 }
-export const loginTC = (params: LoginParamsType): AppThunkType  => async dispatch => {
+export const loginTC = (params: LoginParamsType): AppThunkType => async dispatch => {
     dispatch(setAppStatusAC('loading'))
     try {
         let res = await api.login(params)
@@ -60,7 +60,7 @@ export const loginTC = (params: LoginParamsType): AppThunkType  => async dispatc
         }
     }
 }
-export const logoutTC = (): AppThunkType  => async dispatch => {
+export const logoutTC = (): AppThunkType => async dispatch => {
     try {
         let res = await api.logout()
         if (res.data.resultCode === resultCode.SUCCEEDED) {

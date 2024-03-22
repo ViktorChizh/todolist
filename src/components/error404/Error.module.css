@@ -11,16 +11,16 @@
     100% { opacity: 1; }
 }
 .text {
-    color:white;
+    color: #85c0d7;
     background-color: #051010;
     text-align: center;
-    line-height: 75px;
-    font-size: 75px;
+    line-height: 50px;
+    font-size: 50px;
     font-style: italic;
     animation: blink 2.5s infinite;
 }
 .main img {
     height: 25vh;
     object-fit: cover;
-    margin: 0 auto 50px;
+    margin: 25px auto 50px;
 }

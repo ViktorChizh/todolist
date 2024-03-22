@@ -10,17 +10,19 @@ import Button from '@mui/material/Button'
 import {useFormik} from 'formik';
 import {loginTC} from '../../auth/authReducer';
 import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
-import {Navigate} from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 
 export const Login = () => {
     let dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
 
+
+
     const formik = useFormik({
         initialValues: {
             email: 'free@samuraijs.com',
             password: 'free',
-            rememberMe: true,
+            rememberMe: false,
         },
         validate: values => {
             const errors: FormikErrorType = {}
@@ -28,10 +30,11 @@ export const Login = () => {
                 errors.email = 'Email is required'
             } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = 'Invalid email address'
-            } else if (!values.password) {
+            }
+            if (!values.password) {
                 errors.password = 'Password is required'
             } else if (!/.{4,}/i.test(values.password)) {
-                errors.password = 'Password must be 4 simbols or more'
+                errors.password = 'Password must be 4 characters or more'
             }
             return errors
         },
@@ -62,15 +65,15 @@ export const Login = () => {
                         </FormLabel>
                         <FormGroup>
                             <TextField label="Email" margin="normal" {...formik.getFieldProps('email')}/>
-                            {formik.touched.email && formik.errors.email
-                                ? <div style={{color: 'red'}}>{formik.errors.email}</div> : null}
+                            {formik.touched.email && formik.errors.email &&
+                                <div style={{color: 'red'}}>{formik.errors.email}</div>}
                             <TextField type="password" label="Password"
                                        margin="normal"  {...formik.getFieldProps('password')}/>
                             {formik.touched.password && formik.errors.password
                                 ? <div style={{color: 'red'}}>{formik.errors.password}</div> : null}
                             <FormControlLabel label="Remember me"
                                               control={<Checkbox  {...formik.getFieldProps('rememberMe')}
-                                                                  checked={formik.values.rememberMe}/>}/>
+                                              checked={formik.values.rememberMe}/>}/>
                             <Button type="submit" variant="contained" color="primary"
                                     disabled={!(!formik.errors.email && !formik.errors.password)}>
                                 LOGIN

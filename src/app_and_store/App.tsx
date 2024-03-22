@@ -40,8 +40,8 @@ export const App: FC<AppPropsType> = memo(({demo = false}) => {
                         <Route path={'/1-todolist'} element={<Navigate to={'/todolists'}/>}/>
                         <Route path={''} element={<Navigate to={'/todolists'}/>}/>
                         <Route path={'/todolists'} element={<PageTodoLists demo={demo}/>}/>
-                        <Route path={'/404'} element={<Error404 /> }/>
-                        <Route path={'/*'} element={<Navigate to={'/404'}/>}/>
+                        <Route path={'/error404'} element={<Error404 /> }/>
+                        <Route path={'*'} element={<Navigate to={'/error404'}/>}/>
                     </Routes>
                 </Container>
                 <ErrorSnackBar />
