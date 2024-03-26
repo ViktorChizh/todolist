@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import s from "./Error.module.css";
 import {
   setAppErrorPageAC,
@@ -15,9 +15,11 @@ export const Error404 = () => {
   const timeout = useAppSelector((state) => state.app.timeout);
 
   dispatch(setAppStatusAC("failed"));
-  setTimeout(() => {
-    dispatch(setAppErrorPageAC(false));
-  }, timeout);
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(setAppErrorPageAC(false));
+    }, timeout);
+  }, []);
 
   if (!errorPage && !isLoggedIn) {
     dispatch(setAppErrorPageAC(true));
