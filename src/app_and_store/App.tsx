@@ -36,9 +36,9 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
       </div>
     );
   }
+  // GitHubPages uncorrect working with BrouserRouter
   return (
     <HashRouter>
-      // GitHubPages uncorrect working with BrouserRouter
       <div className="App">
         <ButtonAppBar />
         {status === "loading" && <LinearProgress color="error" />}
