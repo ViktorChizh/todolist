@@ -1,35 +1,38 @@
-import React from 'react'
-import s from './Error.module.css';
-import {setAppStatusAC, setAppTimeoutAC} from '../../app_and_store/AppReducer';
-import {useAppDispatch, useAppSelector} from '../../app_and_store/Store';
-import {Navigate, useNavigate} from 'react-router-dom';
-import img404 from '../../_assets/bgE.jpg'
+import React from "react";
+import s from "./Error.module.css";
+import {
+  setAppErrorPageAC,
+  setAppStatusAC,
+} from "../../app_and_store/AppReducer";
+import { useAppDispatch, useAppSelector } from "../../app_and_store/Store";
+import { Navigate } from "react-router-dom";
+import img404 from "../../_assets/bgE.jpg";
 
 export const Error404 = () => {
-    const dispatch = useAppDispatch()
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const errorPageTimeout = useAppSelector(state => state.app.errorPageTimeout)
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const errorPage = useAppSelector((state) => state.app.errorPage);
+  const timeout = useAppSelector((state) => state.app.timeout);
 
+  dispatch(setAppStatusAC("failed"));
+  setTimeout(() => {
+    dispatch(setAppErrorPageAC(false));
+  }, timeout);
 
-    let t // ввожу переменную, чтобы сохранять установленное в AppReducer время отображения страницы Error404
-    if(errorPageTimeout) t=errorPageTimeout
-    dispatch(setAppStatusAC('failed'))
-    setTimeout(() => {
-        dispatch(setAppTimeoutAC(0))
-    }, errorPageTimeout)
+  if (!errorPage && !isLoggedIn) {
+    dispatch(setAppErrorPageAC(true));
+    return <Navigate to="/login" />;
+  } else if (!errorPage && isLoggedIn) {
+    dispatch(setAppErrorPageAC(true));
+    return <Navigate to="/todolists" />;
+  }
 
-    if (!errorPageTimeout && !isLoggedIn) {
-        dispatch(setAppTimeoutAC(t))
-        return <Navigate to="/login"/>
-    } else if (!errorPageTimeout && isLoggedIn) {
-        dispatch(setAppTimeoutAC(t))
-        return <Navigate to="/todolists"/>
-    }
-
-    return (
-        <div className={s.main}>
-            <h2 className={s.text}>{t ? `WAIT ${t/1000} SECONDS OR CLICK BACK` : ''}</h2>
-            <img src={img404} alt=""/>
-        </div>
-    )
-}
+  return (
+    <div className={s.main}>
+      <h2 className={s.text}>
+        {`WAIT ${timeout / 1000} SECONDS OR CLICK BACK`}
+      </h2>
+      <img src={img404} alt="" />
+    </div>
+  );
+};

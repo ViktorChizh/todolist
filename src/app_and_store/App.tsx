@@ -36,7 +36,7 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
       </div>
     );
   }
-  // GitHubPages uncorrect working with BrouserRouter
+
   return (
     <HashRouter>
       <div className="App">
@@ -52,7 +52,7 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
               path={"/1-todolist"}
               element={<Navigate to={"/todolists"} />}
             />
-            <Route path={""} element={<Navigate to={"/todolists"} />} />
+            <Route path={"/"} element={<Navigate to={"/todolists"} />} />
             <Route
               path={"/todolists"}
               element={<PageTodoLists demo={demo} />}
