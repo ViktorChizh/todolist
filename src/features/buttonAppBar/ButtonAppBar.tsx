@@ -13,6 +13,7 @@ import { setAppErrorPageAC } from "../../app_and_store/AppReducer";
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const timeout = useAppSelector((state) => state.app.timeout);
 
   const dispatch = useAppDispatch();
   // строки 19-32 просто для тренировки использования новых хуков
@@ -21,13 +22,12 @@ function ButtonAppBar() {
 
   const onClickErrorHandler = useCallback(() => {
     if (isLoggedIn) {
-      dispatch(setAppErrorPageAC(true));
       navigate("/todolists");
     } else {
-      dispatch(setAppErrorPageAC(true));
       navigate("/login");
     }
-  }, [navigate]);
+    dispatch(setAppErrorPageAC(true));
+  }, []);
 
   const onClickHandler = useCallback(() => {
     dispatch(logoutTC());
