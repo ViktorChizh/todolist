@@ -1,49 +1,42 @@
-import React, { memo, useCallback } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useAppDispatch, useAppSelector } from "../../app_and_store/Store";
-import { logoutTC } from "../../auth/authReducer";
-import { useLocation, useNavigate } from "react-router-dom";
-import { setAppErrorPageAC } from "../../app_and_store/AppReducer";
+import React, { memo, useCallback } from "react"
+import AppBar from "@mui/material/AppBar"
+import Box from "@mui/material/Box"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+import IconButton from "@mui/material/IconButton"
+import MenuIcon from "@mui/icons-material/Menu"
+import { useAppDispatch, useAppSelector } from "app_and_store/Store"
+import { logoutTC } from "auth/authReducer"
+import { useLocation, useNavigate } from "react-router-dom"
+import { setAppErrorPageAC } from "app_and_store/AppReducer"
 
 function ButtonAppBar() {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
-  const timeout = useAppSelector((state) => state.app.timeout);
+  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
 
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
   // строки 19-32 просто для тренировки использования новых хуков
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const onClickErrorHandler = useCallback(() => {
     if (isLoggedIn) {
-      navigate("/todolists");
+      navigate("/todolists")
     } else {
-      navigate("/login");
+      navigate("/login")
     }
-    dispatch(setAppErrorPageAC(true));
-  }, []);
+    dispatch(setAppErrorPageAC({ errorPage: true }))
+  }, [])
 
   const onClickHandler = useCallback(() => {
-    dispatch(logoutTC());
-  }, []);
+    dispatch(logoutTC())
+  }, [])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
+          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
           <Typography
@@ -81,7 +74,7 @@ function ButtonAppBar() {
         </Toolbar>
       </AppBar>
     </Box>
-  );
+  )
 }
 
-export default memo(ButtonAppBar);
+export default memo(ButtonAppBar)

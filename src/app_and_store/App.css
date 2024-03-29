@@ -1,18 +1,18 @@
 .error {
-    border: red 1px solid;
+  border: red 1px solid;
 }
 
 .error-message {
-    color: red;
+  color: red;
 }
 
 .active-filter {
-    background-color: aquamarine;
+  background-color: aquamarine;
 }
 
 .is-done {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 .App {
-    width: 100%;
+  width: 100%;
 }

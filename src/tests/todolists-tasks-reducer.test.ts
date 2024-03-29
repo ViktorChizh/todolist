@@ -1,22 +1,32 @@
-import {addTodolistAC, todoListsReducer, TodolistType} from '../features/pageTodolists/todolist/TodoListsReducer';
-import {tasksReducer, TasksStateType} from '../features/pageTodolists/todolist/task/TasksReducer';
-import {todolistId1} from './todoListsReducer.test';
-// тесты для случаев, когда работают 2 редюсера одновременно
-test('ids should be equals', () => {
-    // задаем стартовые пустые значения для редюсеров, чтобы не заморачиваться
-    const startTasksState: TasksStateType = {};
-    const startTodolistsState: Array<TodolistType> = [];
+import {
+  addTodolistAC,
+  todoListsReducer,
+  TodolistType,
+} from "features/pageTodolists/todolist/TodoListsReducer"
+import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/task/TasksReducer"
 
-    const action = addTodolistAC({id: "todolistId3", title: 'new Todolist',addedDate: new Date(), order: 0});
+test("ids should be equals", () => {
+  const startTasksState: TasksStateType = {}
+  const startTodolistsState: Array<TodolistType> = []
+  const date = new Date()
+  let todolist: TodolistType = {
+    title: "new todolist",
+    id: "any id",
+    addedDate: date,
+    order: 0,
+    todoStatus: "idle",
+    filter: "all",
+  }
 
-    const endTasksState = tasksReducer(startTasksState, action)
-    const endTodolistsState = todoListsReducer(startTodolistsState, action)
+  const action = addTodolistAC({ todolist })
 
-    const keys = Object.keys(endTasksState);
-    const idFromTasks = keys[0];
-    const idFromTodolists = endTodolistsState[0].id;
+  const endTasksState = tasksReducer(startTasksState, action)
+  const endTodolistsState = todoListsReducer(startTodolistsState, action)
 
-    expect(idFromTasks).toBe(action.payload.todolist.id);
-    expect(idFromTodolists).toBe(action.payload.todolist.id);
-});
+  const keys = Object.keys(endTasksState)
+  const idFromTasks = keys[0]
+  const idFromTodolists = endTodolistsState[0].id
 
+  expect(idFromTasks).toBe(action.payload.todolist.id)
+  expect(idFromTodolists).toBe(action.payload.todolist.id)
+})

@@ -1,28 +1,26 @@
-import {todoListsReducer, TodoListsReducerActionType} from '../features/pageTodolists/todolist/TodoListsReducer';
-import {tasksReducer, TasksReducerActionType} from '../features/pageTodolists/todolist/task/TasksReducer';
-import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
-import {thunk, ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {appReducer, AppReducerActionType} from './AppReducer';
-import {authReducer, AuthReducerActionsType} from '../auth/authReducer';
+import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/task/TasksReducer"
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
+import { appReducer } from "./AppReducer"
+import { authReducer } from "auth/authReducer"
+import { configureStore, ThunkAction } from "@reduxjs/toolkit"
+import { combineReducers } from "redux"
+import { thunk } from "redux-thunk"
 
 const rootReducer = combineReducers({
-    todolists: todoListsReducer,
-    tasks: tasksReducer,
-    app: appReducer,
-    auth: authReducer
+  todolists: todoListsReducer,
+  tasks: tasksReducer,
+  app: appReducer,
+  auth: authReducer,
 })
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
+})
 //types
-export type AppStateType = ReturnType<typeof rootReducer>
-export type AppDispatchType = ThunkDispatch<AppStateType, unknown, StoreReducerActionType>
-export type AppThunkType<ReturnType = void> = ThunkAction<ReturnType, AppStateType, unknown, StoreReducerActionType>
-export type StoreReducerActionType =
-    | TodoListsReducerActionType
-    | TasksReducerActionType
-    | AuthReducerActionsType
-    | AppReducerActionType
+export type AppStateType = ReturnType<typeof store.getState>
+export type AppDispatchType = typeof store.dispatch
 //hooks
 export const useAppDispatch = useDispatch<AppDispatchType>
 export const useAppSelector: TypedUseSelectorHook<AppStateType> = useSelector
