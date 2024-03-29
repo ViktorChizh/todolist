@@ -1,10 +1,7 @@
 import { TasksStateType } from "../App"
 import { v1 } from "uuid"
 
-export const TasksReducer = (
-  state: TasksStateType,
-  action: TasksReducerActionType,
-): TasksStateType => {
+export const TasksReducer = (state: TasksStateType, action: TasksReducerActionType): TasksStateType => {
   switch (action.type) {
     case "ADD-NEW-TASKSLIST": {
       return { ...state, [action.payload.id]: [] }
@@ -12,9 +9,7 @@ export const TasksReducer = (
     case "REMOVE-TASK": {
       return {
         ...state,
-        [action.payload.todolistId]: state[action.payload.todolistId].filter(
-          (t) => t.id !== action.payload.id,
-        ),
+        [action.payload.todolistId]: state[action.payload.todolistId].filter((t) => t.id !== action.payload.id),
       }
     }
     case "ADD-TASK": {
@@ -34,11 +29,7 @@ export const TasksReducer = (
   }
 }
 
-type TasksReducerActionType =
-  | addNewTaskslistACType
-  | removeTaskACType
-  | addTaskACType
-  | changeStatusACType
+type TasksReducerActionType = addNewTaskslistACType | removeTaskACType | addTaskACType | changeStatusACType
 
 type addNewTaskslistACType = ReturnType<typeof addNewTaskslistAC>
 

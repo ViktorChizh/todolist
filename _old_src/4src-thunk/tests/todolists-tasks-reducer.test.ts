@@ -1,8 +1,4 @@
-import {
-  addTodolistAC,
-  todoListsReducer,
-  TodolistType,
-} from "../features/pageTodolists/todolist/todoListsReducer"
+import { addTodolistAC, todoListsReducer, TodolistType } from "../features/pageTodolists/todolist/todoListsReducer"
 import { tasksReducer, TasksStateType } from "../features/pageTodolists/todolist/task/tasksReducer"
 import { todolistId1 } from "./todoListsReducer.test"
 // тесты для случаев, когда работают 2 редюсера одновременно

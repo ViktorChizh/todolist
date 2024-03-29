@@ -1,9 +1,6 @@
 import { FilterValuesType } from "../App"
 
-export const filterReducer = (
-  state: FilterValuesType,
-  action: changeFilterACType,
-): FilterValuesType => {
+export const filterReducer = (state: FilterValuesType, action: changeFilterACType): FilterValuesType => {
   switch (action.type) {
     case "CHANGE-FILTER": {
       return action.payload.value

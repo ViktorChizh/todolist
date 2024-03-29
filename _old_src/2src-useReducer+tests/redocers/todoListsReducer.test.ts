@@ -1,11 +1,5 @@
 import { TodolistType } from "../App"
-import {
-  addTodolistAC,
-  changeFilterAC,
-  removeTodolistAC,
-  TodoListsReducer,
-  updateTodolistAC,
-} from "./todoListsReducer"
+import { addTodolistAC, changeFilterAC, removeTodolistAC, TodoListsReducer, updateTodolistAC } from "./todoListsReducer"
 
 let state: TodolistType[] = [
   { id: "todolistId1", title: "What to learn", filter: "all" },

@@ -7,12 +7,12 @@ import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { logoutTC } from "auth/authReducer"
+import { isLoggedInSelector, logoutTC } from "auth/authReducer"
 import { useLocation, useNavigate } from "react-router-dom"
-import { setAppErrorPageAC } from "app_and_store/AppReducer"
+import { setAppErrorPage } from "app_and_store/AppReducer"
 
 function ButtonAppBar() {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector(isLoggedInSelector)
 
   const dispatch = useAppDispatch()
   // строки 19-32 просто для тренировки использования новых хуков
@@ -25,7 +25,7 @@ function ButtonAppBar() {
     } else {
       navigate("/login")
     }
-    dispatch(setAppErrorPageAC({ errorPage: true }))
+    dispatch(setAppErrorPage({ errorPage: false }))
   }, [])
 
   const onClickHandler = useCallback(() => {
@@ -39,24 +39,13 @@ function ButtonAppBar() {
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-            textAlign="center"
-            color="secondary"
-          >
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} textAlign="center" color="secondary">
             <h1 style={{ fontSize: "50px", lineHeight: "50px", margin: "0" }}>
               <i>Todolists</i>
             </h1>
           </Typography>
           {location.pathname === "/error404" && (
-            <Button
-              variant="contained"
-              color="secondary"
-              aria-label="logout"
-              onClick={onClickErrorHandler}
-            >
+            <Button variant="contained" color="secondary" aria-label="logout" onClick={onClickErrorHandler}>
               BACK
             </Button>
           )}
@@ -66,8 +55,7 @@ function ButtonAppBar() {
               color="inherit"
               aria-label="logout"
               style={{ marginLeft: "10px" }}
-              onClick={onClickHandler}
-            >
+              onClick={onClickHandler}>
               LOGOUT
             </Button>
           )}

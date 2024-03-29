@@ -22,8 +22,7 @@ export const AddItemForm: FC<AddItemProps> = memo(({ callBack, placeholder, styl
         marginLeft: "-5wh",
         display: "flex",
         flexWrap: "nowrap",
-      }}
-    >
+      }}>
       <TextField
         placeholder={placeholder}
         id="outlined-basic"
@@ -43,8 +42,7 @@ export const AddItemForm: FC<AddItemProps> = memo(({ callBack, placeholder, styl
         color="primary"
         aria-label="add item"
         onClick={addTask}
-        disabled={disabled}
-      >
+        disabled={disabled}>
         <QueueSharpIcon />
       </IconButton>
     </div>

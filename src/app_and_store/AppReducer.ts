@@ -4,31 +4,37 @@ const initialState: AppStateType = {
   status: "idle",
   error: null,
   isInitialized: false,
-  errorPage: true,
+  errorPage: false,
 }
 
 const slice = createSlice({
   name: "app",
   initialState: initialState,
   reducers: {
-    setAppStatusAC(state, action: PayloadAction<{ status: StatusType }>) {
+    setAppStatus(state, action: PayloadAction<{ status: StatusType }>) {
       state.status = action.payload.status
     },
-    setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
+    setAppError(state, action: PayloadAction<{ error: string | null }>) {
       state.error = action.payload.error
     },
-    setAppIsInitializedAC(state, action: PayloadAction<{ isInitialized: boolean }>) {
+    setAppIsInitialized(state, action: PayloadAction<{ isInitialized: boolean }>) {
       state.isInitialized = action.payload.isInitialized
     },
-    setAppErrorPageAC(state, action: PayloadAction<{ errorPage: boolean }>) {
+    setAppErrorPage(state, action: PayloadAction<{ errorPage: boolean }>) {
       state.errorPage = action.payload.errorPage
     },
+  },
+  selectors: {
+    statusAppSelector: (state) => state.status,
+    errorAppSelector: (state) => state.error,
+    isInitializedAppSelector: (state) => state.isInitialized,
+    errorPageAppSelector: (state) => state.errorPage,
   },
 })
 
 export const appReducer = slice.reducer
-export const { setAppStatusAC, setAppErrorAC, setAppIsInitializedAC, setAppErrorPageAC } =
-  slice.actions
+export const { setAppStatus, setAppError, setAppIsInitialized, setAppErrorPage } = slice.actions
+export const { statusAppSelector, errorAppSelector, isInitializedAppSelector, errorPageAppSelector } = slice.selectors
 
 //types
 export type StatusType = "idle" | "loading" | "succeeded" | "failed"

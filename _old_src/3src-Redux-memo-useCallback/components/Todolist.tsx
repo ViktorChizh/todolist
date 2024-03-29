@@ -7,12 +7,7 @@ import Button from "@mui/material/Button"
 import { useDispatch, useSelector } from "react-redux"
 import { AppStoreType } from "../reducers/Store"
 import { addTaskAC, changeStatusAC, TaskType } from "../reducers/tasksReducer"
-import {
-  changeFilterAC,
-  FilterValuesType,
-  removeTodolistAC,
-  updateTodolistAC,
-} from "../reducers/todoListsReducer"
+import { changeFilterAC, FilterValuesType, removeTodolistAC, updateTodolistAC } from "../reducers/todoListsReducer"
 import { Task } from "./Task"
 
 type PropsType = {
@@ -36,18 +31,9 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
   // если через переменную: tasks = useMemo( () => {тот же код},[filter, tasks])
 
   const removeTodolist = useCallback(() => dispatch(removeTodolistAC(idTDL)), [dispatch, idTDL])
-  const onAllClickHandler = useCallback(
-    () => dispatch(changeFilterAC(idTDL, "all")),
-    [dispatch, idTDL],
-  )
-  const onActiveClickHandler = useCallback(
-    () => dispatch(changeFilterAC(idTDL, "active")),
-    [dispatch, idTDL],
-  )
-  const onCompletedClickHandler = useCallback(
-    () => dispatch(changeFilterAC(idTDL, "completed")),
-    [dispatch, idTDL],
-  )
+  const onAllClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, "all")), [dispatch, idTDL])
+  const onActiveClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, "active")), [dispatch, idTDL])
+  const onCompletedClickHandler = useCallback(() => dispatch(changeFilterAC(idTDL, "completed")), [dispatch, idTDL])
   const addTaskHandler = useMemo(() => {
     return (title: string) => {
       dispatch(addTaskAC(idTDL, title))
@@ -80,9 +66,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           <Task key={t.id} task={t} todolistId={idTDL} onChangeHandler={onChangeHandler} />
         ))}
       </ul>
-      {!tasks.length && (
-        <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>
-      )}
+      {!tasks.length && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
       <div
         style={{
           display: "flex",
@@ -90,14 +74,12 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           margin: "0 auto",
           width: "100%",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <Button
           size="small"
           onClick={onAllClickHandler}
           color="success"
-          variant={filter === "all" ? "outlined" : "contained"}
-        >
+          variant={filter === "all" ? "outlined" : "contained"}>
           {" "}
           All{" "}
         </Button>
@@ -105,8 +87,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           size="small"
           onClick={onActiveClickHandler}
           color="error"
-          variant={filter === "active" ? "outlined" : "contained"}
-        >
+          variant={filter === "active" ? "outlined" : "contained"}>
           {" "}
           Active{" "}
         </Button>
@@ -114,8 +95,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           size="small"
           onClick={onCompletedClickHandler}
           color="primary"
-          variant={filter === "completed" ? "outlined" : "contained"}
-        >
+          variant={filter === "completed" ? "outlined" : "contained"}>
           {" "}
           Completed{" "}
         </Button>

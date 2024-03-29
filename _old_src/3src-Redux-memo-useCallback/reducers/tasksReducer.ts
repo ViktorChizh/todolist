@@ -12,10 +12,7 @@ export type TasksStateType = {
 
 const initialState: TasksStateType = {}
 
-export const tasksReducer = (
-  state = initialState,
-  action: TasksReducerActionType,
-): TasksStateType => {
+export const tasksReducer = (state = initialState, action: TasksReducerActionType): TasksStateType => {
   switch (action.type) {
     case "ADD-TODOLIST": {
       return { ...state, [action.payload.id]: [] }
@@ -28,9 +25,7 @@ export const tasksReducer = (
     case "REMOVE-TASK": {
       return {
         ...state,
-        [action.payload.todolistId]: state[action.payload.todolistId].filter(
-          (t) => t.id !== action.payload.id,
-        ),
+        [action.payload.todolistId]: state[action.payload.todolistId].filter((t) => t.id !== action.payload.id),
       }
     }
     case "ADD-TASK": {

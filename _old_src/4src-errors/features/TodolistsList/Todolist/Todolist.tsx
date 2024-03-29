@@ -53,14 +53,8 @@ export const Todolist = React.memo(function (props: PropsType) {
     [props.id, props.changeTodolistTitle],
   )
 
-  const onAllClickHandler = useCallback(
-    () => props.changeFilter("all", props.id),
-    [props.id, props.changeFilter],
-  )
-  const onActiveClickHandler = useCallback(
-    () => props.changeFilter("active", props.id),
-    [props.id, props.changeFilter],
-  )
+  const onAllClickHandler = useCallback(() => props.changeFilter("all", props.id), [props.id, props.changeFilter])
+  const onActiveClickHandler = useCallback(() => props.changeFilter("active", props.id), [props.id, props.changeFilter])
   const onCompletedClickHandler = useCallback(
     () => props.changeFilter("completed", props.id),
     [props.id, props.changeFilter],
@@ -97,25 +91,19 @@ export const Todolist = React.memo(function (props: PropsType) {
         ))}
       </div>
       <div style={{ paddingTop: "10px" }}>
-        <Button
-          variant={props.filter === "all" ? "outlined" : "text"}
-          onClick={onAllClickHandler}
-          color={"inherit"}
-        >
+        <Button variant={props.filter === "all" ? "outlined" : "text"} onClick={onAllClickHandler} color={"inherit"}>
           All
         </Button>
         <Button
           variant={props.filter === "active" ? "outlined" : "text"}
           onClick={onActiveClickHandler}
-          color={"primary"}
-        >
+          color={"primary"}>
           Active
         </Button>
         <Button
           variant={props.filter === "completed" ? "outlined" : "text"}
           onClick={onCompletedClickHandler}
-          color={"secondary"}
-        >
+          color={"secondary"}>
           Completed
         </Button>
       </div>

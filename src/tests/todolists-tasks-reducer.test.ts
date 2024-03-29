@@ -1,8 +1,4 @@
-import {
-  addTodolistAC,
-  todoListsReducer,
-  TodolistType,
-} from "features/pageTodolists/todolist/TodoListsReducer"
+import { addTodolist, todoListsReducer, TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
 import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/task/TasksReducer"
 
 test("ids should be equals", () => {
@@ -18,7 +14,7 @@ test("ids should be equals", () => {
     filter: "all",
   }
 
-  const action = addTodolistAC({ todolist })
+  const action = addTodolist({ todolist })
 
   const endTasksState = tasksReducer(startTasksState, action)
   const endTodolistsState = todoListsReducer(startTodolistsState, action)

@@ -44,11 +44,10 @@ export const api = {
       instance
         // если надо указать типизацию третьего параметра, то надо указывать все три (но чаще хватит только первого)
         // при указании второго и третьего параметра, типизация первого игнорируется в пользу второго
-        .post<
-          ResponseType<{ item: TaskType }>,
-          AxiosResponse<ResponseType<{ item: TaskType }>>,
-          { title: string }
-        >(`todo-lists/${todolistId}/tasks/`, { title: title })
+        .post<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, { title: string }>(
+          `todo-lists/${todolistId}/tasks/`,
+          { title: title },
+        )
     )
   },
   deleteTask(todolistId: string, id: string) {

@@ -9,10 +9,7 @@ type EditableSpanProps = {
 }
 
 export const EditableSpan: FC<EditableSpanProps> = memo((props) => {
-  const { edit, newTitle, editFoo, onChangeHandler } = useEditableSpan(
-    props.oldTitle,
-    props.callBack,
-  )
+  const { edit, newTitle, editFoo, onChangeHandler } = useEditableSpan(props.oldTitle, props.callBack)
 
   return edit && !props.disabled ? (
     <TextField

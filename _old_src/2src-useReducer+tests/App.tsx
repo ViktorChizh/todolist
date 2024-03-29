@@ -12,13 +12,7 @@ import {
   TodoListsReducer,
   updateTodolistAC,
 } from "./redocers/todoListsReducer"
-import {
-  addNewTaskslistAC,
-  addTaskAC,
-  changeStatusAC,
-  removeTaskAC,
-  TasksReducer,
-} from "./redocers/tasksReducer"
+import { addNewTaskslistAC, addTaskAC, changeStatusAC, removeTaskAC, TasksReducer } from "./redocers/tasksReducer"
 
 export type FilterValuesType = "all" | "active" | "completed"
 export type TodolistType = {
@@ -144,20 +138,11 @@ function App() {
       <Container fixed style={{ width: "100%", maxWidth: "100%" }}>
         {/*<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>*/}
         <Grid container>
-          <Paper
-            elevation={5}
-            style={{ width: "25%", padding: "20px 0px 20px 60px", margin: "20px auto" }}
-          >
+          <Paper elevation={5} style={{ width: "25%", padding: "20px 0px 20px 60px", margin: "20px auto" }}>
             <h3 style={{ textAlign: "center" }}>Add Todolist</h3>
-            <AddItemForm
-              callBack={addTodolist}
-              placeholder={"add new todolist"}
-              style={{ width: "92%" }}
-            />
+            <AddItemForm callBack={addTodolist} placeholder={"add new todolist"} style={{ width: "92%" }} />
             {!todoLists.length && (
-              <span style={{ color: "red", display: "block", marginTop: "10px" }}>
-                todoLists are empty
-              </span>
+              <span style={{ color: "red", display: "block", marginTop: "10px" }}>todoLists are empty</span>
             )}
           </Paper>
         </Grid>

@@ -1,9 +1,6 @@
 import React from "react"
 import { Task } from "./Task"
-import {
-  AppStoreType,
-  StoriesProviderDecorator,
-} from "../../../../app_and_store/StoriesProviderDecorator"
+import { AppStoreType, StoriesProviderDecorator } from "../../../../app_and_store/StoriesProviderDecorator"
 import { useSelector } from "react-redux"
 import { v1 } from "uuid"
 import { Meta } from "@storybook/react"

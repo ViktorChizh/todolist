@@ -8,10 +8,7 @@ export type TodolistType = {
 }
 const initialState: TodolistType[] = []
 
-export const todoListsReducer = (
-  state = initialState,
-  action: TodoListsReducerActionType,
-): TodolistType[] => {
+export const todoListsReducer = (state = initialState, action: TodoListsReducerActionType): TodolistType[] => {
   switch (action.type) {
     case "REMOVE-TODOLIST": {
       return state.filter((tl) => tl.id !== action.payload.id)
@@ -20,14 +17,10 @@ export const todoListsReducer = (
       return [...state, { id: action.payload.id, title: action.payload.title, filter: "all" }]
     }
     case "UPDATE-TODOLIST": {
-      return state.map((tl) =>
-        tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl,
-      )
+      return state.map((tl) => (tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl))
     }
     case "CHANGE-FILTER": {
-      return state.map((tl) =>
-        tl.id === action.payload.id ? { ...tl, filter: action.payload.value } : tl,
-      )
+      return state.map((tl) => (tl.id === action.payload.id ? { ...tl, filter: action.payload.value } : tl))
     }
     default:
       return state

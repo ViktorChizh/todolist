@@ -8,13 +8,13 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useFormik } from "formik"
-import { loginTC } from "auth/authReducer"
+import { isLoggedInSelector, loginTC } from "auth/authReducer"
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { Navigate, useNavigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 
 export const Login = () => {
   let dispatch = useAppDispatch()
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector(isLoggedInSelector)
 
   const formik = useFormik({
     initialValues: {
@@ -74,33 +74,20 @@ export const Login = () => {
             </FormLabel>
             <FormGroup>
               <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
-              {formik.touched.email && formik.errors.email && (
-                <div style={{ color: "red" }}>{formik.errors.email}</div>
-              )}
-              <TextField
-                type="password"
-                label="Password"
-                margin="normal"
-                {...formik.getFieldProps("password")}
-              />
+              {formik.touched.email && formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
+              <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
               {formik.touched.password && formik.errors.password ? (
                 <div style={{ color: "red" }}>{formik.errors.password}</div>
               ) : null}
               <FormControlLabel
                 label="Remember me"
-                control={
-                  <Checkbox
-                    {...formik.getFieldProps("rememberMe")}
-                    checked={formik.values.rememberMe}
-                  />
-                }
+                control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
               />
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={!(!formik.errors.email && !formik.errors.password)}
-              >
+                disabled={!(!formik.errors.email && !formik.errors.password)}>
                 LOGIN
               </Button>
             </FormGroup>

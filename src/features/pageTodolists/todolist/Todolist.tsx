@@ -29,17 +29,8 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
   return (
     <div>
       <h3>
-        <EditableSpan
-          oldTitle={todoList.title}
-          callBack={updateTodolistHandler}
-          disabled={disabled}
-        />
-        <IconButton
-          color="primary"
-          aria-label="delete"
-          onClick={removeTodolist}
-          disabled={disabled}
-        >
+        <EditableSpan oldTitle={todoList.title} callBack={updateTodolistHandler} disabled={disabled} />
+        <IconButton color="primary" aria-label="delete" onClick={removeTodolist} disabled={disabled}>
           <DeleteIcon />
         </IconButton>
       </h3>
@@ -49,24 +40,20 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />
         ))}
       </ul>
-      {!tasks.length && (
-        <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>
-      )}
+      {!tasks.length && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
       <div
         style={{
           display: "flex",
           margin: "0 auto",
           width: "100%",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <Button
           size="small"
           onClick={onAllClickHandler}
           color="success"
           disabled={disabled}
-          variant={todoList.filter === "all" ? "outlined" : "contained"}
-        >
+          variant={todoList.filter === "all" ? "outlined" : "contained"}>
           {" "}
           All{" "}
         </Button>
@@ -75,8 +62,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           onClick={onActiveClickHandler}
           color="error"
           disabled={disabled}
-          variant={todoList.filter === "active" ? "outlined" : "contained"}
-        >
+          variant={todoList.filter === "active" ? "outlined" : "contained"}>
           {" "}
           Active{" "}
         </Button>
@@ -85,8 +71,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           onClick={onCompletedClickHandler}
           color="primary"
           disabled={disabled}
-          variant={todoList.filter === "completed" ? "outlined" : "contained"}
-        >
+          variant={todoList.filter === "completed" ? "outlined" : "contained"}>
           {" "}
           Completed{" "}
         </Button>

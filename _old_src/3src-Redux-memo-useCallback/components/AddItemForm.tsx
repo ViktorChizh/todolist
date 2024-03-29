@@ -52,8 +52,7 @@ export const AddItemForm: FC<AddItemProps> = memo((props: AddItemProps) => {
         display: "flex",
         flexDirection: "row",
         flexWrap: "nowrap",
-      }}
-    >
+      }}>
       <TextField
         placeholder={props.placeholder}
         id="outlined-basic"

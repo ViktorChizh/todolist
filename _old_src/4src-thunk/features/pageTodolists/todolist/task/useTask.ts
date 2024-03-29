@@ -7,10 +7,7 @@ import { useAppDispatch } from "../../../../app_and_store/Store"
  */
 export const useTask = (task: TaskType, idTDL: string) => {
   const dispatch = useAppDispatch()
-  const onClickHandler = useCallback(
-    () => dispatch(removeTaskTC(idTDL, task.id)),
-    [dispatch, idTDL, task.id],
-  )
+  const onClickHandler = useCallback(() => dispatch(removeTaskTC(idTDL, task.id)), [dispatch, idTDL, task.id])
   const updateTaskHandler = useCallback(
     (title: string) => {
       dispatch(updateTaskTC(idTDL, task.id, { title: title }))

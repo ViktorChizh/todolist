@@ -1,11 +1,4 @@
-import {
-  addTaskAC,
-  changeStatusAC,
-  removeTaskAC,
-  tasksReducer,
-  TasksStateType,
-  updateTaskAC,
-} from "./tasksReducer"
+import { addTaskAC, changeStatusAC, removeTaskAC, tasksReducer, TasksStateType, updateTaskAC } from "./tasksReducer"
 import { addTodolistAC, removeTodolistAC } from "./todoListsReducer"
 import { v1 } from "uuid"
 import { todolistId1, todolistId2 } from "./todoListsReducer.test"

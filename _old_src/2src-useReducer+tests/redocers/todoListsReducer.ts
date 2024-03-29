@@ -1,9 +1,6 @@
 import { FilterValuesType, TodolistType } from "../App"
 
-export const TodoListsReducer = (
-  state: TodolistType[],
-  action: TodoListsReducerActionType,
-): TodolistType[] => {
+export const TodoListsReducer = (state: TodolistType[], action: TodoListsReducerActionType): TodolistType[] => {
   switch (action.type) {
     case "REMOVE-TODOLIST": {
       return state.filter((tl) => tl.id !== action.payload.id)
@@ -12,9 +9,7 @@ export const TodoListsReducer = (
       return [...state, { id: action.payload.id, title: action.payload.title, filter: "all" }]
     }
     case "UPDATE-TODOLIST": {
-      return state.map((tl) =>
-        tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl,
-      )
+      return state.map((tl) => (tl.id === action.payload.id ? { ...tl, title: action.payload.title } : tl))
     }
     case "CHANGE-FILTER": {
       let todolist = state.find((tl) => tl.id === action.payload.id)
@@ -28,11 +23,7 @@ export const TodoListsReducer = (
   }
 }
 
-type TodoListsReducerActionType =
-  | removeTodolistACType
-  | addTodolistACType
-  | updateTodolistACType
-  | changeFilterACType
+type TodoListsReducerActionType = removeTodolistACType | addTodolistACType | updateTodolistACType | changeFilterACType
 
 type removeTodolistACType = ReturnType<typeof removeTodolistAC>
 

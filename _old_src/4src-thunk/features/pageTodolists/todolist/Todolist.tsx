@@ -45,9 +45,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           <Task key={t.id} task={t} todolistId={idTDL} />
         ))}
       </ul>
-      {!tasks.length && (
-        <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>
-      )}
+      {!tasks.length && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
       <div
         style={{
           display: "flex",
@@ -55,14 +53,12 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           margin: "0 auto",
           width: "100%",
           justifyContent: "space-between",
-        }}
-      >
+        }}>
         <Button
           size="small"
           onClick={onAllClickHandler}
           color="success"
-          variant={filter === "all" ? "outlined" : "contained"}
-        >
+          variant={filter === "all" ? "outlined" : "contained"}>
           {" "}
           All{" "}
         </Button>
@@ -70,8 +66,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           size="small"
           onClick={onActiveClickHandler}
           color="error"
-          variant={filter === "active" ? "outlined" : "contained"}
-        >
+          variant={filter === "active" ? "outlined" : "contained"}>
           {" "}
           Active{" "}
         </Button>
@@ -79,8 +74,7 @@ export const Todolist: FC<PropsType> = memo(({ idTDL, title, filter }) => {
           size="small"
           onClick={onCompletedClickHandler}
           color="primary"
-          variant={filter === "completed" ? "outlined" : "contained"}
-        >
+          variant={filter === "completed" ? "outlined" : "contained"}>
           {" "}
           Completed{" "}
         </Button>

@@ -1,11 +1,5 @@
 import { TasksStateType } from "../App"
-import {
-  addNewTaskslistAC,
-  addTaskAC,
-  changeStatusAC,
-  removeTaskAC,
-  TasksReducer,
-} from "./tasksReducer"
+import { addNewTaskslistAC, addTaskAC, changeStatusAC, removeTaskAC, TasksReducer } from "./tasksReducer"
 import { v1 } from "uuid"
 
 let state: TasksStateType = {

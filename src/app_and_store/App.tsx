@@ -10,14 +10,15 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "../features/login/Login"
 import { meTC } from "../auth/authReducer"
 import { Error404 } from "../components/error404/Error404"
+import { isInitializedAppSelector, statusAppSelector } from "app_and_store/AppReducer"
 
 type AppPropsType = {
   demo?: boolean
 }
 
 export const App: FC<AppPropsType> = memo(({ demo = false }) => {
-  const status = useAppSelector((state) => state.app.status)
-  const isInitialized = useAppSelector((state) => state.app.isInitialized)
+  const status = useAppSelector(statusAppSelector)
+  const isInitialized = useAppSelector(isInitializedAppSelector)
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(meTC())
@@ -30,8 +31,7 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
           top: "30%",
           textAlign: "center",
           width: "100%",
-        }}
-      >
+        }}>
         <CircularProgress />
       </div>
     )

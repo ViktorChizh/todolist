@@ -1,14 +1,8 @@
-import { useAppDispatch, useAppSelector } from "../../../app_and_store/Store"
+import { useAppDispatch, useAppSelector } from "app_and_store/Store"
 import { addTaskTC } from "./task/TasksReducer"
 import { useCallback, useMemo } from "react"
-import {
-  changeTodoFilterAC,
-  FilterValuesType,
-  removeTodolistTC,
-  updateTodolistTC,
-} from "./TodoListsReducer"
-import { TaskType } from "../../../api/api"
-import { StatusType } from "../../../app_and_store/AppReducer"
+import { FilterValuesType, removeTodolistTC, updateTodolist, updateTodolistTC } from "./TodoListsReducer"
+
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
  */
@@ -23,20 +17,19 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
       tasks = tasks.filter((t) => t.status === 1)
     }
     return tasks
-  }, [filter, tasks]) // МОЖНО И БЕЗ ПЕРЕМЕННОЙ
-  // если через переменную: tasks = useMemo( () => {тот же код},[filter, tasks])
+  }, [filter, tasks])
 
   const removeTodolist = useCallback(() => dispatch(removeTodolistTC(idTDL)), [dispatch, idTDL])
   const onAllClickHandler = useCallback(
-    () => dispatch(changeTodoFilterAC({ idTDL, filter: "all" })),
+    () => dispatch(updateTodolist({ idTDL, model: { filter: "all" } })),
     [dispatch, idTDL],
   )
   const onActiveClickHandler = useCallback(
-    () => dispatch(changeTodoFilterAC({ idTDL, filter: "active" })),
+    () => dispatch(updateTodolist({ idTDL, model: { filter: "active" } })),
     [dispatch, idTDL],
   )
   const onCompletedClickHandler = useCallback(
-    () => dispatch(changeTodoFilterAC({ idTDL, filter: "completed" })),
+    () => dispatch(updateTodolist({ idTDL, model: { filter: "completed" } })),
     [dispatch, idTDL],
   )
   const addTaskHandler = useMemo(() => {

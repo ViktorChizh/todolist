@@ -3,10 +3,7 @@ import { api, TaskType, status, priority } from "../../../../api/todolists-api"
 import { Dispatch } from "redux"
 import { AppStoreType } from "../../../../app_and_store/Store"
 
-export const tasksReducer = (
-  state = {} as TasksStateType,
-  action: TasksReducerActionType,
-): TasksStateType => {
+export const tasksReducer = (state = {} as TasksStateType, action: TasksReducerActionType): TasksStateType => {
   switch (action.type) {
     case "SET-TODOLIST":
       return action.payload.todolists.reduce((acc, tl) => ({ ...acc, [tl.id]: [] }), { ...state })
@@ -21,17 +18,12 @@ export const tasksReducer = (
     case "ADD-TASK":
       return {
         ...state,
-        [action.payload.task.todoListId]: [
-          action.payload.task,
-          ...state[action.payload.task.todoListId],
-        ],
+        [action.payload.task.todoListId]: [action.payload.task, ...state[action.payload.task.todoListId]],
       }
     case "REMOVE-TASK":
       return {
         ...state,
-        [action.payload.idTDL]: state[action.payload.idTDL].filter(
-          (t) => t.id !== action.payload.taskId,
-        ),
+        [action.payload.idTDL]: state[action.payload.idTDL].filter((t) => t.id !== action.payload.taskId),
       }
     case "UPDATE-TASK":
       return {
@@ -85,14 +77,12 @@ export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({
 export const fetchTasksTC = (idTDL: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
   api.getTasks(idTDL).then((res) => dispatch(setTasksAC(res.data.items, idTDL)))
 }
-export const removeTaskTC =
-  (idTDL: string, taskId: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    api.deleteTask(idTDL, taskId).then((_) => dispatch(removeTaskAC(idTDL, taskId)))
-  }
-export const addTaskTC =
-  (idTDL: string, title: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
-    api.createTask(idTDL, title).then((res) => dispatch(addTaskAC(res.data.data.item)))
-  }
+export const removeTaskTC = (idTDL: string, taskId: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
+  api.deleteTask(idTDL, taskId).then((_) => dispatch(removeTaskAC(idTDL, taskId)))
+}
+export const addTaskTC = (idTDL: string, title: string) => (dispatch: Dispatch<TasksReducerActionType>) => {
+  api.createTask(idTDL, title).then((res) => dispatch(addTaskAC(res.data.data.item)))
+}
 export const updateTaskTC =
   (idTDL: string, taskId: string, model: UpdateTaskType) =>
   (dispatch: Dispatch<TasksReducerActionType>, getState: () => AppStoreType) => {
@@ -107,7 +97,5 @@ export const updateTaskTC =
       deadline: task.deadline,
       ...model,
     }
-    api
-      .updateTask(idTDL, taskId, updateTask)
-      .then((_) => dispatch(updateTaskAC(idTDL, taskId, model)))
+    api.updateTask(idTDL, taskId, updateTask).then((_) => dispatch(updateTaskAC(idTDL, taskId, model)))
   }

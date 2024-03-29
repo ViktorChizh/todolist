@@ -14,10 +14,7 @@ type TaskPropsType = {
 
 export const Task: FC<TaskPropsType> = memo(({ task, todolistId, onChangeHandler }) => {
   const dispatch = useDispatch()
-  const onClickHandler = useCallback(
-    () => dispatch(removeTaskAC(task.id, todolistId)),
-    [dispatch, todolistId, task.id],
-  )
+  const onClickHandler = useCallback(() => dispatch(removeTaskAC(task.id, todolistId)), [dispatch, todolistId, task.id])
   const updateTaskHandler = useCallback(
     (title: string) => {
       dispatch(updateTaskAC(todolistId, task.id, title))
@@ -27,10 +24,7 @@ export const Task: FC<TaskPropsType> = memo(({ task, todolistId, onChangeHandler
 
   return (
     <li className={task.isDone ? "is-done" : ""}>
-      <Checkbox
-        onChange={(checked: boolean) => onChangeHandler(task.id, checked)}
-        checked={task.isDone}
-      />
+      <Checkbox onChange={(checked: boolean) => onChangeHandler(task.id, checked)} checked={task.isDone} />
       <EditableSpan oldTitle={task.title} callBack={updateTaskHandler} />
       <IconButton color="primary" aria-label="delete" onClick={onClickHandler}>
         <DeleteIcon />

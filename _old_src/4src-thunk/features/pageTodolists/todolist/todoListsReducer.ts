@@ -1,10 +1,7 @@
 import { api, TodolistServerType } from "../../../api/todolists-api"
 import { Dispatch } from "redux"
 
-export const todoListsReducer = (
-  state = [] as TodolistType[],
-  action: TodoListsReducerActionType,
-): TodolistType[] => {
+export const todoListsReducer = (state = [] as TodolistType[], action: TodoListsReducerActionType): TodolistType[] => {
   switch (action.type) {
     case "SET-TODOLIST":
       return action.payload.todolists.map((tl) => ({ ...tl, filter: "all" }))
@@ -13,13 +10,9 @@ export const todoListsReducer = (
     case "REMOVE-TODOLIST":
       return state.filter((tl) => tl.id !== action.payload.id)
     case "UPDATE-TODOLIST":
-      return state.map((tl) =>
-        tl.id === action.payload.idTDL ? { ...tl, title: action.payload.title } : tl,
-      )
+      return state.map((tl) => (tl.id === action.payload.idTDL ? { ...tl, title: action.payload.title } : tl))
     case "CHANGE-FILTER":
-      return state.map((tl) =>
-        tl.id === action.payload.idTDL ? { ...tl, filter: action.payload.value } : tl,
-      )
+      return state.map((tl) => (tl.id === action.payload.idTDL ? { ...tl, filter: action.payload.value } : tl))
     default:
       return state
   }
@@ -61,15 +54,12 @@ export const changeFilterAC = (idTDL: string, value: FilterValuesType) => ({
 export const setTodolistTC = () => (dispatch: Dispatch<TodoListsReducerActionType>) => {
   api.getTodolists().then((res) => dispatch(setTodolistAC(res.data)))
 }
-export const removeTodolistTC =
-  (idTDL: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
-    api.deleteTodolist(idTDL).then((_) => dispatch(removeTodolistAC(idTDL)))
-  }
-export const addTodolistTC =
-  (title: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
-    api.createTodolist(title).then((res) => dispatch(addTodolistAC(res.data.data.item)))
-  }
-export const updateTodolistTC =
-  (idTDL: string, title: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
-    api.updateTodolist(idTDL, title).then((_) => dispatch(updateTodolistAC(idTDL, title)))
-  }
+export const removeTodolistTC = (idTDL: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
+  api.deleteTodolist(idTDL).then((_) => dispatch(removeTodolistAC(idTDL)))
+}
+export const addTodolistTC = (title: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
+  api.createTodolist(title).then((res) => dispatch(addTodolistAC(res.data.data.item)))
+}
+export const updateTodolistTC = (idTDL: string, title: string) => (dispatch: Dispatch<TodoListsReducerActionType>) => {
+  api.updateTodolist(idTDL, title).then((_) => dispatch(updateTodolistAC(idTDL, title)))
+}

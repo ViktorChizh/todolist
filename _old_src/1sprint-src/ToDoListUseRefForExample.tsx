@@ -19,13 +19,7 @@ type ToDoListPropsType = {
   changeToDoListFilter: (filterValue: FilterValuesType) => void
 }
 
-export const ToDoList: FC<ToDoListPropsType> = ({
-  title,
-  tasks,
-  addTask,
-  removeTask,
-  changeToDoListFilter,
-}) => {
+export const ToDoList: FC<ToDoListPropsType> = ({ title, tasks, addTask, removeTask, changeToDoListFilter }) => {
   const ListItems: Array<JSX.Element> = []
 
   for (let i = 0; i < tasks.length; i++) {
@@ -38,8 +32,7 @@ export const ToDoList: FC<ToDoListPropsType> = ({
     )
     ListItems.push(ListItem)
   }
-  const taskList: JSX.Element =
-    tasks.length !== 0 ? <ul>{ListItems}</ul> : <span>Tasks list is empty</span>
+  const taskList: JSX.Element = tasks.length !== 0 ? <ul>{ListItems}</ul> : <span>Tasks list is empty</span>
 
   const taskTitleInput = useRef<HTMLInputElement>(null)
 
