@@ -1,10 +1,11 @@
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { addTodolistTC, setTodolistTC } from "./todolist/TodoListsReducer"
+import { addTodolistTC, setTodolistTC, todolistsSelector } from "./todolist/TodoListsReducer"
 import { useCallback, useEffect } from "react"
+import { isLoggedInSelector } from "auth/authReducer"
 
 export const usePageTodoList = (demo: boolean) => {
-  const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
-  const todoLists = useAppSelector((state) => state.todolists)
+  const isLoggedIn = useAppSelector(isLoggedInSelector)
+  const todoLists = useAppSelector(todolistsSelector)
   const dispatch = useAppDispatch()
 
   const addTodolist = useCallback(

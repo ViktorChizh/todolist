@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios"
-import { StatusType } from "../app_and_store/AppReducer"
+import { StatusType } from "app_and_store/AppReducer"
 
 const settings = {
   withCredentials: true,

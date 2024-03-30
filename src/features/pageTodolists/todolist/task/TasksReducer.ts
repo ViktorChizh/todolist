@@ -41,14 +41,14 @@ const slice = createSlice({
       return {}
     },
   },
-  // selectors: {
-  //   tasksSelector: (state) => state[idTDL]
-  // }
+  selectors: {
+    tasksSelector: (state) => state,
+  },
 })
 
 export const tasksReducer = slice.reducer
 export const { addTask, removeTask, updateTask, setTasks, cleanTasks } = slice.actions
-// export const {tasksSelector} = slice.selectors
+export const { tasksSelector } = slice.selectors
 //types
 export type TasksStateType = {
   [key: string]: TaskType[]

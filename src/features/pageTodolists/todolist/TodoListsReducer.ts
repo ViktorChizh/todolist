@@ -30,10 +30,14 @@ const slice = createSlice({
       return [] as TodolistType[]
     },
   },
+  selectors: {
+    todolistsSelector: (state) => state,
+  },
 })
 
 export const todoListsReducer = slice.reducer
 export const { removeTodolist, addTodolist, setTodolist, updateTodolist, cleanTodolist } = slice.actions
+export const { todolistsSelector } = slice.selectors
 
 //types
 export type FilterValuesType = "all" | "active" | "completed"

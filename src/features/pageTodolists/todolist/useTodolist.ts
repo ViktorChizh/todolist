@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { addTaskTC } from "./task/TasksReducer"
+import { addTaskTC, tasksSelector } from "./task/TasksReducer"
 import { useCallback, useMemo } from "react"
 import { FilterValuesType, removeTodolistTC, updateTodolist, updateTodolistTC } from "./TodoListsReducer"
 
@@ -7,10 +7,10 @@ import { FilterValuesType, removeTodolistTC, updateTodolist, updateTodolistTC } 
  * Вынесли всю логику в кастомный хук в качестве примера
  */
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
-  let tasks = useAppSelector((state) => state.tasks[idTDL])
+  let tasks = useAppSelector(tasksSelector)[idTDL]
   const dispatch = useAppDispatch()
   useMemo(() => {
-    if (filter === "active") {
+    if (tasks && filter === "active") {
       tasks = tasks.filter((t) => t.status === 0)
     }
     if (filter === "completed") {

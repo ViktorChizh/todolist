@@ -22,3 +22,5 @@ export const useAppSelector: TypedUseSelectorHook<AppStateType> = useSelector
 
 //@ts-ignore
 window.store = store
+// типизация action в Redux (типизируется вoзврат колбэка в котором лежит thunk):
+// export type AppActionType<ReturnType = void> = ThunkAction<ReturnType, AppRootState, unknown, AnyAction>
