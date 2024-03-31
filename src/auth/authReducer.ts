@@ -7,11 +7,9 @@ import { cleanTasks } from "features/pageTodolists/todolist/task/TasksReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
 
-const initialState = { isLoggedIn: false }
-
 const slice = createSlice({
   name: "auth",
-  initialState: initialState,
+  initialState: { isLoggedIn: false },
   reducers: {
     setIsLoggedIn(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
       state.isLoggedIn = action.payload.isLoggedIn
