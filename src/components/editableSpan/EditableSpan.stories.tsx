@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react"
-import { action } from "@storybook/addon-actions/dist"
+import { action } from "@storybook/addon-actions"
 import { EditableSpan } from "./EditableSpan"
 import { useState } from "react"
 import React from "react"
@@ -17,6 +17,7 @@ const meta: Meta<typeof EditableSpan> = {
 }
 
 export default meta
+
 type Story = StoryObj<typeof EditableSpan>
 export const EditableSpanStory: Story = {
   args: {

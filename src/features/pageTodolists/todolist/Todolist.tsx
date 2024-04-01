@@ -35,12 +35,10 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
         </IconButton>
       </h3>
       <AddItemForm callBack={addTaskHandler} placeholder={"add new task"} disabled={disabled} />
-      <ul>
-        {tasks.map((t) => (
-          <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />
-        ))}
-      </ul>
-      {!tasks.length && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
+      <ul>{tasks && tasks.map((t) => <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />)}</ul>
+      {tasks && !tasks.length && (
+        <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>
+      )}
       <div
         style={{
           display: "flex",

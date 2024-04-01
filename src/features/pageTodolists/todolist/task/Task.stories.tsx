@@ -1,11 +1,9 @@
 import React from "react"
 import { Task } from "./Task"
 import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
-import { useSelector } from "react-redux"
 import { v1 } from "uuid"
-import { Meta } from "@storybook/react"
-import { TaskType } from "api/api"
-import { AppStateType } from "app_and_store/Store"
+import { Meta, StoryObj } from "@storybook/react"
+import { StatusType } from "app_and_store/AppReducer"
 
 const meta: Meta<typeof Task> = {
   title: "Task component",
@@ -19,28 +17,23 @@ const meta: Meta<typeof Task> = {
 }
 
 export default meta
-
-const HelpComponent = () => {
-  let task = useSelector<AppStateType, TaskType>((state) => state.tasks["todolistId1"][0])
-  if (!task) {
-    task = {
-      id: v1(),
-      title: "DefaultTask",
-      status: 0,
-      order: 0,
-      addedDate: new Date(),
-      startDate: null,
-      todoListId: "newTodolistId",
-      priority: 1,
-      description: "",
-      deadline: null,
-      taskStatus: "idle",
-    }
-  }
-
-  return <Task task={task} todolistId="todolistId1" />
-}
+type StoryType = StoryObj<typeof Task>
 
 export const TaskExample = () => {
-  return <HelpComponent />
+  const task = {
+    id: v1(),
+    title: "DefaultTask",
+    status: 0,
+    order: 0,
+    addedDate: new Date(),
+    startDate: null,
+    todoListId: "defaultTLiD",
+    priority: 1,
+    description: "",
+    deadline: null,
+    taskStatus: "idle" as StatusType,
+  }
+  const todolistId = "newTodolistId"
+
+  return <Task task={task} todolistId={todolistId} />
 }

@@ -1,7 +1,7 @@
 import React from "react"
 import { AddItemForm } from "./AddItemForm"
 import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
-import { action } from "@storybook/addon-actions/dist"
+import { action } from "@storybook/addon-actions"
 import { Meta, StoryObj } from "@storybook/react"
 
 const meta: Meta<typeof AddItemForm> = {
