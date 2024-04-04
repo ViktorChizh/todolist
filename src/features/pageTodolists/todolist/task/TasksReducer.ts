@@ -23,8 +23,8 @@ const slice = createSlice({
       })
   },
   reducers: {
-    addTask(state, action: PayloadAction<{ task: TaskType }>) {
-      state[action.payload.task.todoListId].unshift({ ...action.payload.task, taskStatus: "idle" })
+    addTask(state, action: PayloadAction<TaskType>) {
+      state[action.payload.todoListId].unshift({ ...action.payload, taskStatus: "idle" })
     },
     removeTask(state, action: PayloadAction<{ idTDL: string; taskId: string }>) {
       const index = state[action.payload.idTDL].findIndex((tl) => tl.id === action.payload.taskId)
@@ -107,7 +107,7 @@ export const addTaskTC = (idTDL: string, title: string) => (dispatch: Dispatch) 
     try {
       let res = await api.createTask(idTDL, title)
       if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(addTask({ task: { ...res.data.data.item } }))
+        dispatch(addTask({ ...res.data.data.item }))
         dispatch(setAppStatus({ status: "succeeded" }))
       } else {
         ServerErrorHandler<{ item: TaskType }>(res.data, dispatch)

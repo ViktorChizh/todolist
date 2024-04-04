@@ -112,19 +112,17 @@ test("correct task should be added to correct array", () => {
   //const action = addTaskAC("juce", "todolistId2");
   const date = new Date()
   const action = addTask({
-    task: {
-      todoListId: "todolistId2",
-      title: "juce",
-      status: TaskStatuses.New,
-      addedDate: date,
-      deadline: date,
-      description: "",
-      order: 0,
-      priority: 0,
-      startDate: date,
-      id: "id exists",
-      taskStatus: "idle",
-    },
+    todoListId: "todolistId2",
+    title: "juce",
+    status: TaskStatuses.New,
+    addedDate: date,
+    deadline: date,
+    description: "",
+    order: 0,
+    priority: 0,
+    startDate: date,
+    id: "id exists",
+    taskStatus: "idle",
   })
 
   const endState = tasksReducer(startState, action)
@@ -188,7 +186,6 @@ test("propertry with todolistId should be deleted", () => {
   expect(keys.length).toBe(1)
   expect(endState["todolistId2"]).not.toBeDefined()
 })
-
 test("empty arrays should be added when we set todolists", () => {
   const date = new Date()
   const action = setTodolist({

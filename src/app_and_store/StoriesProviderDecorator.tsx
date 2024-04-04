@@ -8,7 +8,6 @@ import { thunk } from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
 import { authReducer } from "auth/authReducer"
 import { Provider } from "react-redux"
-import { MemoryRouter } from "react-router-dom"
 
 const initialState: AppStateType = {
   app: {
@@ -110,9 +109,5 @@ let storeStorebook = configureStore({
 })
 
 export const StoriesProviderDecorator = (story: () => ReactNode) => {
-  return (
-    <Provider store={storeStorebook}>
-      <MemoryRouter>{story()}</MemoryRouter>
-    </Provider>
-  )
+  return <Provider store={storeStorebook}>{story()}</Provider>
 }
