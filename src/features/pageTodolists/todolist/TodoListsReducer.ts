@@ -58,11 +58,7 @@ export const setTodolistTC = () => async (dispatch: any) => {
     res.data.forEach((tl) => dispatch(setTasks(tl.id)))
     dispatch(setAppStatus({ status: "succeeded" }))
   } catch (e) {
-    if (axios.isAxiosError<ErrorType>(e)) {
-      netWorkErrorHandler(e, dispatch)
-    } else {
-      netWorkErrorHandler(e as Error, dispatch)
-    }
+    netWorkErrorHandler(e, dispatch)
   }
 }
 export const removeTodolistTC = (idTDL: string) => async (dispatch: Dispatch) => {
@@ -78,11 +74,7 @@ export const removeTodolistTC = (idTDL: string) => async (dispatch: Dispatch) =>
       dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
     }
   } catch (e) {
-    if (axios.isAxiosError<ErrorType>(e)) {
-      netWorkErrorHandler(e, dispatch)
-    } else {
-      netWorkErrorHandler(e as Error, dispatch)
-    }
+    netWorkErrorHandler(e, dispatch)
     dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
   }
 }
@@ -97,11 +89,7 @@ export const addTodolistTC = (title: string) => async (dispatch: Dispatch) => {
       serverErrorHandler<{ item: TodolistServerType }>(res.data, dispatch)
     }
   } catch (e) {
-    if (axios.isAxiosError<ErrorType>(e)) {
-      netWorkErrorHandler(e, dispatch)
-    } else {
-      netWorkErrorHandler(e as Error, dispatch)
-    }
+    netWorkErrorHandler(e, dispatch)
   }
 }
 export const updateTodolistTC = (idTDL: string, title: string) => async (dispatch: Dispatch) => {
@@ -118,11 +106,7 @@ export const updateTodolistTC = (idTDL: string, title: string) => async (dispatc
       dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
     }
   } catch (e) {
-    if (axios.isAxiosError<ErrorType>(e)) {
-      netWorkErrorHandler(e, dispatch)
-    } else {
-      netWorkErrorHandler(e as Error, dispatch)
-    }
+    netWorkErrorHandler(e, dispatch)
     dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
   }
 }

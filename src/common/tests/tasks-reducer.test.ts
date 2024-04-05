@@ -3,12 +3,15 @@ import {
   cleanTasks,
   tasksReducer,
   TasksStateType,
-  tasksThunks,
+  addTask,
+  removeTask,
+  setTasks,
+  updateTask,
 } from "features/pageTodolists/todolist/task/TasksReducer"
 import { addTodolist, removeTodolist, setTodolist } from "features/pageTodolists/todolist/TodoListsReducer"
 import { TaskPriorities, TaskStatuses } from "common/api/api"
+import { ActionTypeForTest } from "common/utils"
 
-const { addTask, removeTask, setTasks, updateTask } = tasksThunks
 let startState: TasksStateType
 beforeEach(() => {
   const date = new Date()
@@ -104,15 +107,49 @@ test("taskStatus should be changed", () => {
   expect(endState["todolistId1"][2].taskStatus).toBe("succeeded")
   expect(endState["todolistId2"][2].taskStatus).toBe("idle")
 })
-test("all tasks for all todolist should be removed", () => {
-  const endState = tasksReducer(startState, cleanTasks())
-  expect(endState).toEqual({})
+// описание вариантов типизации action
+test("tasks should be added for todolist", () => {
+  // 1 var
+  // const action = setTasks.fulfilled(
+  //   {
+  //     idTDL: "todolistId1",
+  //     tasks: startState["todolistId1"],
+  //   },
+  //   "requestId",
+  //   "todolistId1",
+  // )
+  // 2 var
+  // type SetTaskActionType = Omit<ReturnType<typeof setTasks.fulfilled>, "meta">
+  // const action: SetTaskActionType = {
+  //   type: setTasks.fulfilled.type,
+  //   payload: {
+  //     idTDL: "todolistId1",
+  //     tasks: startState["todolistId1"],
+  //   },
+  // }
+  // 3 var
+  const action: ActionTypeForTest<typeof setTasks.fulfilled> = {
+    type: setTasks.fulfilled.type,
+    payload: { idTDL: "todolistId1", tasks: startState["todolistId1"] },
+  }
+
+  const endState = tasksReducer(
+    {
+      todolistId2: [],
+      todolistId1: [],
+    },
+    action,
+  )
+
+  expect(endState["todolistId1"].length).toBe(3)
+  expect(endState["todolistId2"].length).toBe(0)
 })
+//
 test("correct task should be deleted from correct array", () => {
-  const action = removeTask.fulfilled({ idTDL: "todolistId2", taskId: "2" }, "requestID", {
-    idTDL: "todolistId2",
-    taskId: "2",
-  })
+  const action: ActionTypeForTest<typeof removeTask.fulfilled> = {
+    type: removeTask.fulfilled.type,
+    payload: { idTDL: "todolistId2", taskId: "2" },
+  }
 
   const endState = tasksReducer(startState, action)
 
@@ -122,8 +159,9 @@ test("correct task should be deleted from correct array", () => {
 })
 test("correct task should be added to correct array", () => {
   const date = new Date()
-  const action = addTask.fulfilled(
-    {
+  const action: ActionTypeForTest<typeof addTask.fulfilled> = {
+    type: addTask.fulfilled.type,
+    payload: {
       idTDL: "todolistId2",
       newTask: {
         todoListId: "todolistId2",
@@ -139,10 +177,7 @@ test("correct task should be added to correct array", () => {
         taskStatus: "idle",
       },
     },
-    "requestId",
-    { idTDL: "todolistId2", title: "juce" },
-  )
-
+  }
   const endState = tasksReducer(startState, action)
 
   expect(endState["todolistId1"].length).toBe(3)
@@ -152,19 +187,14 @@ test("correct task should be added to correct array", () => {
   expect(endState["todolistId2"][0].status).toBe(TaskStatuses.New)
 })
 test("status of specified task should be changed", () => {
-  const action = updateTask.fulfilled(
-    {
+  const action: ActionTypeForTest<typeof updateTask.fulfilled> = {
+    type: updateTask.fulfilled.type,
+    payload: {
       idTDL: "todolistId2",
       taskId: "2",
       model: { status: TaskStatuses.New },
     },
-    "requestId",
-    {
-      idTDL: "todolistId2",
-      taskId: "2",
-      model: { status: TaskStatuses.New },
-    },
-  )
+  }
 
   const endState = tasksReducer(startState, action)
 
@@ -172,15 +202,14 @@ test("status of specified task should be changed", () => {
   expect(endState["todolistId2"][1].status).toBe(TaskStatuses.New)
 })
 test("title of specified task should be changed", () => {
-  const action = updateTask.fulfilled(
-    {
+  const action: ActionTypeForTest<typeof updateTask.fulfilled> = {
+    type: updateTask.fulfilled.type,
+    payload: {
       idTDL: "todolistId2",
       taskId: "2",
       model: { title: "yogurt" },
     },
-    "requestId",
-    { idTDL: "todolistId2", taskId: "2", model: { title: "yogurt" } },
-  )
+  }
 
   const endState = tasksReducer(startState, action)
 
@@ -188,6 +217,7 @@ test("title of specified task should be changed", () => {
   expect(endState["todolistId2"][1].title).toBe("yogurt")
   expect(endState["todolistId2"][0].title).toBe("bread")
 })
+// тесты, связанные с тудулистами
 test("new array should be added when new todolist is added", () => {
   const date = new Date()
   const action = addTodolist({
@@ -237,24 +267,7 @@ test("empty arrays should be added when we set todolists", () => {
   expect(endState["1"]).toBeDefined()
   expect(endState["2"]).toBeDefined()
 })
-test("tasks should be added for todolist", () => {
-  const action = setTasks.fulfilled(
-    {
-      idTDL: "todolistId1",
-      tasks: startState["todolistId1"],
-    },
-    "requestId",
-    "todolistId1",
-  )
-
-  const endState = tasksReducer(
-    {
-      todolistId2: [],
-      todolistId1: [],
-    },
-    action,
-  )
-
-  expect(endState["todolistId1"].length).toBe(3)
-  expect(endState["todolistId2"].length).toBe(0)
+test("all tasks for all todolist should be removed", () => {
+  const endState = tasksReducer(startState, cleanTasks())
+  expect(endState).toEqual({})
 })
