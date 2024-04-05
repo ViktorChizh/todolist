@@ -7,7 +7,7 @@ import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { isLoggedInSelector, logoutTC } from "auth/authReducer"
+import { isLoggedInSelector, logoutTC } from "features/auth/authReducer"
 import { useLocation, useNavigate } from "react-router-dom"
 import { setAppErrorPage } from "app_and_store/AppReducer"
 

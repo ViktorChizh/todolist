@@ -8,7 +8,7 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { useFormik } from "formik"
-import { isLoggedInSelector, loginTC } from "auth/authReducer"
+import { isLoggedInSelector, loginTC } from "features/auth/authReducer"
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
 import { Navigate } from "react-router-dom"
 

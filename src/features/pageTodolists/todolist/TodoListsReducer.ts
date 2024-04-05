@@ -1,10 +1,11 @@
-import { api, ErrorType, resultCode, TodolistServerType } from "api/api"
+import { api, ErrorType, resultCode, TodolistServerType } from "common/api/api"
 import { setAppStatus, StatusType } from "app_and_store/AppReducer"
-import { NetWorkErrorHandler, ServerErrorHandler } from "utils/ErrorsHandler"
+import { serverErrorHandler } from "common/utils/serverErrorHandler"
 import axios from "axios"
-import { fetchTasksTC } from "./task/TasksReducer"
+import { setTasks } from "./task/TasksReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
+import { netWorkErrorHandler } from "common/utils/netWorkErrorHandler"
 
 const slice = createSlice({
   name: "todolists",
@@ -49,87 +50,79 @@ export type UpdateTodoModelType = {
 }
 
 //thunks
-export const setTodolistTC = () => (dispatch: any) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  setTimeout(async () => {
-    try {
-      let res = await api.getTodolists()
-      dispatch(setTodolist({ todolists: res.data }))
-      res.data.forEach((tl) => dispatch(fetchTasksTC(tl.id)))
+export const setTodolistTC = () => async (dispatch: any) => {
+  try {
+    dispatch(setAppStatus({ status: "loading" }))
+    let res = await api.getTodolists()
+    dispatch(setTodolist({ todolists: res.data }))
+    res.data.forEach((tl) => dispatch(setTasks(tl.id)))
+    dispatch(setAppStatus({ status: "succeeded" }))
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      netWorkErrorHandler(e, dispatch)
+    } else {
+      netWorkErrorHandler(e as Error, dispatch)
+    }
+  }
+}
+export const removeTodolistTC = (idTDL: string) => async (dispatch: Dispatch) => {
+  try {
+    dispatch(setAppStatus({ status: "loading" }))
+    dispatch(updateTodolist({ idTDL, model: { todoStatus: "loading" } }))
+    let res = await api.deleteTodolist(idTDL)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(removeTodolist({ idTDL }))
       dispatch(setAppStatus({ status: "succeeded" }))
-    } catch (e) {
-      if (axios.isAxiosError<ErrorType>(e)) {
-        NetWorkErrorHandler(e, dispatch)
-      } else {
-        NetWorkErrorHandler(e as Error, dispatch)
-      }
-    }
-  }, 1000)
-}
-export const removeTodolistTC = (idTDL: string) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  dispatch(updateTodolist({ idTDL, model: { todoStatus: "loading" } }))
-  setTimeout(async () => {
-    try {
-      let res = await api.deleteTodolist(idTDL)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(removeTodolist({ idTDL }))
-        dispatch(setAppStatus({ status: "succeeded" }))
-      } else {
-        ServerErrorHandler(res.data, dispatch)
-        dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
-      }
-    } catch (e) {
-      if (axios.isAxiosError<ErrorType>(e)) {
-        NetWorkErrorHandler(e, dispatch)
-      } else {
-        NetWorkErrorHandler(e as Error, dispatch)
-      }
+    } else {
+      serverErrorHandler(res.data, dispatch)
       dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
     }
-  }, 1000)
-}
-export const addTodolistTC = (title: string) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  setTimeout(async () => {
-    try {
-      let res = await api.createTodolist(title)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(addTodolist({ todolist: res.data.data.item }))
-        dispatch(setAppStatus({ status: "succeeded" }))
-      } else {
-        ServerErrorHandler<{ item: TodolistServerType }>(res.data, dispatch)
-      }
-    } catch (e) {
-      if (axios.isAxiosError<ErrorType>(e)) {
-        NetWorkErrorHandler(e, dispatch)
-      } else {
-        NetWorkErrorHandler(e as Error, dispatch)
-      }
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      netWorkErrorHandler(e, dispatch)
+    } else {
+      netWorkErrorHandler(e as Error, dispatch)
     }
-  }, 1000)
+    dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
+  }
 }
-export const updateTodolistTC = (idTDL: string, title: string) => (dispatch: Dispatch) => {
-  dispatch(setAppStatus({ status: "loading" }))
-  dispatch(updateTodolist({ idTDL, model: { todoStatus: "loading" } }))
-  setTimeout(async () => {
-    try {
-      let res = await api.updateTodolist(idTDL, title)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(updateTodolist({ idTDL, model: { title } }))
-        dispatch(setAppStatus({ status: "succeeded" }))
-        dispatch(updateTodolist({ idTDL, model: { todoStatus: "succeeded" } }))
-      } else {
-        ServerErrorHandler(res.data, dispatch)
-        dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
-      }
-    } catch (e) {
-      if (axios.isAxiosError<ErrorType>(e)) {
-        NetWorkErrorHandler(e, dispatch)
-      } else {
-        NetWorkErrorHandler(e as Error, dispatch)
-      }
+export const addTodolistTC = (title: string) => async (dispatch: Dispatch) => {
+  try {
+    dispatch(setAppStatus({ status: "loading" }))
+    let res = await api.createTodolist(title)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(addTodolist({ todolist: res.data.data.item }))
+      dispatch(setAppStatus({ status: "succeeded" }))
+    } else {
+      serverErrorHandler<{ item: TodolistServerType }>(res.data, dispatch)
+    }
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      netWorkErrorHandler(e, dispatch)
+    } else {
+      netWorkErrorHandler(e as Error, dispatch)
+    }
+  }
+}
+export const updateTodolistTC = (idTDL: string, title: string) => async (dispatch: Dispatch) => {
+  try {
+    dispatch(setAppStatus({ status: "loading" }))
+    dispatch(updateTodolist({ idTDL, model: { todoStatus: "loading" } }))
+    let res = await api.updateTodolist(idTDL, title)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(updateTodolist({ idTDL, model: { title } }))
+      dispatch(setAppStatus({ status: "succeeded" }))
+      dispatch(updateTodolist({ idTDL, model: { todoStatus: "succeeded" } }))
+    } else {
+      serverErrorHandler(res.data, dispatch)
       dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
     }
-  }, 1000)
+  } catch (e) {
+    if (axios.isAxiosError<ErrorType>(e)) {
+      netWorkErrorHandler(e, dispatch)
+    } else {
+      netWorkErrorHandler(e as Error, dispatch)
+    }
+    dispatch(updateTodolist({ idTDL, model: { todoStatus: "failed" } }))
+  }
 }

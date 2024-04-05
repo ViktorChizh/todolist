@@ -1,11 +1,12 @@
 import { setAppIsInitialized, setAppStatus } from "app_and_store/AppReducer"
-import { api, ErrorType, LoginParamsType, ResponseMeType, resultCode } from "api/api"
-import { NetWorkErrorHandler, ServerErrorHandler } from "utils/ErrorsHandler"
+import { api, ErrorType, LoginParamsType, ResponseMeType, resultCode } from "common/api/api"
+import { serverErrorHandler } from "common/utils/serverErrorHandler"
 import axios from "axios"
 import { cleanTodolist } from "features/pageTodolists/todolist/TodoListsReducer"
 import { cleanTasks } from "features/pageTodolists/todolist/task/TasksReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Dispatch } from "redux"
+import { netWorkErrorHandler } from "common/utils/netWorkErrorHandler"
 
 const slice = createSlice({
   name: "auth",
@@ -32,13 +33,13 @@ export const meTC = () => async (dispatch: Dispatch) => {
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
       dispatch(setAppStatus({ status: "succeeded" }))
     } else {
-      ServerErrorHandler<ResponseMeType>(res.data, dispatch)
+      serverErrorHandler<ResponseMeType>(res.data, dispatch)
     }
   } catch (e) {
     if (axios.isAxiosError<ErrorType>(e)) {
-      NetWorkErrorHandler(e, dispatch)
+      netWorkErrorHandler(e, dispatch)
     } else {
-      NetWorkErrorHandler(e as Error, dispatch)
+      netWorkErrorHandler(e as Error, dispatch)
     }
   } finally {
     dispatch(setAppIsInitialized({ isInitialized: true }))
@@ -52,13 +53,13 @@ export const loginTC = (params: LoginParamsType) => async (dispatch: Dispatch) =
       dispatch(setIsLoggedIn({ isLoggedIn: true }))
       dispatch(setAppStatus({ status: "succeeded" }))
     } else {
-      ServerErrorHandler<{ userId?: number }>(res.data, dispatch)
+      serverErrorHandler<{ userId?: number }>(res.data, dispatch)
     }
   } catch (e) {
     if (axios.isAxiosError<ErrorType>(e)) {
-      NetWorkErrorHandler(e, dispatch)
+      netWorkErrorHandler(e, dispatch)
     } else {
-      NetWorkErrorHandler(e as Error, dispatch)
+      netWorkErrorHandler(e as Error, dispatch)
     }
   }
 }
@@ -70,13 +71,13 @@ export const logoutTC = () => async (dispatch: Dispatch) => {
       dispatch(cleanTodolist())
       dispatch(cleanTasks())
     } else {
-      ServerErrorHandler(res.data, dispatch)
+      serverErrorHandler(res.data, dispatch)
     }
   } catch (e) {
     if (axios.isAxiosError<ErrorType>(e)) {
-      NetWorkErrorHandler(e, dispatch)
+      netWorkErrorHandler(e, dispatch)
     } else {
-      NetWorkErrorHandler(e as Error, dispatch)
+      netWorkErrorHandler(e as Error, dispatch)
     }
   }
 }

@@ -1,11 +1,11 @@
 import React, { FC } from "react"
 import { Container, Grid, Paper } from "@mui/material"
-import { AddItemForm } from "components/addItemForm/AddItemForm"
+import { AddItemForm } from "common/components/addItemForm/AddItemForm"
 import { Todolist } from "./todolist/Todolist"
 import { usePageTodoList } from "./usePageTodoList"
 import { useAppSelector } from "app_and_store/Store"
 import { Navigate } from "react-router-dom"
-import { isLoggedInSelector } from "auth/authReducer"
+import { isLoggedInSelector } from "features/auth/authReducer"
 
 type PageTodoListsPropsType = {
   demo?: boolean

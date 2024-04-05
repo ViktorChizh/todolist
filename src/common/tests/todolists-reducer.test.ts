@@ -9,7 +9,7 @@ import {
 } from "features/pageTodolists/todolist/TodoListsReducer"
 import { v1 } from "uuid"
 import { StatusType } from "app_and_store/AppReducer"
-import { TodolistServerType } from "api/api"
+import { TodolistServerType } from "common/api/api"
 
 let todolistId1: string
 let todolistId2: string

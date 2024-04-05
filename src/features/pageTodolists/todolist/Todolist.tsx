@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react"
-import { AddItemForm } from "components/addItemForm/AddItemForm"
-import { EditableSpan } from "components/editableSpan/EditableSpan"
+import { AddItemForm } from "common/components/addItemForm/AddItemForm"
+import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import Button from "@mui/material/Button"
@@ -50,7 +50,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           size="small"
           onClick={onAllClickHandler}
           color="success"
-          disabled={disabled}
+          disabled={disabled || todoList.filter === "all"}
           variant={todoList.filter === "all" ? "outlined" : "contained"}>
           {" "}
           All{" "}
@@ -59,7 +59,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           size="small"
           onClick={onActiveClickHandler}
           color="error"
-          disabled={disabled}
+          disabled={disabled || todoList.filter === "active"}
           variant={todoList.filter === "active" ? "outlined" : "contained"}>
           {" "}
           Active{" "}
@@ -68,7 +68,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           size="small"
           onClick={onCompletedClickHandler}
           color="primary"
-          disabled={disabled}
+          disabled={disabled || todoList.filter === "completed"}
           variant={todoList.filter === "completed" ? "outlined" : "contained"}>
           {" "}
           Completed{" "}

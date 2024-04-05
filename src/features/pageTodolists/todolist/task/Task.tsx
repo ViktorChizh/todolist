@@ -1,10 +1,10 @@
 import React, { FC, memo } from "react"
-import { Checkbox } from "components/checkbox/Checkbox"
-import { EditableSpan } from "components/editableSpan/EditableSpan"
+import { Checkbox } from "common/components/checkbox/Checkbox"
+import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useTask } from "./useTask"
-import { TaskType } from "api/api"
+import { TaskType } from "common/api/api"
 
 type TaskPropsType = {
   task: TaskType

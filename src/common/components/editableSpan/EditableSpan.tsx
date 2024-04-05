@@ -1,6 +1,6 @@
 import React, { FC, memo } from "react"
 import TextField from "@mui/material/TextField"
-import { useEditableSpan } from "./useEditableSpan"
+import { useEditableSpan } from "common/components/editableSpan/useEditableSpan"
 
 type EditableSpanProps = {
   oldTitle: string

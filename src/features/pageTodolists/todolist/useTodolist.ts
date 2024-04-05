@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { addTaskTC, tasksSelector } from "./task/TasksReducer"
+import { addTask, tasksSelector } from "./task/TasksReducer"
 import { useCallback, useMemo } from "react"
 import { FilterValuesType, removeTodolistTC, updateTodolist, updateTodolistTC } from "./TodoListsReducer"
 
@@ -34,7 +34,7 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
   )
   const addTaskHandler = useMemo(() => {
     return (title: string) => {
-      dispatch(addTaskTC(idTDL, title))
+      dispatch(addTask({ idTDL, title }))
     }
   }, [dispatch, idTDL]) //чисто попробовать useMemo
   const updateTodolistHandler = useCallback(

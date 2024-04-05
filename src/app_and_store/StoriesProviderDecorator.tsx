@@ -6,7 +6,7 @@ import { v1 } from "uuid"
 import { appReducer } from "./AppReducer"
 import { thunk } from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
-import { authReducer } from "auth/authReducer"
+import { authReducer } from "features/auth/authReducer"
 import { Provider } from "react-redux"
 
 const initialState: AppStateType = {

@@ -2,7 +2,7 @@ import React, { FC, memo } from "react"
 import IconButton from "@mui/material/IconButton"
 import QueueSharpIcon from "@mui/icons-material/QueueSharp"
 import TextField from "@mui/material/TextField"
-import { useAddItemForm } from "./useAddItemForm"
+import { useAddItemForm } from "common/components/addItemForm/useAddItemForm"
 
 type AddItemProps = {
   callBack: (title: string) => void
