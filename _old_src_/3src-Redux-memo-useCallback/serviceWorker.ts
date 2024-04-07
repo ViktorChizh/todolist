@@ -1,7 +1,7 @@
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
-// This lets the app_and_store load faster on subsequent visits in production, and gives
+// This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities. However, it also means that developers (and users)
 // will only see deployed updates on subsequent visits to a page, after all the
 // existing tabs open on the page have been closed, since previously cached
@@ -30,7 +30,7 @@ export function register(config?: Config) {
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
-      // serve _assets; see https://github.com/facebook/create-react-app/issues/2374
+      // serve assets; see https://github.com/facebook/create-react-app/issues/2374
       return
     }
 
@@ -45,7 +45,7 @@ export function register(config?: Config) {
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
           console.log(
-            "This web app_and_store is being served cache-first by a service " +
+            "This web app is being served cache-first by a service " +
               "worker. To learn more, visit https://bit.ly/CRA-PWA",
           )
         })
@@ -110,7 +110,7 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       // Ensure service worker exists, and that we really are getting a JS file.
       const contentType = response.headers.get("content-type")
       if (response.status === 404 || (contentType != null && contentType.indexOf("javascript") === -1)) {
-        // No service worker found. Probably a different app_and_store. Reload the page.
+        // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
             window.location.reload()

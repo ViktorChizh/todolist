@@ -1,6 +1,6 @@
 import React from "react"
 import { AddItemForm } from "common/components/addItemForm/AddItemForm"
-import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
+import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { action } from "@storybook/addon-actions"
 import { Meta, StoryObj } from "@storybook/react"
 

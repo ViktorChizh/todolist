@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from "@storybook/react"
-import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
+import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { Todolist } from "features/pageTodolists/todolist/Todolist"
 import { FilterValuesType, TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
 import React from "react"
-import { StatusType } from "app_and_store/AppReducer"
+import { StatusType } from "app/AppReducer"
 
 const meta: Meta<typeof Todolist> = {
   title: "Todolist component",

@@ -6,10 +6,10 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
-import { useAppDispatch, useAppSelector } from "app_and_store/Store"
+import { useAppDispatch, useAppSelector } from "app/Store"
 import { isLoggedInSelector, logoutTC } from "features/auth/authReducer"
 import { useLocation, useNavigate } from "react-router-dom"
-import { setAppErrorPage } from "app_and_store/AppReducer"
+import { setAppErrorPageAC } from "app/AppReducer"
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
@@ -25,7 +25,7 @@ function ButtonAppBar() {
     } else {
       navigate("/login")
     }
-    dispatch(setAppErrorPage({ errorPage: false }))
+    dispatch(setAppErrorPageAC({ errorPage: false }))
   }, [])
 
   const onClickHandler = useCallback(() => {

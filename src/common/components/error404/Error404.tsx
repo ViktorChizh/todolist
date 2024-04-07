@@ -1,9 +1,9 @@
 import React from "react"
 import s from "common/components/error404/Error.module.css"
-import { errorPageAppSelector, setAppErrorPage, setAppStatus } from "app_and_store/AppReducer"
-import { useAppDispatch, useAppSelector } from "app_and_store/Store"
+import { errorPageAppSelector, setAppErrorPageAC, setAppStatusAC } from "app/AppReducer"
+import { useAppDispatch, useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
-import img404 from "_assets/bgE.jpg"
+import img404 from "assets/bgE.jpg"
 import { isLoggedInSelector } from "features/auth/authReducer"
 
 export const Error404 = () => {
@@ -11,13 +11,13 @@ export const Error404 = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const errorPage = useAppSelector(errorPageAppSelector)
 
-  dispatch(setAppStatus({ status: "failed" }))
+  dispatch(setAppStatusAC({ status: "failed" }))
 
   if (errorPage && !isLoggedIn) {
-    dispatch(setAppErrorPage({ errorPage: false }))
+    dispatch(setAppErrorPageAC({ errorPage: false }))
     return <Navigate to="/login" />
   } else if (errorPage && isLoggedIn) {
-    dispatch(setAppErrorPage({ errorPage: false }))
+    dispatch(setAppErrorPageAC({ errorPage: false }))
     return <Navigate to="/todolists" />
   }
 

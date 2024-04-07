@@ -10,7 +10,7 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/auth/login/Login"
 import { meTC } from "features/auth/authReducer"
 import { Error404 } from "common/components/error404/Error404"
-import { isInitializedAppSelector, statusAppSelector } from "app_and_store/AppReducer"
+import { isInitializedAppSelector, statusAppSelector } from "app/AppReducer"
 
 type AppPropsType = {
   demo?: boolean

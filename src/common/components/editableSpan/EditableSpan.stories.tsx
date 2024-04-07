@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions"
 import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import { useState } from "react"
 import React from "react"
-import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
+import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 
 const meta: Meta<typeof EditableSpan> = {
   title: "EditableSpan",

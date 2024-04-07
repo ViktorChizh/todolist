@@ -1,5 +1,5 @@
-import { AppDispatchType } from "app_and_store/Store"
-import { setAppError, setAppStatus } from "app_and_store/AppReducer"
+import { AppDispatchType } from "app/Store"
+import { setAppErrorAC, setAppStatusAC } from "app/AppReducer"
 import axios from "axios"
 
 export const netWorkErrorHandler = (e: unknown, dispatch: AppDispatchType) => {
@@ -11,6 +11,6 @@ export const netWorkErrorHandler = (e: unknown, dispatch: AppDispatchType) => {
   } else {
     error = JSON.stringify(e)
   }
-  dispatch(setAppError({ error }))
-  dispatch(setAppStatus({ status: "failed" }))
+  dispatch(setAppErrorAC({ error }))
+  dispatch(setAppStatusAC({ status: "failed" }))
 }

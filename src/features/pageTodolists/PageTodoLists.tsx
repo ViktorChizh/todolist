@@ -3,7 +3,7 @@ import { Container, Grid, Paper } from "@mui/material"
 import { AddItemForm } from "common/components/addItemForm/AddItemForm"
 import { Todolist } from "./todolist/Todolist"
 import { usePageTodoList } from "./usePageTodoList"
-import { useAppSelector } from "app_and_store/Store"
+import { useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
 import { isLoggedInSelector } from "features/auth/authReducer"
 

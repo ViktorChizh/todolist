@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { meTC } from "features/auth/authReducer"
 
 const initialState: AppStateType = {
   status: "idle",
@@ -11,18 +12,24 @@ const slice = createSlice({
   name: "app",
   initialState: initialState,
   reducers: {
-    setAppStatus(state, action: PayloadAction<{ status: StatusType }>) {
+    setAppStatusAC(state, action: PayloadAction<{ status: StatusType }>) {
       state.status = action.payload.status
     },
-    setAppError(state, action: PayloadAction<{ error: string | null }>) {
+    setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
       state.error = action.payload.error
     },
-    setAppIsInitialized(state, action: PayloadAction<{ isInitialized: boolean }>) {
-      state.isInitialized = action.payload.isInitialized
-    },
-    setAppErrorPage(state, action: PayloadAction<{ errorPage: boolean }>) {
+    setAppErrorPageAC(state, action: PayloadAction<{ errorPage: boolean }>) {
       state.errorPage = action.payload.errorPage
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(meTC.fulfilled, (state) => {
+        state.isInitialized = true
+      })
+      .addCase(meTC.rejected, (state) => {
+        state.isInitialized = true
+      })
   },
   selectors: {
     statusAppSelector: (state) => state.status,
@@ -33,7 +40,7 @@ const slice = createSlice({
 })
 
 export const appReducer = slice.reducer
-export const { setAppStatus, setAppError, setAppIsInitialized, setAppErrorPage } = slice.actions
+export const { setAppStatusAC, setAppErrorAC, setAppErrorPageAC } = slice.actions
 export const { statusAppSelector, errorAppSelector, isInitializedAppSelector, errorPageAppSelector } = slice.selectors
 //types
 export type StatusType = "idle" | "loading" | "succeeded" | "failed"

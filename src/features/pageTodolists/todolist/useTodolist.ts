@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from "app_and_store/Store"
-import { addTask, tasksSelector } from "./task/TasksReducer"
+import { useAppDispatch, useAppSelector } from "app/Store"
+import { addTaskTC, tasksSelector } from "./task/TasksReducer"
 import { useCallback, useMemo } from "react"
-import { FilterValuesType, removeTodolistTC, updateTodolist, updateTodolistTC } from "./TodoListsReducer"
+import { FilterValuesType, removeTodolistTC, updateTodolistFilterTC, updateTodolistTitleTC } from "./TodoListsReducer"
 
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
@@ -21,32 +21,32 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
 
   const removeTodolist = useCallback(() => dispatch(removeTodolistTC(idTDL)), [dispatch, idTDL])
   const onAllClickHandler = useCallback(
-    () => dispatch(updateTodolist({ idTDL, model: { filter: "all" } })),
+    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "all" })),
     [dispatch, idTDL],
   )
   const onActiveClickHandler = useCallback(
-    () => dispatch(updateTodolist({ idTDL, model: { filter: "active" } })),
+    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "active" })),
     [dispatch, idTDL],
   )
   const onCompletedClickHandler = useCallback(
-    () => dispatch(updateTodolist({ idTDL, model: { filter: "completed" } })),
+    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "completed" })),
     [dispatch, idTDL],
   )
   const addTaskHandler = useMemo(() => {
     return (title: string) => {
-      dispatch(addTask({ idTDL, title }))
+      dispatch(addTaskTC({ idTDL, title }))
     }
   }, [dispatch, idTDL]) //чисто попробовать useMemo
   const updateTodolistHandler = useCallback(
     (title: string) => {
-      dispatch(updateTodolistTC(idTDL, title))
+      dispatch(updateTodolistTitleTC({ idTDL, title }))
     },
     [dispatch, idTDL],
   )
 
   return {
     tasks,
-    removeTodolist,
+    removeTodolist: removeTodolist,
     onAllClickHandler,
     onActiveClickHandler,
     onCompletedClickHandler,

@@ -1,15 +1,19 @@
 import {
-  addTodolist,
+  addTodolistTC,
+  changeTodoStatusAC,
   FilterValuesType,
-  removeTodolist,
-  setTodolist,
+  removeTodolistTC,
+  setTodolistTC,
   todoListsReducer,
   TodolistType,
-  updateTodolist,
+  updateTodolistFilterTC,
+  updateTodolistTitleTC,
 } from "features/pageTodolists/todolist/TodoListsReducer"
 import { v1 } from "uuid"
-import { StatusType } from "app_and_store/AppReducer"
+import { StatusType } from "app/AppReducer"
 import { TodolistServerType } from "common/api/api"
+import { ActionTypeForTest } from "common/utils"
+import { removeTaskTC } from "features/pageTodolists/todolist/task/TasksReducer"
 
 let todolistId1: string
 let todolistId2: string
@@ -40,7 +44,11 @@ beforeEach(() => {
 })
 
 test("correct todolist should be removed", () => {
-  const endState = todoListsReducer(startState, removeTodolist({ idTDL: todolistId1 }))
+  const action: ActionTypeForTest<typeof removeTodolistTC.fulfilled> = {
+    type: removeTodolistTC.fulfilled.type,
+    payload: { idTDL: todolistId1 },
+  }
+  const endState = todoListsReducer(startState, action)
 
   expect(endState.length).toBe(1)
   expect(endState[0].id).toBe(todolistId2)
@@ -54,37 +62,43 @@ test("correct todolist should be added", () => {
     addedDate: date,
     order: 0,
   }
-
-  const endState = todoListsReducer(startState, addTodolist({ todolist }))
+  const action: ActionTypeForTest<typeof addTodolistTC.fulfilled> = {
+    type: addTodolistTC.fulfilled.type,
+    payload: { todolist },
+  }
+  const endState = todoListsReducer(startState, action)
 
   expect(endState.length).toBe(3)
   expect(endState[0].title).toBe(todolist.title)
   expect(endState[0].filter).toBe("all")
 })
 
-test("correct todolist should change its name", () => {
-  let newTodolistTitle = "New Todolist"
-
-  const action = updateTodolist({ idTDL: todolistId2, model: { title: newTodolistTitle } })
-
+test("correct todolist should change its title", () => {
+  const action: ActionTypeForTest<typeof updateTodolistTitleTC.fulfilled> = {
+    type: updateTodolistTitleTC.fulfilled.type,
+    payload: { idTDL: todolistId2, title: "New Todolist" },
+  }
   const endState = todoListsReducer(startState, action)
 
   expect(endState[0].title).toBe("What to learn")
-  expect(endState[1].title).toBe(newTodolistTitle)
+  expect(endState[1].title).toBe("New Todolist")
 })
 
 test("correct filter of todolist should be changed", () => {
-  let newFilter: FilterValuesType = "completed"
-
-  const action = updateTodolist({ idTDL: todolistId2, model: { filter: newFilter } })
-
+  const action: ActionTypeForTest<typeof updateTodolistFilterTC.fulfilled> = {
+    type: updateTodolistFilterTC.fulfilled.type,
+    payload: { idTDL: todolistId2, filter: "completed" },
+  }
   const endState = todoListsReducer(startState, action)
 
   expect(endState[0].filter).toBe("all")
-  expect(endState[1].filter).toBe(newFilter)
+  expect(endState[1].filter).toBe("completed")
 })
 test("todolists should be added", () => {
-  const action = setTodolist({ todolists: startState })
+  const action: ActionTypeForTest<typeof setTodolistTC.fulfilled> = {
+    type: setTodolistTC.fulfilled.type,
+    payload: { todolists: startState },
+  }
 
   const endState = todoListsReducer([], action)
 
@@ -93,7 +107,7 @@ test("todolists should be added", () => {
 test("correct entity status of todolist should be changed", () => {
   let newStatus: StatusType = "loading"
 
-  const action = updateTodolist({ idTDL: todolistId2, model: { todoStatus: newStatus } })
+  const action = changeTodoStatusAC({ idTDL: todolistId2, todoStatus: newStatus })
 
   const endState = todoListsReducer(startState, action)
 

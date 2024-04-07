@@ -1,9 +1,9 @@
 import React from "react"
 import { Task } from "./Task"
-import { StoriesProviderDecorator } from "app_and_store/StoriesProviderDecorator"
+import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { v1 } from "uuid"
 import { Meta, StoryObj } from "@storybook/react"
-import { StatusType } from "app_and_store/AppReducer"
+import { StatusType } from "app/AppReducer"
 
 const meta: Meta<typeof Task> = {
   title: "Task component",
