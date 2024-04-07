@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 import { StatusType } from "app/AppReducer"
-import { TaskPriorities, TaskStatuses } from "common/enums"
+import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
 
 const settings = {
   withCredentials: true,
@@ -18,7 +18,7 @@ export const api = {
     return instance.get<ResponseType<ResponseMeType>>("auth/me")
   },
   login(params: LoginParamsType) {
-    return instance.post<ResponseType<{ userId?: number }>>("auth/login", params)
+    return instance.post<ResponseLoginType>("auth/login", params)
   },
   logout() {
     return instance.delete<ResponseType>("auth/login")
@@ -78,7 +78,7 @@ export type TodolistServerType = {
   order: number
 }
 export type ResponseType<T = {}> = {
-  resultCode: number
+  resultCode: resultCode
   messages: string[]
   data: T
 }
@@ -108,13 +108,14 @@ export type ResponseTasksType = {
   totalCount: number
   error: string
 }
-export type ErrorServerType = {
-  statusCode: number
-  messages: [
-    {
-      message: string
-      field: string
-    },
-  ]
+
+export type ResponseLoginType = {
+  data: {}
+  messages: string[]
+  fieldsErrors: FieldsErrorsType[]
+  resultCode: resultCode
+}
+export type FieldsErrorsType = {
+  field: string
   error: string
 }

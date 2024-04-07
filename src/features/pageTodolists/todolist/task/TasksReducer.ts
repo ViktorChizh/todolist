@@ -1,10 +1,10 @@
 import { addTodolistTC, changeTodoStatusAC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
 import { api, TaskType } from "common/api/api"
-import { AppStateType } from "app/Store"
 import { setAppErrorAC, setAppStatusAC, StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, netWorkErrorHandler, serverErrorHandler } from "common/utils"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
+import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 const slice = createSlice({
   name: "tasks",
@@ -17,9 +17,9 @@ const slice = createSlice({
         taskStatus: action.payload.taskStatus,
       }
     },
-    cleanTasksAC() {
-      return {}
-    },
+    // cleanTasksAC() {
+    //   return {}
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -46,6 +46,9 @@ const slice = createSlice({
       .addCase(updateTaskTC.fulfilled, (state, action) => {
         const index = state[action.payload.idTDL].findIndex((tl) => tl.id === action.payload.taskId)
         state[action.payload.idTDL][index] = { ...state[action.payload.idTDL][index], ...action.payload.model }
+      })
+      .addCase(clearDataAfterLogoutAC, (state, action) => {
+        return action.payload.tasks
       })
   },
   selectors: {
@@ -124,7 +127,7 @@ export const updateTaskTC = createAppAsyncThunk<
   async (param: { idTDL: string; taskId: string; model: UpdateTaskModelType }, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
     const { idTDL, taskId, model } = param
-    let task = (getState() as AppStateType).tasks[idTDL].find((t) => t.id === taskId)
+    let task = getState().tasks[idTDL].find((t) => t.id === taskId)
     if (!task) {
       dispatch(setAppErrorAC({ error: "Task not found" }))
       return rejectWithValue(null)
@@ -172,6 +175,6 @@ export type UpdateTaskModelType = {
 }
 //exports
 export const tasksReducer = slice.reducer
-export const { changeTaskStatusAC, cleanTasksAC } = slice.actions
+export const { changeTaskStatusAC } = slice.actions
 export const { tasksSelector } = slice.selectors
 export const tasksThunks = { setTasksTC, removeTaskTC, addTaskTC, updateTaskTC }

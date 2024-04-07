@@ -7,7 +7,7 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
-import { useFormik } from "formik"
+import { FormikHelpers, useFormik } from "formik"
 import { isLoggedInSelector, loginTC } from "features/auth/authReducer"
 import { useAppDispatch, useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
@@ -36,9 +36,16 @@ export const Login = () => {
       }
       return errors
     },
-    onSubmit: (values) => {
-      dispatch(loginTC(values))
-      formik.resetForm()
+    onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+      const res = await dispatch(loginTC(values))
+      if (loginTC.rejected.match(res)) {
+        if (res.payload?.field?.length) {
+          res.payload.field.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
+        }
+      }
+      if (loginTC.fulfilled.match(res)) {
+        formik.resetForm()
+      }
     },
   })
 
@@ -83,6 +90,12 @@ export const Login = () => {
                 label="Remember me"
                 control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
               />
+              {!!formik.values.captcha && (
+                <TextField label="captcha" margin="normal" {...formik.getFieldProps("captcha")} />
+              )}
+              {formik.touched.captcha && formik.errors.captcha && (
+                <div style={{ color: "red" }}>{formik.errors.captcha}</div>
+              )}
               <Button
                 type="submit"
                 variant="contained"
@@ -102,5 +115,11 @@ type FormikErrorType = {
   email?: string
   password?: string
   rememberMe?: boolean
+  captcha?: string
+}
+type FormValuesType = {
+  email: string
+  password: string
+  rememberMe: boolean
   captcha?: string
 }

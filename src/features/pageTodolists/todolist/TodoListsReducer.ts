@@ -5,6 +5,7 @@ import { setTasksTC } from "./task/TasksReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, netWorkErrorHandler } from "common/utils"
 import { resultCode } from "common/enums"
+import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 const slice = createSlice({
   name: "todolists",
@@ -17,14 +18,11 @@ const slice = createSlice({
         todoStatus: action.payload.todoStatus,
       }
     },
-    cleanTodolistAC() {
-      return [] as TodolistType[]
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(setTodolistTC.fulfilled, (state, action) => {
-        action.payload.todolists.map((tl) => state.push({ ...tl, filter: "all", todoStatus: "idle" }))
+        return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", todoStatus: "idle" }))
       })
       .addCase(removeTodolistTC.fulfilled, (state, action) => {
         const index = state.findIndex((tl) => tl.id === action.payload.idTDL)
@@ -42,6 +40,9 @@ const slice = createSlice({
       .addCase(updateTodolistFilterTC.fulfilled, (state, action) => {
         const index = state.findIndex((tl) => tl.id === action.payload.idTDL)
         state[index] = { ...state[index], filter: action.payload.filter }
+      })
+      .addCase(clearDataAfterLogoutAC, (state, action) => {
+        return action.payload.todolists
       })
   },
   selectors: {
@@ -108,10 +109,7 @@ export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServerType 
     }
   },
 )
-export const updateTodolistTitleTC = createAppAsyncThunk<
-  { idTDL: string; title: string },
-  { idTDL: string; title: string }
->(
+export const updateTodolistTitleTC = createAppAsyncThunk<paramT, paramT>(
   `${slice.name}/updateTodolistTitleTC`,
   async (param: { idTDL: string; title: string }, { dispatch, rejectWithValue }) => {
     const { idTDL, title } = param
@@ -135,10 +133,7 @@ export const updateTodolistTitleTC = createAppAsyncThunk<
     }
   },
 )
-export const updateTodolistFilterTC = createAppAsyncThunk<
-  { idTDL: string; filter: FilterValuesType },
-  { idTDL: string; filter: FilterValuesType }
->(
+export const updateTodolistFilterTC = createAppAsyncThunk<paramF, paramF>(
   `${slice.name}/updateTodolistFilterTC`,
   async (param: { idTDL: string; filter: FilterValuesType }, { dispatch, rejectWithValue }) => {
     const { idTDL, filter } = param
@@ -151,11 +146,13 @@ export const updateTodolistFilterTC = createAppAsyncThunk<
   },
 )
 //types
+type paramT = { idTDL: string; title: string }
+type paramF = { idTDL: string; filter: FilterValuesType }
 export type FilterValuesType = "all" | "active" | "completed"
 export type TodolistType = TodolistServerType & { filter: FilterValuesType; todoStatus: StatusType }
 // exports
 export const todoListsReducer = slice.reducer
-export const { changeTodoStatusAC, cleanTodolistAC } = slice.actions
+export const { changeTodoStatusAC } = slice.actions
 export const { todolistsSelector } = slice.selectors
 export const todolistsThunk = {
   setTodolistTC,

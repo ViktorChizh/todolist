@@ -4,13 +4,13 @@ import { TaskPriorities, TaskStatuses } from "common/enums"
 import {
   addTaskTC,
   changeTaskStatusAC,
-  cleanTasksAC,
   removeTaskTC,
   setTasksTC,
   tasksReducer,
   TasksStateType,
   updateTaskTC,
 } from "features/pageTodolists/todolist/task/TasksReducer"
+import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 let startState: TasksStateType
 beforeEach(() => {
@@ -133,13 +133,12 @@ test("tasks should be added for todolist", () => {
     payload: { idTDL: "todolistId1", tasks: startState["todolistId1"] },
   }
 
-  const endState = tasksReducer(
-    {
-      todolistId2: [],
-      todolistId1: [],
-    },
-    action,
-  )
+  const endState = tasksReducer({ todolistId2: [], todolistId1: [] }, action)
+  // 4 var
+  // const fullfiled = setTasksTC.fulfilled
+  // const action = createAction<Parameters<typeof fullfiled>[0]>(fullfiled.type)
+  //
+  // const endState = tasksReducer({ todolistId2: [], todolistId1: [] }, action({ idTDL: "todolistId1", tasks: startState["todolistId1"] }))
 
   expect(endState["todolistId1"].length).toBe(3)
   expect(endState["todolistId2"].length).toBe(0)
@@ -275,6 +274,6 @@ test("empty arrays should be added when we set todolists", () => {
   expect(endState["2"]).toBeDefined()
 })
 test("all tasks for all todolist should be removed", () => {
-  const endState = tasksReducer(startState, cleanTasksAC())
+  const endState = tasksReducer(startState, clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
   expect(endState).toEqual({})
 })
