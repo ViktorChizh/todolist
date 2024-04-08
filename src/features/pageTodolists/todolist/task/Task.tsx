@@ -4,7 +4,8 @@ import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useTask } from "./useTask"
-import { TaskType } from "common/api/api"
+
+import { TaskType } from "features/pageTodolists/todolist/task/TasksReducer"
 
 type TaskPropsType = {
   task: TaskType

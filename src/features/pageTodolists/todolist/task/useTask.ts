@@ -1,6 +1,5 @@
 import { useCallback } from "react"
-import { removeTaskTC, updateTaskTC } from "./TasksReducer"
-import { TaskType } from "common/api/api"
+import { removeTaskTC, TaskType, updateTaskTC } from "./TasksReducer"
 import { useAppDispatch } from "app/Store"
 /**
  * Вынесли всю логику в кастомный хук в качестве примера

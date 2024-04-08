@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { api, TaskType } from "common/api/api"
+import { api } from "common/api/api"
+import { TaskType } from "features/pageTodolists/todolist/task/TasksReducer"
 
 export default {
   title: "API",

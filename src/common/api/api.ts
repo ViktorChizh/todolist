@@ -1,12 +1,10 @@
 import axios, { AxiosResponse } from "axios"
-import { StatusType } from "app/AppReducer"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
+import { TaskType } from "features/pageTodolists/todolist/task/TasksReducer"
 
 const settings = {
   withCredentials: true,
-  headers: {
-    "API-KEY": "7786fc28-3a8a-4ff6-a330-c22ffae6ff54",
-  },
+  headers: { "API-KEY": "7786fc28-3a8a-4ff6-a330-c22ffae6ff54" },
 }
 const instance = axios.create({
   baseURL: "https://social-network.samuraijs.com/api/1.1/",
@@ -60,27 +58,12 @@ export const api = {
 }
 
 // types
-export type ResponseMeType = {
-  id: number
-  email: string
-  login: string
-}
-export type LoginParamsType = {
-  email: string
-  password: string
-  rememberMe: boolean
-  captcha?: string
-}
+
 export type TodolistServerType = {
   id: string
   title: string
   addedDate: Date
   order: number
-}
-export type ResponseType<T = {}> = {
-  resultCode: resultCode
-  messages: string[]
-  data: T
 }
 export type TaskServerType = {
   id: string
@@ -94,7 +77,6 @@ export type TaskServerType = {
   order: number
   priority: TaskPriorities
 }
-export type TaskType = TaskServerType & { taskStatus: StatusType }
 export type UpdateServerTaskType = {
   title: string
   description: string
@@ -103,12 +85,22 @@ export type UpdateServerTaskType = {
   startDate: Date | null
   deadline: Date | null
 }
+
+export type ResponseType<T = {}> = {
+  resultCode: resultCode
+  messages: string[]
+  data: T
+}
 export type ResponseTasksType = {
   items: TaskServerType[]
   totalCount: number
   error: string
 }
-
+export type ResponseMeType = {
+  id: number
+  email: string
+  login: string
+}
 export type ResponseLoginType = {
   data: {}
   messages: string[]
@@ -118,4 +110,10 @@ export type ResponseLoginType = {
 export type FieldsErrorsType = {
   field: string
   error: string
+}
+export type LoginParamsType = {
+  email: string
+  password: string
+  rememberMe: boolean
+  captcha?: string
 }

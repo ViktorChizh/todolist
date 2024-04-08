@@ -1,5 +1,5 @@
 import { addTodolistTC, changeTodoStatusAC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
-import { api, TaskType } from "common/api/api"
+import { api, TaskServerType } from "common/api/api"
 import { setAppErrorAC, setAppStatusAC, StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, netWorkErrorHandler, serverErrorHandler } from "common/utils"
@@ -17,9 +17,6 @@ const slice = createSlice({
         taskStatus: action.payload.taskStatus,
       }
     },
-    // cleanTasksAC() {
-    //   return {}
-    // },
   },
   extraReducers: (builder) => {
     builder
@@ -55,6 +52,7 @@ const slice = createSlice({
     tasksSelector: (state) => state,
   },
 })
+
 //thunks
 export const setTasksTC = createAppAsyncThunk<{ tasks: TaskType[]; idTDL: string }, string>(
   `${slice.name}/setTasksTC`,
@@ -162,9 +160,8 @@ export const updateTaskTC = createAppAsyncThunk<
   },
 )
 //types
-export type TasksStateType = {
-  [key: string]: TaskType[]
-}
+export type TaskType = TaskServerType & { taskStatus: StatusType }
+export type TasksStateType = { [key: string]: TaskType[] }
 export type UpdateTaskModelType = {
   title?: string
   description?: string
