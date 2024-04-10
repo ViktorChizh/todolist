@@ -6,7 +6,7 @@ import { v1 } from "uuid"
 import { appReducer } from "./AppReducer"
 import { thunk } from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
-import { authReducer } from "features/auth/authReducer"
+import { loginReducer } from "features/login/loginReducer"
 import { Provider } from "react-redux"
 
 const initialState: AppStateType = {
@@ -16,7 +16,7 @@ const initialState: AppStateType = {
     isInitialized: false,
     errorPage: false,
   },
-  auth: {
+  login: {
     isLoggedIn: false,
   },
   todolists: [
@@ -100,7 +100,7 @@ const initialState: AppStateType = {
 let storeStorebook = configureStore({
   reducer: {
     app: appReducer,
-    auth: authReducer,
+    login: loginReducer,
     todolists: todoListsReducer,
     tasks: tasksReducer,
   },

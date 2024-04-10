@@ -2,7 +2,8 @@ import * as React from "react"
 import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
 import { useAppDispatch, useAppSelector } from "app/Store"
-import { errorAppSelector, setAppErrorAC } from "app/AppReducer"
+import { setAppErrorAC } from "app/AppReducer"
+import { errorAppSelector } from "common/selectors"
 
 export function ErrorSnackBar() {
   const error = useAppSelector(errorAppSelector)

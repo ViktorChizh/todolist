@@ -2,13 +2,13 @@ import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReduc
 import { tasksReducer } from "features/pageTodolists/todolist/task/TasksReducer"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import { appReducer } from "./AppReducer"
-import { authReducer } from "features/auth/authReducer"
+import { loginReducer } from "features/login/loginReducer"
 import { configureStore } from "@reduxjs/toolkit"
 
 export const store = configureStore({
   reducer: {
     app: appReducer,
-    auth: authReducer,
+    login: loginReducer,
     tasks: tasksReducer,
     todolists: todoListsReducer,
   },

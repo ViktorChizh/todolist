@@ -5,7 +5,7 @@ import { Todolist } from "./todolist/Todolist"
 import { usePageTodoList } from "./usePageTodoList"
 import { useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
-import { isLoggedInSelector } from "features/auth/authReducer"
+import { isLoggedInSelector } from "common/selectors"
 
 type PageTodoListsPropsType = {
   demo?: boolean
@@ -15,7 +15,7 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   let { todoLists, addTodolist } = usePageTodoList(demo)
   if (!isLoggedIn) {
-    return <Navigate to={"/login"} />
+    return <Navigate to={"/login1"} />
   }
 
   return (
@@ -38,7 +38,7 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
           return (
             <Grid key={tl.id} style={{ margin: "30px 15px 0" }}>
               <Paper elevation={5} style={{ padding: "20px" }}>
-                <Todolist todoList={tl} demo={demo} />
+                <Todolist todoList={tl} />
               </Paper>
             </Grid>
           )

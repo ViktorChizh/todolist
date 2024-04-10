@@ -7,10 +7,10 @@ import { ErrorSnackBar } from "common/components/errorSnackBar/ErrorSnackBar"
 import { useAppDispatch, useAppSelector } from "./Store"
 import { CircularProgress, Container } from "@mui/material"
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Login } from "features/auth/login/Login"
-import { meTC } from "features/auth/authReducer"
+import { Login } from "features/login/Login"
+import { meTC } from "features/login/loginReducer"
 import { Error404 } from "common/components/error404/Error404"
-import { isInitializedAppSelector, statusAppSelector } from "app/AppReducer"
+import { isInitializedAppSelector, statusAppSelector } from "common/selectors"
 
 type AppPropsType = {
   demo?: boolean
@@ -44,7 +44,7 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
         {status === "loading" && <LinearProgress color="error" />}
         <Container fixed style={{ margin: "0", padding: "0", width: "100%", maxWidth: "100%" }}>
           <Routes>
-            <Route path={"/login"} element={<Login />} />
+            <Route path={"/login1"} element={<Login />} />
             <Route path={"/1-todolist"} element={<Navigate to={"/todolists"} />} />
             <Route path={"/"} element={<Navigate to={"/todolists"} />} />
             <Route path={"/todolists"} element={<PageTodoLists demo={demo} />} />

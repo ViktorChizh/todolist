@@ -8,7 +8,7 @@ import { createAppAsyncThunk } from "common/utils"
 import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 const slice = createSlice({
-  name: "auth",
+  name: "login",
   initialState: { isLoggedIn: false },
   reducers: {},
   extraReducers: (builder) => {
@@ -89,6 +89,6 @@ export const logoutTC = createAppAsyncThunk<undefined, undefined>(
   },
 )
 //exports
-export const authReducer = slice.reducer
+export const loginReducer = slice.reducer
 export const { isLoggedInSelector } = slice.selectors
 export const authThunks = { meTC, loginTC, logoutTC }

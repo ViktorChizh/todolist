@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { meTC } from "features/auth/authReducer"
+import { meTC } from "features/login/loginReducer"
 
 const initialState: AppStateType = {
   status: "idle",

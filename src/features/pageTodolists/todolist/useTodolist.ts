@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from "app/Store"
-import { addTaskTC, tasksSelector } from "./task/TasksReducer"
+import { addTaskTC } from "./task/TasksReducer"
+import { tasksSelector } from "common/selectors"
 import { useCallback, useMemo } from "react"
 import { FilterValuesType, removeTodolistTC, updateTodolistFilterTC, updateTodolistTitleTC } from "./TodoListsReducer"
 
@@ -20,16 +21,8 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
   }, [filter, tasks])
 
   const removeTodolist = useCallback(() => dispatch(removeTodolistTC(idTDL)), [dispatch, idTDL])
-  const onAllClickHandler = useCallback(
-    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "all" })),
-    [dispatch, idTDL],
-  )
-  const onActiveClickHandler = useCallback(
-    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "active" })),
-    [dispatch, idTDL],
-  )
-  const onCompletedClickHandler = useCallback(
-    () => dispatch(updateTodolistFilterTC({ idTDL, filter: "completed" })),
+  const onClickFilterHandler = useCallback(
+    (filter: FilterValuesType) => dispatch(updateTodolistFilterTC({ idTDL, filter })),
     [dispatch, idTDL],
   )
   const addTaskHandler = useMemo(() => {
@@ -44,13 +37,5 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
     [dispatch, idTDL],
   )
 
-  return {
-    tasks,
-    removeTodolist: removeTodolist,
-    onAllClickHandler,
-    onActiveClickHandler,
-    onCompletedClickHandler,
-    addTaskHandler,
-    updateTodolistHandler,
-  }
+  return { tasks, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler }
 }

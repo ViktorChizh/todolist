@@ -3,29 +3,34 @@ import { AddItemForm } from "common/components/addItemForm/AddItemForm"
 import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import Button from "@mui/material/Button"
-import { TodolistType } from "./TodoListsReducer"
+import { FilterValuesType, TodolistType } from "./TodoListsReducer"
 import { Task } from "./task/Task"
 import { useTodolist } from "./useTodolist"
+import Button from "@mui/material/Button"
 
 type PropsType = {
   todoList: TodolistType
-  demo?: boolean
 }
 
-export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
-  const {
-    tasks,
-    removeTodolist,
-    onAllClickHandler,
-    onActiveClickHandler,
-    onCompletedClickHandler,
-    addTaskHandler,
-    updateTodolistHandler,
-  } = useTodolist(todoList.id, todoList.filter)
+export const Todolist: FC<PropsType> = memo(({ todoList }) => {
+  const { tasks, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler } = useTodolist(
+    todoList.id,
+    todoList.filter,
+  )
 
   const disabled = todoList.todoStatus === "loading"
-
+  // в отдельную компоненту выносить нет смысла, т.к. передаваемых значений очень много и ничего не выигрываешь
+  // но если использовать замыкание, то количество настроек резко уменьшается + общий колбэк фильтра на кнопки
+  const buttonELement = (color: "error" | "success" | "info", filter: FilterValuesType) => (
+    <Button
+      size="small"
+      onClick={() => onClickFilterHandler(filter)}
+      color={color}
+      disabled={disabled || todoList.filter === filter}
+      variant={todoList.filter === filter ? "outlined" : "contained"}>
+      {`  ${filter}  `}
+    </Button>
+  )
   return (
     <div>
       <h3>
@@ -46,33 +51,9 @@ export const Todolist: FC<PropsType> = memo(({ todoList, demo }) => {
           width: "100%",
           justifyContent: "space-between",
         }}>
-        <Button
-          size="small"
-          onClick={onAllClickHandler}
-          color="success"
-          disabled={disabled || todoList.filter === "all"}
-          variant={todoList.filter === "all" ? "outlined" : "contained"}>
-          {" "}
-          All{" "}
-        </Button>
-        <Button
-          size="small"
-          onClick={onActiveClickHandler}
-          color="error"
-          disabled={disabled || todoList.filter === "active"}
-          variant={todoList.filter === "active" ? "outlined" : "contained"}>
-          {" "}
-          Active{" "}
-        </Button>
-        <Button
-          size="small"
-          onClick={onCompletedClickHandler}
-          color="primary"
-          disabled={disabled || todoList.filter === "completed"}
-          variant={todoList.filter === "completed" ? "outlined" : "contained"}>
-          {" "}
-          Completed{" "}
-        </Button>
+        {buttonELement("info", "all")}
+        {buttonELement("success", "active")}
+        {buttonELement("error", "completed")}
       </div>
     </div>
   )

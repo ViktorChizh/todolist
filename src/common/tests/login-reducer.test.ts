@@ -1,5 +1,5 @@
 import { ActionTypeForTest } from "common/utils"
-import { authReducer, loginTC, logoutTC, meTC } from "features/auth/authReducer"
+import { loginReducer, loginTC, logoutTC, meTC } from "features/login/loginReducer"
 import { appReducer } from "app/AppReducer"
 
 let startState: { isLoggedIn: boolean }
@@ -11,7 +11,7 @@ test("loginTC should return isLoggedIn=true", () => {
     payload: undefined,
   }
 
-  const endState = authReducer(startState, action)
+  const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(true)
 })
@@ -22,20 +22,20 @@ test("logouTC should return isLoggedIn=false", () => {
     payload: undefined,
   }
 
-  const endState = authReducer(startState, action)
+  const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(false)
 })
 
 test("fulfilled me-request should return isLoggedIn=true", () => {
   const action = meTC.fulfilled(undefined, "requestId", undefined)
-  const endState = authReducer(startState, action)
+  const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(true)
 })
 test("rejected me-request should return isLoggedIn=false", () => {
   const action = meTC.rejected(null, "requestId", undefined)
-  const endState = authReducer(startState, action)
+  const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(false)
 })

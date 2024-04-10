@@ -1,6 +1,6 @@
 import { appReducer, AppStateType, setAppErrorAC, setAppErrorPageAC, setAppStatusAC } from "app/AppReducer"
 import { ActionTypeForTest } from "common/utils"
-import { authReducer, logoutTC, meTC } from "features/auth/authReducer"
+import { loginReducer, logoutTC, meTC } from "features/login/loginReducer"
 
 let state: AppStateType
 
