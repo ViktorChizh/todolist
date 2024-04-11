@@ -1,20 +1,25 @@
 import { setAppStatusAC } from "app/AppReducer"
-import { api, FieldsErrorsType, LoginParamsType, ResponseMeType } from "common/api/api"
-import { serverErrorHandler } from "common/utils/serverErrorHandler"
 import { createSlice } from "@reduxjs/toolkit"
-import { netWorkErrorHandler } from "common/utils/netWorkErrorHandler"
+import { createAppAsyncThunk, netWorkErrorHandler, serverErrorHandler } from "common/utils"
+import { api, FieldErrorType, LoginParamsType, ResponseMeType } from "common/api"
+import { clearDataAfterLogoutAC } from "common/actions"
 import { resultCode } from "common/enums"
-import { createAppAsyncThunk } from "common/utils"
-import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 const slice = createSlice({
   name: "login",
-  initialState: { isLoggedIn: false },
+  initialState: {
+    isLoggedIn: false,
+    isInitialized: false,
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(meTC.fulfilled, (state) => {
         state.isLoggedIn = true
+        state.isInitialized = true
+      })
+      .addCase(meTC.rejected, (state) => {
+        state.isInitialized = true
       })
       .addCase(loginTC.fulfilled, (state) => {
         state.isLoggedIn = true
@@ -25,6 +30,7 @@ const slice = createSlice({
   },
   selectors: {
     isLoggedInSelector: (state) => state.isLoggedIn,
+    isInitializedAppSelector: (state) => state.isInitialized,
   },
 })
 // thunks
@@ -51,7 +57,7 @@ export const meTC = createAppAsyncThunk<undefined, undefined>(
 export const loginTC = createAppAsyncThunk<
   undefined,
   LoginParamsType,
-  { rejectValue: { error: string[]; field?: FieldsErrorsType[] } | null }
+  { rejectValue: { error: string[]; field?: FieldErrorType[] } | null }
 >(`${slice.name}/loginTC`, async (params: LoginParamsType, { dispatch, rejectWithValue }) => {
   dispatch(setAppStatusAC({ status: "loading" }))
   try {
@@ -59,12 +65,14 @@ export const loginTC = createAppAsyncThunk<
     if (res.data.resultCode === resultCode.SUCCEEDED) {
       dispatch(setAppStatusAC({ status: "succeeded" }))
     } else {
-      serverErrorHandler<{ userId?: number }>(res.data, dispatch)
+      // если есть поля с ошибками, то отобразим их на форме, если нет - то глобально
+      const showError = !res.data.fieldsErrors.length
+      serverErrorHandler<{ userId?: number }>(res.data, dispatch, showError)
       dispatch(setAppStatusAC({ status: "failed" }))
       return rejectWithValue({ error: res.data.messages, field: res.data.fieldsErrors })
     }
   } catch (e) {
-    netWorkErrorHandler(e as Error, dispatch)
+    netWorkErrorHandler(e, dispatch)
     dispatch(setAppStatusAC({ status: "failed" }))
     return rejectWithValue(null)
   }
@@ -90,5 +98,5 @@ export const logoutTC = createAppAsyncThunk<undefined, undefined>(
 )
 //exports
 export const loginReducer = slice.reducer
-export const { isLoggedInSelector } = slice.selectors
+export const { isLoggedInSelector, isInitializedAppSelector } = slice.selectors
 export const authThunks = { meTC, loginTC, logoutTC }

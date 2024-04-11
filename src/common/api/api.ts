@@ -90,6 +90,7 @@ export type ResponseType<T = {}> = {
   resultCode: resultCode
   messages: string[]
   data: T
+  fieldsErrors?: FieldErrorType[]
 }
 export type ResponseTasksType = {
   items: TaskServerType[]
@@ -104,16 +105,16 @@ export type ResponseMeType = {
 export type ResponseLoginType = {
   data: {}
   messages: string[]
-  fieldsErrors: FieldsErrorsType[]
+  fieldsErrors: FieldErrorType[]
   resultCode: resultCode
 }
-export type FieldsErrorsType = {
+export type FieldErrorType = {
   field: string
   error: string
 }
 export type LoginParamsType = {
-  email: string
-  password: string
-  rememberMe: boolean
+  email?: string
+  password?: string
+  rememberMe?: boolean
   captcha?: string
 }

@@ -15,11 +15,11 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   let { todoLists, addTodolist } = usePageTodoList(demo)
   if (!isLoggedIn) {
-    return <Navigate to={"/login1"} />
+    return <Navigate to={"/login"} />
   }
 
   return (
-    <Container fixed style={{ width: "100%", maxWidth: "100%" }}>
+    <Container fixed style={{ maxWidth: "100%" }}>
       <Grid container>
         <Paper elevation={5} style={{ width: "100%", padding: "20px  6px 20px 20px", margin: "20px auto" }}>
           <h3 style={{ textAlign: "center" }}>Add Todolist</h3>
@@ -28,12 +28,10 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
             placeholder={"add new todolist"}
             style={{ width: "100%", maxWidth: "100%" }}
           />
-          {!todoLists.length && (
-            <span style={{ color: "red", display: "block", marginTop: "10px" }}>todoLists are empty</span>
-          )}
+          {!todoLists.length && <span style={{ color: "red", lineHeight: "2" }}>todoLists are empty</span>}
         </Paper>
       </Grid>
-      <Grid container spacing={3} style={{ width: "100%", justifyContent: "center", marginLeft: "-0.5vw" }}>
+      <Grid container spacing={3} style={{ width: "100%", justifyContent: "center" }}>
         {todoLists.map((tl) => {
           return (
             <Grid key={tl.id} style={{ margin: "30px 15px 0" }}>

@@ -13,11 +13,11 @@ const initialState: AppStateType = {
   app: {
     status: "idle",
     error: null,
-    isInitialized: false,
     errorPage: false,
   },
   login: {
     isLoggedIn: false,
+    isInitialized: false,
   },
   todolists: [
     {

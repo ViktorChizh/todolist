@@ -9,6 +9,7 @@ import { FilterValuesType, removeTodolistTC, updateTodolistFilterTC, updateTodol
  */
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
   let tasks = useAppSelector(tasksSelector)[idTDL]
+  let isTasksListEmpty = !tasks.length
   const dispatch = useAppDispatch()
   useMemo(() => {
     if (tasks && filter === "active") {
@@ -37,5 +38,5 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
     [dispatch, idTDL],
   )
 
-  return { tasks, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler }
+  return { tasks, isTasksListEmpty, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler }
 }

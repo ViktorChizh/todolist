@@ -12,6 +12,7 @@ import { loginTC } from "features/login/loginReducer"
 import { isLoggedInSelector } from "common/selectors"
 import { useAppDispatch, useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
+import { LoginParamsType } from "common/api"
 
 export const Login = () => {
   let dispatch = useAppDispatch()
@@ -24,7 +25,7 @@ export const Login = () => {
       rememberMe: false,
     },
     validate: (values) => {
-      const errors: FormikErrorType = {}
+      const errors: LoginParamsType = {}
       if (!values.email) {
         errors.email = "Email is required"
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -37,22 +38,17 @@ export const Login = () => {
       }
       return errors
     },
-    onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+    onSubmit: async (values: LoginParamsType, formikHelpers: FormikHelpers<LoginParamsType>) => {
       const res = await dispatch(loginTC(values))
       if (loginTC.rejected.match(res)) {
         if (res.payload?.field?.length) {
-          res.payload.field.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
+          res.payload?.field.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
         }
-      }
-      if (loginTC.fulfilled.match(res)) {
-        formik.resetForm()
       }
     },
   })
 
-  if (isLoggedIn) {
-    return <Navigate to={"/todolists"} />
-  }
+  if (isLoggedIn) return <Navigate to={"/todolists"} />
 
   return (
     <Grid container justifyContent={"center"}>
@@ -62,7 +58,7 @@ export const Login = () => {
             <FormLabel>
               <p>
                 To log in get registered &nbsp;
-                <a href={"https://social-network.samuraijs.com/"} target={"_blank"}>
+                <a href={"https://social-network.samuraijs.com/"} target={"_blank"} rel="noreferrer">
                   here
                 </a>
               </p>
@@ -84,9 +80,9 @@ export const Login = () => {
               <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
               {formik.touched.email && formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
               <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
-              {formik.touched.password && formik.errors.password ? (
+              {formik.touched.password && formik.errors.password && (
                 <div style={{ color: "red" }}>{formik.errors.password}</div>
-              ) : null}
+              )}
               <FormControlLabel
                 label="Remember me"
                 control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
@@ -110,17 +106,4 @@ export const Login = () => {
       </Grid>
     </Grid>
   )
-}
-// types
-type FormikErrorType = {
-  email?: string
-  password?: string
-  rememberMe?: boolean
-  captcha?: string
-}
-type FormValuesType = {
-  email: string
-  password: string
-  rememberMe: boolean
-  captcha?: string
 }

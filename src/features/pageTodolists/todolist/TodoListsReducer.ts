@@ -1,11 +1,11 @@
-import { api, TodolistServerType } from "common/api/api"
 import { setAppStatusAC, StatusType } from "app/AppReducer"
 import { serverErrorHandler } from "common/utils/serverErrorHandler"
 import { setTasksTC } from "./task/TasksReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, netWorkErrorHandler } from "common/utils"
+import { clearDataAfterLogoutAC } from "common/actions"
+import { api, TodolistServerType } from "common/api"
 import { resultCode } from "common/enums"
-import { clearDataAfterLogoutAC } from "common/actions/common-actions"
 
 const slice = createSlice({
   name: "todolists",

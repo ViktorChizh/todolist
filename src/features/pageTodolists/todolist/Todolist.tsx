@@ -8,16 +8,9 @@ import { Task } from "./task/Task"
 import { useTodolist } from "./useTodolist"
 import Button from "@mui/material/Button"
 
-type PropsType = {
-  todoList: TodolistType
-}
-
-export const Todolist: FC<PropsType> = memo(({ todoList }) => {
-  const { tasks, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler } = useTodolist(
-    todoList.id,
-    todoList.filter,
-  )
-
+export const Todolist: FC<{ todoList: TodolistType }> = memo(({ todoList }) => {
+  const { tasks, isTasksListEmpty, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler } =
+    useTodolist(todoList.id, todoList.filter)
   const disabled = todoList.todoStatus === "loading"
   // в отдельную компоненту выносить нет смысла, т.к. передаваемых значений очень много и ничего не выигрываешь
   // но если использовать замыкание, то количество настроек резко уменьшается + общий колбэк фильтра на кнопки
@@ -31,6 +24,7 @@ export const Todolist: FC<PropsType> = memo(({ todoList }) => {
       {`  ${filter}  `}
     </Button>
   )
+
   return (
     <div>
       <h3>
@@ -41,16 +35,8 @@ export const Todolist: FC<PropsType> = memo(({ todoList }) => {
       </h3>
       <AddItemForm callBack={addTaskHandler} placeholder={"add new task"} disabled={disabled} />
       <ul>{tasks && tasks.map((t) => <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />)}</ul>
-      {tasks && !tasks.length && (
-        <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>
-      )}
-      <div
-        style={{
-          display: "flex",
-          margin: "0 auto",
-          width: "100%",
-          justifyContent: "space-between",
-        }}>
+      {isTasksListEmpty && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
+      <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
         {buttonELement("info", "all")}
         {buttonELement("success", "active")}
         {buttonELement("error", "completed")}

@@ -1,10 +1,10 @@
-import { addTodolistTC, changeTodoStatusAC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
-import { api, TaskServerType } from "common/api/api"
-import { setAppErrorAC, setAppStatusAC, StatusType } from "app/AppReducer"
+import { addTodolistTC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
+import { setAppErrorAC, StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { createAppAsyncThunk, netWorkErrorHandler, serverErrorHandler } from "common/utils"
+import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
-import { clearDataAfterLogoutAC } from "common/actions/common-actions"
+import { clearDataAfterLogoutAC } from "common/actions"
+import { api, TaskServerType } from "common/api"
 
 const slice = createSlice({
   name: "tasks",
@@ -57,17 +57,11 @@ const slice = createSlice({
 export const setTasksTC = createAppAsyncThunk<{ tasks: TaskType[]; idTDL: string }, string>(
   `${slice.name}/setTasksTC`,
   async (idTDL, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
-    try {
-      dispatch(setAppStatusAC({ status: "loading" }))
+    return thunkTryCatch(thunkAPI, async () => {
       const res = await api.getTasks(idTDL)
       const tasks = res.data.items.map((t) => ({ ...t, taskStatus: "idle" as StatusType }))
-      dispatch(setAppStatusAC({ status: "succeeded" }))
       return { tasks, idTDL }
-    } catch (e) {
-      netWorkErrorHandler(e, dispatch)
-      return rejectWithValue(null)
-    }
+    })
   },
 )
 export const removeTaskTC = createAppAsyncThunk<{ idTDL: string; taskId: string }, { idTDL: string; taskId: string }>(
@@ -75,90 +69,72 @@ export const removeTaskTC = createAppAsyncThunk<{ idTDL: string; taskId: string 
   async (param: { idTDL: string; taskId: string }, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
     const { idTDL, taskId } = param
-    dispatch(setAppStatusAC({ status: "loading" }))
     dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "loading" }))
-    try {
+    return thunkTryCatch(thunkAPI, async () => {
       let res = await api.deleteTask(idTDL, taskId)
       if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(setAppStatusAC({ status: "succeeded" }))
         return { idTDL, taskId }
       } else {
         serverErrorHandler<{}>(res.data, dispatch)
         dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "failed" }))
         return rejectWithValue(null)
       }
-    } catch (e) {
-      netWorkErrorHandler(e, dispatch)
-      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-      return rejectWithValue(null)
-    }
+    })
   },
 )
 export const addTaskTC = createAppAsyncThunk<{ idTDL: string; newTask: TaskType }, { idTDL: string; title: string }>(
   `${slice.name}/addTaskTC`,
   async (param: { idTDL: string; title: string }, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    const { idTDL, title } = param
-    dispatch(setAppStatusAC({ status: "loading" }))
-    try {
+    return thunkTryCatch(thunkAPI, async () => {
+      const { idTDL, title } = param
       let res = await api.createTask(idTDL, title)
       const newTask = res.data.data.item
       if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(setAppStatusAC({ status: "succeeded" }))
         return { idTDL, newTask }
       } else {
         serverErrorHandler<{ item: TaskType }>(res.data, dispatch)
         return rejectWithValue(null)
       }
-    } catch (e) {
-      netWorkErrorHandler(e, dispatch)
-      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-      return rejectWithValue(null)
-    }
+    })
   },
 )
-export const updateTaskTC = createAppAsyncThunk<
-  { idTDL: string; taskId: string; model: UpdateTaskModelType },
-  { idTDL: string; taskId: string; model: UpdateTaskModelType }
->(
+export const updateTaskTC = createAppAsyncThunk<typeParam, typeParam>(
   `${slice.name}/updateTaskTC`,
-  async (param: { idTDL: string; taskId: string; model: UpdateTaskModelType }, thunkAPI) => {
+  async (param: typeParam, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
-    const { idTDL, taskId, model } = param
-    let task = getState().tasks[idTDL].find((t) => t.id === taskId)
-    if (!task) {
-      dispatch(setAppErrorAC({ error: "Task not found" }))
-      return rejectWithValue(null)
-    }
-    let newTask = {
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      priority: task.priority,
-      startDate: task.startDate,
-      deadline: task.deadline,
-      ...model,
-    }
-    dispatch(setAppStatusAC({ status: "loading" }))
-    dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "loading" }))
-    try {
+    return thunkTryCatch(thunkAPI, async () => {
+      const { idTDL, taskId, model } = param
+      let task = getState().tasks[idTDL].find((t) => t.id === taskId)
+      if (!task) {
+        dispatch(setAppErrorAC({ error: "Task not found" }))
+        return rejectWithValue(null)
+      }
+      let newTask = {
+        title: task.title,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        startDate: task.startDate,
+        deadline: task.deadline,
+        ...model,
+      }
       let res = await api.updateTask(idTDL, taskId, newTask)
       if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(setAppStatusAC({ status: "succeeded" }))
-        dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "succeeded" }))
         return { idTDL, taskId, model }
       } else {
         serverErrorHandler<{}>(res.data, dispatch)
         dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "failed" }))
         return rejectWithValue(null)
       }
-    } catch (e) {
-      netWorkErrorHandler(e, dispatch)
-      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-      return rejectWithValue(null)
-    }
+    })
   },
 )
+
+export const tasksReducer = slice.reducer
+export const { changeTaskStatusAC } = slice.actions
+export const { tasksSelector } = slice.selectors
+
 //types
 export type TaskType = TaskServerType & { taskStatus: StatusType }
 export type TasksStateType = { [key: string]: TaskType[] }
@@ -170,8 +146,4 @@ export type UpdateTaskModelType = {
   startDate?: Date
   deadline?: Date
 }
-//exports
-export const tasksReducer = slice.reducer
-export const { changeTaskStatusAC } = slice.actions
-export const { tasksSelector } = slice.selectors
-export const tasksThunks = { setTasksTC, removeTaskTC, addTaskTC, updateTaskTC }
+type typeParam = { idTDL: string; taskId: string; model: UpdateTaskModelType }

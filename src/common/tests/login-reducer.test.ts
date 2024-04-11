@@ -2,8 +2,8 @@ import { ActionTypeForTest } from "common/utils"
 import { loginReducer, loginTC, logoutTC, meTC } from "features/login/loginReducer"
 import { appReducer } from "app/AppReducer"
 
-let startState: { isLoggedIn: boolean }
-beforeEach(() => (startState = { isLoggedIn: false }))
+let startState: { isLoggedIn: boolean; isInitialized: boolean }
+beforeEach(() => (startState = { isLoggedIn: false, isInitialized: false }))
 
 test("loginTC should return isLoggedIn=true", () => {
   const action: ActionTypeForTest<typeof loginTC.fulfilled> = {
@@ -38,4 +38,18 @@ test("rejected me-request should return isLoggedIn=false", () => {
   const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(false)
+})
+
+test("fulfilled me-request should return isInitialized=true", () => {
+  const action = meTC.fulfilled(undefined, "requestId", undefined)
+  const endState = loginReducer(startState, action)
+
+  expect(endState.isInitialized).toBe(true)
+})
+
+test("rejected me-request should return isInitialized=true", () => {
+  const action = meTC.rejected(null, "requestId", undefined)
+  const endState = loginReducer(startState, action)
+
+  expect(endState.isInitialized).toBe(true)
 })

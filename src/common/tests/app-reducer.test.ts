@@ -4,7 +4,7 @@ import { loginReducer, logoutTC, meTC } from "features/login/loginReducer"
 
 let state: AppStateType
 
-beforeEach(() => (state = { status: "idle", error: null, isInitialized: false, errorPage: false }))
+beforeEach(() => (state = { status: "idle", error: null, errorPage: false }))
 
 test("set error message", () => {
   // action
@@ -26,18 +26,4 @@ test("change errorPage status", () => {
   const endState = appReducer(state, setAppErrorPageAC({ errorPage: true }))
   // expect result
   expect(endState.errorPage).toBe(true)
-})
-
-test("fulfilled me-request should return isInitialized=true", () => {
-  const action = meTC.fulfilled(undefined, "requestId", undefined)
-  const endState = appReducer(state, action)
-
-  expect(endState.isInitialized).toBe(true)
-})
-
-test("rejected me-request should return isInitialized=true", () => {
-  const action = meTC.rejected(null, "requestId", undefined)
-  const endState = appReducer(state, action)
-
-  expect(endState.isInitialized).toBe(true)
 })
