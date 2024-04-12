@@ -41,8 +41,8 @@ export const Login = () => {
     onSubmit: async (values: LoginParamsType, formikHelpers: FormikHelpers<LoginParamsType>) => {
       const res = await dispatch(loginTC(values))
       if (loginTC.rejected.match(res)) {
-        if (res.payload?.field?.length) {
-          res.payload?.field.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
+        if (res.payload?.fieldsErrors?.length) {
+          res.payload?.fieldsErrors.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
         }
       }
     },

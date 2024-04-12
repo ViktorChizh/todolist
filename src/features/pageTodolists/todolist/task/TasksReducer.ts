@@ -1,10 +1,10 @@
 import { addTodolistTC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
-import { setAppErrorAC, StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
-import { clearDataAfterLogoutAC } from "common/actions"
+import { setAppErrorAC, clearDataAfterLogoutAC } from "common/actions"
 import { api, TaskServerType } from "common/api"
+import { StatusType } from "app/AppReducer"
 
 const slice = createSlice({
   name: "tasks",
@@ -85,8 +85,8 @@ export const removeTaskTC = createAppAsyncThunk<{ idTDL: string; taskId: string 
 export const addTaskTC = createAppAsyncThunk<{ idTDL: string; newTask: TaskType }, { idTDL: string; title: string }>(
   `${slice.name}/addTaskTC`,
   async (param: { idTDL: string; title: string }, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
     return thunkTryCatch(thunkAPI, async () => {
+      const { dispatch, rejectWithValue } = thunkAPI
       const { idTDL, title } = param
       let res = await api.createTask(idTDL, title)
       const newTask = res.data.data.item
@@ -102,8 +102,8 @@ export const addTaskTC = createAppAsyncThunk<{ idTDL: string; newTask: TaskType 
 export const updateTaskTC = createAppAsyncThunk<typeParam, typeParam>(
   `${slice.name}/updateTaskTC`,
   async (param: typeParam, thunkAPI) => {
-    const { dispatch, rejectWithValue, getState } = thunkAPI
     return thunkTryCatch(thunkAPI, async () => {
+      const { dispatch, rejectWithValue, getState } = thunkAPI
       const { idTDL, taskId, model } = param
       let task = getState().tasks[idTDL].find((t) => t.id === taskId)
       if (!task) {
