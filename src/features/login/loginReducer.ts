@@ -99,4 +99,4 @@ export const logoutTC = createAppAsyncThunk<undefined, undefined>(
 //exports
 export const loginReducer = slice.reducer
 export const { isLoggedInSelector, isInitializedAppSelector } = slice.selectors
-export const authThunks = { meTC, loginTC, logoutTC }
+export const loginThunks = { meTC, loginTC, logoutTC }

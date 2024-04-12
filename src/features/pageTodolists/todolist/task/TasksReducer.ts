@@ -134,6 +134,7 @@ export const updateTaskTC = createAppAsyncThunk<typeParam, typeParam>(
 export const tasksReducer = slice.reducer
 export const { changeTaskStatusAC } = slice.actions
 export const { tasksSelector } = slice.selectors
+export const tasksThunks = { setTasksTC, removeTaskTC, addTaskTC, updateTaskTC }
 
 //types
 export type TaskType = TaskServerType & { taskStatus: StatusType }
