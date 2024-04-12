@@ -1,10 +1,10 @@
 import React from "react"
 import s from "common/components/error404/Error.module.css"
-import { setAppErrorPageAC, setAppStatusAC } from "app/AppReducer"
-import { useAppDispatch, useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
 import img404 from "assets/bgE.jpg"
 import { errorPageAppSelector, isLoggedInSelector } from "common/selectors"
+import { setAppErrorPageAC, setAppStatusAC } from "common/actions"
+import { useAppDispatch, useAppSelector } from "common/hooks"
 
 export const Error404 = () => {
   const dispatch = useAppDispatch()

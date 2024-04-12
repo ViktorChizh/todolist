@@ -8,7 +8,7 @@ beforeEach(() => (startState = { isLoggedIn: false, isInitialized: false }))
 test("loginTC should return isLoggedIn=true", () => {
   const action: ActionTypeForTest<typeof loginTC.fulfilled> = {
     type: loginTC.fulfilled.type,
-    payload: undefined,
+    payload: { isLoggedIn: true },
   }
 
   const endState = loginReducer(startState, action)
@@ -19,7 +19,7 @@ test("loginTC should return isLoggedIn=true", () => {
 test("logouTC should return isLoggedIn=false", () => {
   const action: ActionTypeForTest<typeof logoutTC.fulfilled> = {
     type: logoutTC.fulfilled.type,
-    payload: undefined,
+    payload: { isLoggedIn: false },
   }
 
   const endState = loginReducer(startState, action)
@@ -28,7 +28,7 @@ test("logouTC should return isLoggedIn=false", () => {
 })
 
 test("fulfilled me-request should return isLoggedIn=true", () => {
-  const action = meTC.fulfilled(undefined, "requestId", undefined)
+  const action = meTC.fulfilled({ isLoggedIn: true }, "requestId", undefined)
   const endState = loginReducer(startState, action)
 
   expect(endState.isLoggedIn).toBe(true)
@@ -41,7 +41,7 @@ test("rejected me-request should return isLoggedIn=false", () => {
 })
 
 test("fulfilled me-request should return isInitialized=true", () => {
-  const action = meTC.fulfilled(undefined, "requestId", undefined)
+  const action = meTC.fulfilled({ isLoggedIn: true }, "requestId", undefined)
   const endState = loginReducer(startState, action)
 
   expect(endState.isInitialized).toBe(true)

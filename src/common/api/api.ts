@@ -13,26 +13,26 @@ const instance = axios.create({
 
 export const api = {
   me() {
-    return instance.get<ResponseType<ResponseMeType>>("auth/me")
+    return instance.get<BaseResponseType<ResponseMeType>>("auth/me")
   },
   login(params: LoginParamsType) {
     return instance.post<ResponseLoginType>("auth/login", params)
   },
   logout() {
-    return instance.delete<ResponseType>("auth/login")
+    return instance.delete<BaseResponseType>("auth/login")
   },
 
   getTodolists() {
     return instance.get<TodolistServerType[]>("todo-lists")
   },
   createTodolist(title: string) {
-    return instance.post<ResponseType<{ item: TodolistServerType }>>("todo-lists", { title: title })
+    return instance.post<BaseResponseType<{ item: TodolistServerType }>>("todo-lists", { title: title })
   },
   deleteTodolist(id: string) {
-    return instance.delete<ResponseType>(`todo-lists/${id}`)
+    return instance.delete<BaseResponseType>(`todo-lists/${id}`)
   },
   updateTodolist(id: string, title: string) {
-    return instance.put<ResponseType>(`todo-lists/${id}`, { title: title })
+    return instance.put<BaseResponseType>(`todo-lists/${id}`, { title: title })
   },
 
   getTasks(todolistId: string) {
@@ -43,17 +43,18 @@ export const api = {
       instance
         // если надо указать типизацию третьего параметра, то надо указывать все три (но чаще хватит только первого)
         // при указании второго и третьего параметра, типизация первого игнорируется в пользу второго
-        .post<ResponseType<{ item: TaskType }>, AxiosResponse<ResponseType<{ item: TaskType }>>, { title: string }>(
-          `todo-lists/${todolistId}/tasks/`,
-          { title: title },
-        )
+        .post<
+          BaseResponseType<{ item: TaskType }>,
+          AxiosResponse<BaseResponseType<{ item: TaskType }>>,
+          { title: string }
+        >(`todo-lists/${todolistId}/tasks/`, { title: title })
     )
   },
   deleteTask(todolistId: string, id: string) {
-    return instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${id}`)
+    return instance.delete<BaseResponseType>(`todo-lists/${todolistId}/tasks/${id}`)
   },
   updateTask(todolistId: string, id: string, updateTask: UpdateServerTaskType) {
-    return instance.put<ResponseType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
+    return instance.put<BaseResponseType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
   },
 }
 
@@ -86,7 +87,7 @@ export type UpdateServerTaskType = {
   deadline: Date | null
 }
 
-export type ResponseType<T = {}> = {
+export type BaseResponseType<T = {}> = {
   resultCode: resultCode
   messages: string[]
   data: T

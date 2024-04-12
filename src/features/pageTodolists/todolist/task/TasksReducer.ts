@@ -1,9 +1,9 @@
 import { addTodolistTC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
-import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
-import { setAppErrorAC, clearDataAfterLogoutAC } from "common/actions"
-import { api, TaskServerType } from "common/api"
+import { resultCode } from "common/enums"
+import { clearDataAfterLogoutAC, setAppErrorAC } from "common/actions"
+import { api, TaskServerType, UpdateServerTaskType } from "common/api"
 import { StatusType } from "app/AppReducer"
 
 const slice = createSlice({
@@ -56,7 +56,7 @@ const slice = createSlice({
 //thunks
 export const setTasksTC = createAppAsyncThunk<{ tasks: TaskType[]; idTDL: string }, string>(
   `${slice.name}/setTasksTC`,
-  async (idTDL, thunkAPI) => {
+  (idTDL, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       const res = await api.getTasks(idTDL)
       const tasks = res.data.items.map((t) => ({ ...t, taskStatus: "idle" as StatusType }))
@@ -66,7 +66,7 @@ export const setTasksTC = createAppAsyncThunk<{ tasks: TaskType[]; idTDL: string
 )
 export const removeTaskTC = createAppAsyncThunk<{ idTDL: string; taskId: string }, { idTDL: string; taskId: string }>(
   `${slice.name}/removeTaskTC`,
-  async (param: { idTDL: string; taskId: string }, thunkAPI) => {
+  (param: { idTDL: string; taskId: string }, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
     const { idTDL, taskId } = param
     dispatch(changeTaskStatusAC({ idTDL, taskId, taskStatus: "loading" }))
@@ -84,7 +84,7 @@ export const removeTaskTC = createAppAsyncThunk<{ idTDL: string; taskId: string 
 )
 export const addTaskTC = createAppAsyncThunk<{ idTDL: string; newTask: TaskType }, { idTDL: string; title: string }>(
   `${slice.name}/addTaskTC`,
-  async (param: { idTDL: string; title: string }, thunkAPI) => {
+  (param: { idTDL: string; title: string }, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       const { dispatch, rejectWithValue } = thunkAPI
       const { idTDL, title } = param
@@ -101,7 +101,7 @@ export const addTaskTC = createAppAsyncThunk<{ idTDL: string; newTask: TaskType 
 )
 export const updateTaskTC = createAppAsyncThunk<typeParam, typeParam>(
   `${slice.name}/updateTaskTC`,
-  async (param: typeParam, thunkAPI) => {
+  (param: typeParam, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       const { dispatch, rejectWithValue, getState } = thunkAPI
       const { idTDL, taskId, model } = param
@@ -139,12 +139,5 @@ export const tasksThunks = { setTasksTC, removeTaskTC, addTaskTC, updateTaskTC }
 //types
 export type TaskType = TaskServerType & { taskStatus: StatusType }
 export type TasksStateType = { [key: string]: TaskType[] }
-export type UpdateTaskModelType = {
-  title?: string
-  description?: string
-  status?: TaskStatuses
-  priority?: TaskPriorities
-  startDate?: Date
-  deadline?: Date
-}
+export type UpdateTaskModelType = Partial<UpdateServerTaskType>
 type typeParam = { idTDL: string; taskId: string; model: UpdateTaskModelType }

@@ -1,23 +1,19 @@
-import { useAppDispatch, useAppSelector } from "app/Store"
-import { addTodolistTC, setTodolistTC } from "./todolist/TodoListsReducer"
 import { useCallback, useEffect } from "react"
 import { isLoggedInSelector, todolistsSelector } from "common/selectors"
+import { useActions, useAppSelector } from "common/hooks"
 
 export const usePageTodoList = (demo: boolean) => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const todoLists = useAppSelector(todolistsSelector)
-  const dispatch = useAppDispatch()
+  const { addTodolistTC: addTodoList, setTodolistTC: setTodolist } = useActions()
 
-  const addTodolist = useCallback(
-    (title: string) => {
-      dispatch(addTodolistTC(title))
-    },
-    [dispatch],
-  )
+  const addTodolist = useCallback((title: string) => {
+    addTodoList(title)
+  }, [])
 
   useEffect(() => {
     if (demo || !isLoggedIn) return
-    dispatch(setTodolistTC())
+    setTodolist()
   }, [])
 
   return { todoLists, addTodolist }

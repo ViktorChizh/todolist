@@ -1,27 +1,24 @@
 import React, { FC, memo, useEffect } from "react"
 import "./App.css"
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
 import ButtonAppBar from "features/buttonAppBar/ButtonAppBar"
 import { PageTodoLists } from "features/pageTodolists/PageTodoLists"
-import LinearProgress from "@mui/material/LinearProgress"
-import { ErrorSnackBar } from "common/components/errorSnackBar/ErrorSnackBar"
-import { useAppDispatch, useAppSelector } from "./Store"
-import { CircularProgress, Container } from "@mui/material"
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "features/login/Login"
-import { meTC } from "features/login/loginReducer"
+import LinearProgress from "@mui/material/LinearProgress"
+import { CircularProgress, Container } from "@mui/material"
+import { ErrorSnackBar } from "common/components/errorSnackBar/ErrorSnackBar"
 import { Error404 } from "common/components/error404/Error404"
 import { isInitializedAppSelector, statusAppSelector } from "common/selectors"
+import { useActions, useAppSelector } from "common/hooks"
 
-type AppPropsType = {
-  demo?: boolean
-}
+type AppPropsType = { demo?: boolean }
 
 export const App: FC<AppPropsType> = memo(({ demo = false }) => {
   const status = useAppSelector(statusAppSelector)
   const isInitialized = useAppSelector(isInitializedAppSelector)
-  const dispatch = useAppDispatch()
+  const { meTC: me } = useActions()
   useEffect(() => {
-    dispatch(meTC())
+    me()
   }, [])
   if (!isInitialized) {
     return (

@@ -13,18 +13,18 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(meTC.fulfilled, (state) => {
-        state.isLoggedIn = true
+      .addCase(meTC.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn
         state.isInitialized = true
       })
       .addCase(meTC.rejected, (state) => {
         state.isInitialized = true
       })
-      .addCase(loginTC.fulfilled, (state) => {
-        state.isLoggedIn = true
+      .addCase(loginTC.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn
       })
-      .addCase(logoutTC.fulfilled, (state) => {
-        state.isLoggedIn = false
+      .addCase(logoutTC.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn
       })
   },
   selectors: {
@@ -33,23 +33,26 @@ const slice = createSlice({
   },
 })
 // thunks
-export const meTC = createAppAsyncThunk<undefined, undefined>(`${slice.name}/meTC`, async (_, thunkAPI) => {
+export const meTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(`${slice.name}/meTC`, (_, thunkAPI) => {
   return thunkTryCatch(thunkAPI, async () => {
     const { dispatch, rejectWithValue } = thunkAPI
     let res = await api.me()
     if (res.data.resultCode === 0) {
+      return { isLoggedIn: true }
     } else {
       serverErrorHandler<ResponseMeType>(res.data, dispatch)
       return rejectWithValue(null)
     }
   })
 })
-export const loginTC = createAppAsyncThunk<undefined, LoginParamsType>(
-  `${slice.name}/loginTC`,
-  async (params: LoginParamsType, thunkAPI) => {
+export const loginTC = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
+  `м/loginTC`,
+  (params, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       let res = await api.login(params)
-      if (res.data.resultCode !== resultCode.SUCCEEDED) {
+      if (res.data.resultCode === resultCode.SUCCEEDED) {
+        return { isLoggedIn: true }
+      } else {
         const { dispatch, rejectWithValue } = thunkAPI
         // если есть поля с ошибками, то отобразим их на форме, если нет - то глобально
         const showError = !res.data.fieldsErrors.length
@@ -59,18 +62,22 @@ export const loginTC = createAppAsyncThunk<undefined, LoginParamsType>(
     })
   },
 )
-export const logoutTC = createAppAsyncThunk<undefined, undefined>(`${slice.name}/logoutTC`, async (_, thunkAPI) => {
-  return thunkTryCatch(thunkAPI, async () => {
-    const { dispatch, rejectWithValue } = thunkAPI
-    let res = await api.logout()
-    if (res.data.resultCode === resultCode.SUCCEEDED) {
-      dispatch(clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
-    } else {
-      serverErrorHandler(res.data, dispatch)
-      return rejectWithValue(null)
-    }
-  })
-})
+export const logoutTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
+  `${slice.name}/logoutTC`,
+  (_, thunkAPI) => {
+    return thunkTryCatch(thunkAPI, async () => {
+      const { dispatch, rejectWithValue } = thunkAPI
+      let res = await api.logout()
+      if (res.data.resultCode === resultCode.SUCCEEDED) {
+        dispatch(clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
+        return { isLoggedIn: false }
+      } else {
+        serverErrorHandler(res.data, dispatch)
+        return rejectWithValue(null)
+      }
+    })
+  },
+)
 //exports
 export const loginReducer = slice.reducer
 export const { isLoggedInSelector, isInitializedAppSelector } = slice.selectors

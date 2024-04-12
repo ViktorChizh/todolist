@@ -8,15 +8,15 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { FormikHelpers, useFormik } from "formik"
-import { loginTC } from "features/login/loginReducer"
-import { isLoggedInSelector } from "common/selectors"
-import { useAppDispatch, useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
-import { LoginParamsType } from "common/api"
+import { useActions, useAppSelector } from "common/hooks"
+import { isLoggedInSelector } from "common/selectors"
+import { BaseResponseType, LoginParamsType } from "common/api"
+// import { loginThunks } from "common/thunks"
 
 export const Login = () => {
-  let dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(isLoggedInSelector)
+  let { loginTC: login } = useActions()
 
   const formik = useFormik({
     initialValues: {
@@ -39,11 +39,11 @@ export const Login = () => {
       return errors
     },
     onSubmit: async (values: LoginParamsType, formikHelpers: FormikHelpers<LoginParamsType>) => {
-      const res = await dispatch(loginTC(values))
-      if (loginTC.rejected.match(res)) {
-        if (res.payload?.fieldsErrors?.length) {
-          res.payload?.fieldsErrors.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
-        }
+      try {
+        await login(values).unwrap()
+      } catch (e) {
+        let er = e as BaseResponseType
+        er.fieldsErrors && er.fieldsErrors.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
       }
     },
   })

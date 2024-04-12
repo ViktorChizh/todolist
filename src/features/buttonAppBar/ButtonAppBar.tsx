@@ -6,15 +6,14 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
-import { useAppDispatch, useAppSelector } from "app/Store"
-import { logoutTC } from "features/login/loginReducer"
-import { isLoggedInSelector } from "common/selectors"
 import { useLocation, useNavigate } from "react-router-dom"
-import { setAppErrorPageAC } from "app/AppReducer"
+import { useActions, useAppDispatch, useAppSelector } from "common/hooks"
+import { isLoggedInSelector } from "common/selectors"
+import { setAppErrorPageAC } from "common/actions"
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
-
+  const { logoutTC: logout } = useActions()
   const dispatch = useAppDispatch()
   // строки 19-32 просто для тренировки использования новых хуков
   const navigate = useNavigate()
@@ -30,7 +29,7 @@ function ButtonAppBar() {
   }, [])
 
   const onClickHandler = useCallback(() => {
-    dispatch(logoutTC())
+    logout()
   }, [])
 
   return (

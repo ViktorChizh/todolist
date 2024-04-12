@@ -1,8 +1,7 @@
-import { setAppStatusAC, StatusType } from "app/AppReducer"
-import { serverErrorHandler } from "common/utils/serverErrorHandler"
-import { setTasksTC } from "./task/TasksReducer"
+import { StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { createAppAsyncThunk, netWorkErrorHandler, thunkTryCatch } from "common/utils"
+import { setTasksTC } from "features/pageTodolists/todolist/task/TasksReducer"
+import { createAppAsyncThunk, thunkTryCatch, serverErrorHandler } from "common/utils"
 import { clearDataAfterLogoutAC } from "common/actions"
 import { api, TodolistServerType } from "common/api"
 import { resultCode } from "common/enums"
@@ -64,7 +63,7 @@ export const setTodolistTC = createAppAsyncThunk<{ todolists: TodolistServerType
 )
 export const removeTodolistTC = createAppAsyncThunk<{ idTDL: string }, string>(
   `${slice.name}/removeTodolistTC`,
-  async (idTDL: string, thunkAPI) => {
+  (idTDL: string, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
     return thunkTryCatch(thunkAPI, async () => {
       dispatch(changeTodoStatusAC({ idTDL, todoStatus: "loading" }))
@@ -82,7 +81,7 @@ export const removeTodolistTC = createAppAsyncThunk<{ idTDL: string }, string>(
 )
 export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServerType }, string>(
   `${slice.name}/addTodolistTC`,
-  async (title: string, thunkAPI) => {
+  (title: string, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
     return thunkTryCatch(thunkAPI, async () => {
       let res = await api.createTodolist(title)
@@ -97,7 +96,7 @@ export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServerType 
 )
 export const updateTodolistTitleTC = createAppAsyncThunk<paramT, paramT>(
   `${slice.name}/updateTodolistTitleTC`,
-  async (param: { idTDL: string; title: string }, thunkAPI) => {
+  (param: { idTDL: string; title: string }, thunkAPI) => {
     const { idTDL, title } = param
     const { dispatch, rejectWithValue } = thunkAPI
     return thunkTryCatch(thunkAPI, async () => {
@@ -116,7 +115,7 @@ export const updateTodolistTitleTC = createAppAsyncThunk<paramT, paramT>(
 )
 export const updateTodolistFilterTC = createAppAsyncThunk<paramF, paramF>(
   `${slice.name}/updateTodolistFilterTC`,
-  async (param: { idTDL: string; filter: FilterValuesType }, thunkAPI) => {
+  (param: { idTDL: string; filter: FilterValuesType }, thunkAPI) => {
     const { idTDL, filter } = param
     return thunkTryCatch(thunkAPI, async () => {
       return { idTDL, filter }

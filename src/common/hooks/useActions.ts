@@ -1,22 +1,28 @@
 import { useMemo } from "react"
 import { ActionCreatorsMapObject, bindActionCreators } from "redux"
 import { useAppDispatch } from "common/hooks"
+import { loginThunks, tasksThunks, todolistsThunks } from "common/thunks"
 
-export const useActions = <T extends ActionCreatorsMapObject>(actions: T) => {
+// ❗ упаковываем actions и соответсвенно при вызове хука не нужно
+// будет передавать actions
+const actionsAll = { ...tasksThunks, ...todolistsThunks, ...loginThunks }
+
+type AllActions = typeof actionsAll
+
+export const useActions = () => {
   const dispatch = useAppDispatch()
 
-  return useMemo(() => bindActionCreators<T, RemapActionCreators<T>>(actions, dispatch), [actions, dispatch])
+  return useMemo(
+    () => bindActionCreators<AllActions, RemapActionCreators<AllActions>>(actionsAll, dispatch),
+    [dispatch],
+  )
 }
 
 // Types
-type IsValidArg<T> = T extends object ? (keyof T extends never ? false : true) : true
-type ActionCreatorResponse<T extends (...args: any[]) => any> = ReturnType<ReturnType<T>>
-type ReplaceReturnType<T, TNewReturn> = T extends (...args: any[]) => infer T
-  ? IsValidArg<Extract<T, (...args: any[]) => any>> extends true
-    ? (...args: Parameters<Extract<T, (...args: any[]) => any>>) => TNewReturn
-    : () => TNewReturn
-  : never
+type ReplaceReturnType<T> = T extends (...args: any[]) => any
+  ? (...args: Parameters<T>) => ReturnType<ReturnType<T>>
+  : () => T
 
 type RemapActionCreators<T extends ActionCreatorsMapObject> = {
-  [K in keyof T]: ReplaceReturnType<T[K], ActionCreatorResponse<T[K]>>
+  [K in keyof T]: ReplaceReturnType<T[K]>
 }
