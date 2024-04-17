@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
 import { api, LoginParamsType, ResponseMeType } from "common/api"
-import { clearDataAfterLogoutAC } from "common/actions"
+import { actions } from "common/actions"
 import { resultCode } from "common/enums"
 
 const slice = createSlice({
@@ -41,12 +41,12 @@ export const meTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(`${s
       return { isLoggedIn: true }
     } else {
       serverErrorHandler<ResponseMeType>(res.data, dispatch)
-      return rejectWithValue(null)
+      return rejectWithValue(res.data)
     }
   })
 })
 export const loginTC = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
-  `м/loginTC`,
+  `${slice.name}/loginTC`,
   (params, thunkAPI) => {
     return thunkTryCatch(thunkAPI, async () => {
       let res = await api.login(params)
@@ -69,16 +69,16 @@ export const logoutTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
       const { dispatch, rejectWithValue } = thunkAPI
       let res = await api.logout()
       if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
+        dispatch(actions.clearDataAC({ tasks: {}, todolists: [] }))
         return { isLoggedIn: false }
       } else {
         serverErrorHandler(res.data, dispatch)
-        return rejectWithValue(null)
+        return rejectWithValue(res.data)
       }
     })
   },
 )
-//exports
+
 export const loginReducer = slice.reducer
 export const { isLoggedInSelector, isInitializedAppSelector } = slice.selectors
 export const loginThunks = { meTC, loginTC, logoutTC }

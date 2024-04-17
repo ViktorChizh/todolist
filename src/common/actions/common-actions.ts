@@ -8,4 +8,4 @@ type ActionClearDataType = {
   tasks: TasksStateType
   todolists: TodolistType[]
 }
-export const clearDataAfterLogoutAC = createAction<ActionClearDataType>("common/clearDataAfterLogoutAC")
+export const clearDataAC = createAction<ActionClearDataType>("common/clearDataAC")

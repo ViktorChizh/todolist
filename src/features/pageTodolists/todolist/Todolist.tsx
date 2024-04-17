@@ -26,16 +26,27 @@ export const Todolist: FC<{ todoList: TodolistType }> = memo(({ todoList }) => {
   )
 
   return (
-    <div>
-      <h3>
+    <div style={{ position: "relative", width: "250px", height: "304px", display: "flex", flexDirection: "column" }}>
+      <IconButton
+        color="primary"
+        aria-label="delete"
+        onClick={removeTodolist}
+        disabled={disabled}
+        style={{ position: "absolute", top: "-5px", right: "-10px" }}>
+        <DeleteIcon />
+      </IconButton>
+      <h3 style={{ margin: "0 35px 10px 0", height: "10%", overflowY: "auto" }}>
         <EditableSpan oldTitle={todoList.title} callBack={updateTodolistHandler} disabled={disabled} />
-        <IconButton color="primary" aria-label="delete" onClick={removeTodolist} disabled={disabled}>
-          <DeleteIcon />
-        </IconButton>
       </h3>
       <AddItemForm callBack={addTaskHandler} placeholder={"add new task"} disabled={disabled} />
-      <ul>{tasks && tasks.map((t) => <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />)}</ul>
-      {isTasksListEmpty && <span style={{ color: "red", display: "block", margin: "10px" }}>tasksList is empty</span>}
+      <ul style={{ flex: "1", overflowY: "auto" }}>
+        {tasks && tasks.map((t) => <Task key={t.id} task={t} todolistId={todoList.id} todoStatus={disabled} />)}
+        {isTasksListEmpty && (
+          <span style={{ color: "red", fontStyle: "italic", display: "block", margin: "60px auto" }}>
+            <b>TasksList is empty</b>
+          </span>
+        )}
+      </ul>
       <div style={{ display: "flex", width: "100%", justifyContent: "space-between" }}>
         {buttonELement("info", "all")}
         {buttonELement("success", "active")}

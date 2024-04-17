@@ -10,7 +10,7 @@ import {
   TasksStateType,
   updateTaskTC,
 } from "features/pageTodolists/todolist/task/TasksReducer"
-import { clearDataAfterLogoutAC } from "common/actions/common-actions"
+import { clearDataAC } from "common/actions/common-actions"
 
 let startState: TasksStateType
 beforeEach(() => {
@@ -274,6 +274,6 @@ test("empty arrays should be added when we set todolists", () => {
   expect(endState["2"]).toBeDefined()
 })
 test("all tasks for all todolist should be removed", () => {
-  const endState = tasksReducer(startState, clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
+  const endState = tasksReducer(startState, clearDataAC({ tasks: {}, todolists: [] }))
   expect(endState).toEqual({})
 })

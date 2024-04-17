@@ -1,2 +1,3 @@
-export * from "./common-actions"
-export { setAppStatusAC, setAppErrorAC, setAppErrorPageAC } from "app/AppReducer"
+import { clearDataAC } from "./common-actions"
+import { setAppStatusAC, setAppErrorAC, setAppErrorPageAC } from "app/AppReducer"
+export const actions = { clearDataAC, setAppStatusAC, setAppErrorAC, setAppErrorPageAC }

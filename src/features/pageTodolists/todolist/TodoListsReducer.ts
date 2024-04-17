@@ -2,7 +2,7 @@ import { StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { setTasksTC } from "features/pageTodolists/todolist/task/TasksReducer"
 import { createAppAsyncThunk, thunkTryCatch, serverErrorHandler } from "common/utils"
-import { clearDataAfterLogoutAC } from "common/actions"
+import { actions } from "common/actions"
 import { api, TodolistServerType } from "common/api"
 import { resultCode } from "common/enums"
 
@@ -20,7 +20,7 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(setTodolistTC.fulfilled, (state, action) => {
+      .addCase(setTodolistTC.fulfilled, (_, action) => {
         return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", todoStatus: "idle" }))
       })
       .addCase(removeTodolistTC.fulfilled, (state, action) => {
@@ -40,7 +40,7 @@ const slice = createSlice({
         const index = state.findIndex((tl) => tl.id === action.payload.idTDL)
         state[index] = { ...state[index], filter: action.payload.filter }
       })
-      .addCase(clearDataAfterLogoutAC, (state, action) => {
+      .addCase(actions.clearDataAC, (_, action) => {
         return action.payload.todolists
       })
   },
@@ -74,7 +74,7 @@ export const removeTodolistTC = createAppAsyncThunk<{ idTDL: string }, string>(
       } else {
         serverErrorHandler(res.data, dispatch)
         dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-        return rejectWithValue(null)
+        return rejectWithValue(res.data)
       }
     })
   },
@@ -89,7 +89,7 @@ export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServerType 
         return { todolist: res.data.data.item }
       } else {
         serverErrorHandler<{ item: TodolistServerType }>(res.data, dispatch)
-        return rejectWithValue(null)
+        return rejectWithValue(res.data)
       }
     })
   },
@@ -108,7 +108,7 @@ export const updateTodolistTitleTC = createAppAsyncThunk<paramT, paramT>(
       } else {
         serverErrorHandler(res.data, dispatch)
         dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-        return rejectWithValue(null)
+        return rejectWithValue(res.data)
       }
     })
   },

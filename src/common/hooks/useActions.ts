@@ -2,10 +2,10 @@ import { useMemo } from "react"
 import { ActionCreatorsMapObject, bindActionCreators } from "redux"
 import { useAppDispatch } from "common/hooks"
 import { loginThunks, tasksThunks, todolistsThunks } from "common/thunks"
+import { actions } from "common/actions"
 
-// ❗ упаковываем actions и соответсвенно при вызове хука не нужно
-// будет передавать actions
-const actionsAll = { ...tasksThunks, ...todolistsThunks, ...loginThunks }
+// ❗ упаковываем actions и соответсвенно при вызове хука не нужно будет передавать actions
+const actionsAll = { ...tasksThunks, ...todolistsThunks, ...loginThunks, ...actions }
 
 type AllActions = typeof actionsAll
 

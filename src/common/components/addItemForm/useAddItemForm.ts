@@ -2,15 +2,16 @@ import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react"
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
  */
-export const useAddItemForm = (callBack: (title: string) => void) => {
+
+export const useAddItemForm = (callBack: (title: string) => Promise<any>) => {
   let [title, setTitle] = useState("")
   let [error, setError] = useState<string | null>(null)
 
-  const addTask = useCallback(() => {
+  const addTask = useCallback(async () => {
     let newTitle = title.trim()
     if (newTitle !== "") {
-      callBack(newTitle)
-      setTitle("")
+      await callBack(newTitle)
+      if (newTitle.length <= 100) setTitle("")
     } else {
       setError("Title is required")
     }
@@ -21,10 +22,7 @@ export const useAddItemForm = (callBack: (title: string) => void) => {
   const onKeyPressHandler = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
       error && setError(null)
-      if (e.charCode === 13) {
-        // так показывает устаревшие свойства, но они работают! правильно: e.key === 'Enter'
-        addTask()
-      }
+      if (e.charCode === 13) addTask()
     },
     [addTask, error],
   )

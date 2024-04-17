@@ -7,7 +7,7 @@ export const usePageTodoList = (demo: boolean) => {
   const todoLists = useAppSelector(todolistsSelector)
   const { addTodolistTC: addTodoList, setTodolistTC: setTodolist } = useActions()
 
-  const addTodolist = useCallback((title: string) => {
+  const addTodolist = useCallback(async (title: string) => {
     addTodoList(title)
   }, [])
 

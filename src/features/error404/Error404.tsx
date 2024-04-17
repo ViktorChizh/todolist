@@ -1,23 +1,22 @@
 import React from "react"
-import s from "common/components/error404/Error.module.css"
-import { Navigate } from "react-router-dom"
 import img404 from "assets/bgE.jpg"
+import { Navigate } from "react-router-dom"
+import s from "features/error404/Error.module.css"
 import { errorPageAppSelector, isLoggedInSelector } from "common/selectors"
-import { setAppErrorPageAC, setAppStatusAC } from "common/actions"
-import { useAppDispatch, useAppSelector } from "common/hooks"
+import { useActions, useAppSelector } from "common/hooks"
 
 export const Error404 = () => {
-  const dispatch = useAppDispatch()
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const errorPage = useAppSelector(errorPageAppSelector)
+  const { setAppStatusAC, setAppErrorPageAC } = useActions()
 
-  dispatch(setAppStatusAC({ status: "failed" }))
+  setAppStatusAC({ status: "failed" })
 
   if (errorPage && !isLoggedIn) {
-    dispatch(setAppErrorPageAC({ errorPage: false }))
+    setAppErrorPageAC({ errorPage: false })
     return <Navigate to="/login" />
   } else if (errorPage && isLoggedIn) {
-    dispatch(setAppErrorPageAC({ errorPage: false }))
+    setAppErrorPageAC({ errorPage: false })
     return <Navigate to="/todolists" />
   }
 

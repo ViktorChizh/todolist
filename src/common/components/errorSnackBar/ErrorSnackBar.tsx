@@ -1,17 +1,16 @@
 import * as React from "react"
-import Snackbar from "@mui/material/Snackbar"
 import Alert from "@mui/material/Alert"
-import { useAppDispatch, useAppSelector } from "common/hooks"
+import Snackbar from "@mui/material/Snackbar"
+import { useActions, useAppSelector } from "common/hooks"
 import { errorAppSelector } from "common/selectors"
-import { setAppErrorAC } from "common/actions"
 
 export function ErrorSnackBar() {
   const error = useAppSelector(errorAppSelector)
-  const dispatch = useAppDispatch()
+  const { setAppErrorAC } = useActions()
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") return
-    dispatch(setAppErrorAC({ error: null }))
+    setAppErrorAC({ error: null })
   }
 
   return (

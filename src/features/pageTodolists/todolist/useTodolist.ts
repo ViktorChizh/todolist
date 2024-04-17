@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react"
 import { FilterValuesType } from "./TodoListsReducer"
-import { useActions, useAppDispatch, useAppSelector } from "common/hooks"
+import { useActions, useAppSelector } from "common/hooks"
 import { tasksSelector } from "common/selectors"
 
 /**
@@ -8,14 +8,13 @@ import { tasksSelector } from "common/selectors"
  */
 export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
   let tasks = useAppSelector(tasksSelector)[idTDL]
-  let isTasksListEmpty = !tasks.length
+  let isTasksListEmpty = !tasks?.length
   const {
     addTaskTC: addTask,
     removeTodolistTC: removeTodoList,
     updateTodolistFilterTC: updateTodolistFilter,
     updateTodolistTitleTC: updateTodolistTitle,
   } = useActions()
-  const dispatch = useAppDispatch()
 
   useMemo(() => {
     if (tasks && filter === "active") {
@@ -27,21 +26,21 @@ export const useTodolist = (idTDL: string, filter: FilterValuesType) => {
     return tasks
   }, [filter, tasks])
 
-  const removeTodolist = useCallback(() => removeTodoList(idTDL), [dispatch, idTDL])
+  const removeTodolist = useCallback(() => removeTodoList(idTDL), [idTDL])
   const onClickFilterHandler = useCallback(
     (filter: FilterValuesType) => updateTodolistFilter({ idTDL, filter }),
-    [dispatch, idTDL],
+    [idTDL],
   )
   const addTaskHandler = useMemo(() => {
-    return (title: string) => {
+    return async (title: string) => {
       addTask({ idTDL, title })
     }
-  }, [dispatch, idTDL]) //чисто попробовать useMemo
+  }, [idTDL]) //чисто попробовать useMemo
   const updateTodolistHandler = useCallback(
     (title: string) => {
       updateTodolistTitle({ idTDL, title })
     },
-    [dispatch, idTDL],
+    [idTDL],
   )
 
   return { tasks, isTasksListEmpty, removeTodolist, onClickFilterHandler, addTaskHandler, updateTodolistHandler }

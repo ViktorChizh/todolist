@@ -28,14 +28,21 @@ export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
             placeholder={"add new todolist"}
             style={{ width: "100%", maxWidth: "100%" }}
           />
-          {!todoLists.length && <span style={{ color: "red", lineHeight: "2" }}>todoLists are empty</span>}
+          {!todoLists.length && (
+            <span
+              style={{ color: "red", display: "block", marginTop: "15px", fontWeight: "bold", fontStyle: "italic" }}>
+              TodoLists are empty
+            </span>
+          )}
         </Paper>
       </Grid>
-      <Grid container spacing={3} style={{ width: "100%", justifyContent: "center" }}>
+      <Grid
+        container
+        style={{ width: "100%", height: "380px", padding: "10px", flexWrap: "nowrap", overflowX: "auto", gap: "10px" }}>
         {todoLists.map((tl) => {
           return (
-            <Grid key={tl.id} style={{ margin: "30px 15px 0" }}>
-              <Paper elevation={5} style={{ padding: "20px" }}>
+            <Grid key={tl.id} style={{ margin: "0 auto" }}>
+              <Paper elevation={5} style={{ padding: "10px" }}>
                 <Todolist todoList={tl} />
               </Paper>
             </Grid>

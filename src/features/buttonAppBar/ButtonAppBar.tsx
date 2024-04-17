@@ -7,25 +7,23 @@ import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
 import { useLocation, useNavigate } from "react-router-dom"
-import { useActions, useAppDispatch, useAppSelector } from "common/hooks"
+import { useActions, useAppSelector } from "common/hooks"
 import { isLoggedInSelector } from "common/selectors"
-import { setAppErrorPageAC } from "common/actions"
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
-  const { logoutTC: logout } = useActions()
-  const dispatch = useAppDispatch()
+  const { logoutTC: logout, setAppErrorPageAC } = useActions()
   // строки 19-32 просто для тренировки использования новых хуков
   const navigate = useNavigate()
   const location = useLocation()
 
   const onClickErrorHandler = useCallback(() => {
+    setAppErrorPageAC({ errorPage: false })
     if (isLoggedIn) {
       navigate("/todolists")
     } else {
       navigate("/login")
     }
-    dispatch(setAppErrorPageAC({ errorPage: false }))
   }, [])
 
   const onClickHandler = useCallback(() => {

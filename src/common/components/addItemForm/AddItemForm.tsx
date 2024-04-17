@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField"
 import { useAddItemForm } from "common/components/addItemForm/useAddItemForm"
 
 type AddItemProps = {
-  callBack: (title: string) => void
+  callBack: (title: string) => Promise<any>
   placeholder: string
   style?: { [key: string]: string }
   disabled?: boolean

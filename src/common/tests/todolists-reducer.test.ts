@@ -13,7 +13,7 @@ import { StatusType } from "app/AppReducer"
 import { TodolistServerType } from "common/api/api"
 import { ActionTypeForTest } from "common/utils"
 import { tasksReducer } from "features/pageTodolists/todolist/task/TasksReducer"
-import { clearDataAfterLogoutAC } from "common/actions/common-actions"
+import { clearDataAC } from "common/actions/common-actions"
 import { createAction } from "@reduxjs/toolkit"
 
 let todolistId1: string
@@ -115,6 +115,6 @@ test("correct entity status of todolist should be changed", () => {
   expect(endState[1].todoStatus).toBe(newStatus)
 })
 test("all todolist should be removed", () => {
-  const endState = todoListsReducer(startState, clearDataAfterLogoutAC({ tasks: {}, todolists: [] }))
+  const endState = todoListsReducer(startState, clearDataAC({ tasks: {}, todolists: [] }))
   expect(endState).toEqual([])
 })

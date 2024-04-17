@@ -2,7 +2,7 @@ import { addTodolistTC, removeTodolistTC, setTodolistTC } from "../TodoListsRedu
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
 import { resultCode } from "common/enums"
-import { clearDataAfterLogoutAC, setAppErrorAC } from "common/actions"
+import { actions } from "common/actions"
 import { api, TaskServerType, UpdateServerTaskType } from "common/api"
 import { StatusType } from "app/AppReducer"
 
@@ -44,7 +44,7 @@ const slice = createSlice({
         const index = state[action.payload.idTDL].findIndex((tl) => tl.id === action.payload.taskId)
         state[action.payload.idTDL][index] = { ...state[action.payload.idTDL][index], ...action.payload.model }
       })
-      .addCase(clearDataAfterLogoutAC, (state, action) => {
+      .addCase(actions.clearDataAC, (state, action) => {
         return action.payload.tasks
       })
   },
@@ -107,7 +107,7 @@ export const updateTaskTC = createAppAsyncThunk<typeParam, typeParam>(
       const { idTDL, taskId, model } = param
       let task = getState().tasks[idTDL].find((t) => t.id === taskId)
       if (!task) {
-        dispatch(setAppErrorAC({ error: "Task not found" }))
+        dispatch(actions.setAppErrorAC({ error: "Task not found" }))
         return rejectWithValue(null)
       }
       let newTask = {

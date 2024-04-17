@@ -25,11 +25,11 @@ const meta: Meta<typeof AddItemForm> = {
     },
   },
 }
-
 export default meta
+
 type Story = StoryObj<typeof AddItemForm>
 
-const callback = action("button ADD was pressed inside the form")
+const callback = (title: string) => Promise.resolve(action("button ADD was pressed inside the form"))
 
 export const AddItemFormStoryObjExample: Story = {
   args: {
