@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 import { AppStateType } from "./Store"
 import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer } from "features/pageTodolists/todolist/task/TasksReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 import { v1 } from "uuid"
 import { appReducer } from "./AppReducer"
 import { thunk } from "redux-thunk"

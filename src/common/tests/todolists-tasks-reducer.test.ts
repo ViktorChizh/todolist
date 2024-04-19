@@ -1,5 +1,5 @@
 import { addTodolistTC, todoListsReducer, TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/task/TasksReducer"
+import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 import { ActionTypeForTest } from "common/utils"
 
 test("ids should be equals", () => {

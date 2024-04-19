@@ -1,5 +1,5 @@
 import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer } from "features/pageTodolists/todolist/task/TasksReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import { appReducer } from "./AppReducer"
 import { loginReducer } from "features/login/loginReducer"

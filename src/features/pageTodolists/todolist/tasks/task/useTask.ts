@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { TaskType } from "./TasksReducer"
+import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 import { useActions } from "common/hooks"
 /**
  * Вынесли всю логику в кастомный хук в качестве примера
@@ -19,6 +19,5 @@ export const useTask = (task: TaskType, idTDL: string) => {
     },
     [updateTask, idTDL, task.id],
   )
-
   return { onClickHandler, updateTaskHandler, onChangeHandler }
 }

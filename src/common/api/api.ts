@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
-import { TaskType } from "features/pageTodolists/todolist/task/TasksReducer"
+import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 
 const settings = {
   withCredentials: true,

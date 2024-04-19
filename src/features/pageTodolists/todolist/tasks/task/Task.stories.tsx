@@ -1,5 +1,5 @@
 import React from "react"
-import { Task } from "./Task"
+import { Task } from "features/pageTodolists/todolist/tasks/task/Task"
 import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { v1 } from "uuid"
 import { Meta, StoryObj } from "@storybook/react"

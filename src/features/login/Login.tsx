@@ -7,46 +7,14 @@ import FormGroup from "@mui/material/FormGroup"
 import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
-import { FormikHelpers, useFormik } from "formik"
 import { Navigate } from "react-router-dom"
-import { useActions, useAppSelector } from "common/hooks"
+import { useAppSelector } from "common/hooks"
 import { isLoggedInSelector } from "common/selectors"
-import { BaseResponseType, LoginParamsType } from "common/api"
-// import { loginThunks } from "common/thunks"
+import { useLogin } from "features/login/useLogin"
 
 export const Login = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
-  let { loginTC: login } = useActions()
-
-  const formik = useFormik({
-    initialValues: {
-      email: "free@samuraijs.com",
-      password: "free",
-      rememberMe: false,
-    },
-    validate: (values) => {
-      const errors: LoginParamsType = {}
-      if (!values.email) {
-        errors.email = "Email is required"
-      } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = "Invalid email address"
-      }
-      if (!values.password) {
-        errors.password = "Password is required"
-      } else if (!/.{4,}/i.test(values.password)) {
-        errors.password = "Password must be 4 characters or more"
-      }
-      return errors
-    },
-    onSubmit: async (values: LoginParamsType, formikHelpers: FormikHelpers<LoginParamsType>) => {
-      try {
-        await login(values).unwrap()
-      } catch (e) {
-        let er = e as BaseResponseType
-        er.fieldsErrors && er.fieldsErrors.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
-      }
-    },
-  })
+  const { formik } = useLogin()
 
   if (isLoggedIn) return <Navigate to={"/todolists"} />
 

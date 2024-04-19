@@ -1,4 +1,4 @@
-import { addTodolistTC, removeTodolistTC, setTodolistTC } from "../TodoListsReducer"
+import { addTodolistTC, removeTodolistTC, setTodolistTC } from "features/pageTodolists/todolist/TodoListsReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk, serverErrorHandler, thunkTryCatch } from "common/utils"
 import { resultCode } from "common/enums"

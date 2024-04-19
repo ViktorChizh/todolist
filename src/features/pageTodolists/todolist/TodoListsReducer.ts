@@ -1,6 +1,6 @@
 import { StatusType } from "app/AppReducer"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { setTasksTC } from "features/pageTodolists/todolist/task/TasksReducer"
+import { setTasksTC } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
 import { createAppAsyncThunk, thunkTryCatch, serverErrorHandler } from "common/utils"
 import { actions } from "common/actions"
 import { api, TodolistServerType } from "common/api"

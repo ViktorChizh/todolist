@@ -1,10 +1,11 @@
 import React, { FC, memo } from "react"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { useTask } from "./useTask"
+import { useTask } from "features/pageTodolists/todolist/tasks/task/useTask"
 import { Checkbox } from "common/components/checkbox/Checkbox"
 import { EditableSpan } from "common/components/editableSpan/EditableSpan"
-import { TaskType } from "features/pageTodolists/todolist/task/TasksReducer"
+import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { TaskStatuses } from "common/enums"
 
 type TaskPropsType = {
   task: TaskType
