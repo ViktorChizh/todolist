@@ -1,8 +1,10 @@
-import { useActions } from "common/hooks"
+import { useActions, useAppSelector } from "common/hooks"
 import { FormikHelpers, useFormik } from "formik"
-import { BaseResponseType, LoginParamsType } from "common/api"
+import { BaseResponse, LoginParams } from "common/api"
+import { isLoggedInSelector } from "features/login/loginReducer"
 
 export const useLogin = () => {
+  const isLoggedIn = useAppSelector(isLoggedInSelector)
   let { loginTC: login } = useActions()
 
   const formik = useFormik({
@@ -12,7 +14,7 @@ export const useLogin = () => {
       rememberMe: false,
     },
     validate: (values) => {
-      const errors: LoginParamsType = {}
+      const errors: Partial<LoginParams> = {}
       if (!values.email) {
         errors.email = "Email is required"
       } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -25,14 +27,14 @@ export const useLogin = () => {
       }
       return errors
     },
-    onSubmit: async (values: LoginParamsType, formikHelpers: FormikHelpers<LoginParamsType>) => {
+    onSubmit: async (values: LoginParams, formikHelpers: FormikHelpers<LoginParams>) => {
       try {
         await login(values).unwrap()
-      } catch (e) {
-        let er = e as BaseResponseType
-        er.fieldsErrors && er.fieldsErrors.forEach((er) => formikHelpers.setFieldError(`${er.field}`, `${er.error}`))
+      } catch (error) {
+        let err = error as BaseResponse
+        err.fieldsErrors && err.fieldsErrors.forEach((e) => formikHelpers.setFieldError(`${e.field}`, `${e.error}`))
       }
     },
   })
-  return { formik }
+  return { isLoggedIn, formik }
 }

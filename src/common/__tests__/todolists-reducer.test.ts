@@ -4,21 +4,21 @@ import {
   removeTodolistTC,
   setTodolistTC,
   todoListsReducer,
-  TodolistType,
+  TodolistApp,
   updateTodolistFilterTC,
   updateTodolistTitleTC,
 } from "features/pageTodolists/todolist/TodoListsReducer"
 import { v1 } from "uuid"
-import { StatusType } from "app/AppReducer"
-import { TodolistServerType } from "common/api/api"
+import { Status } from "app/AppReducer"
+import { TodolistServer } from "common/api/api"
 import { ActionTypeForTest } from "common/utils"
-import { tasksReducer } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { clearDataAC } from "common/actions/common-actions"
 import { createAction } from "@reduxjs/toolkit"
 
 let todolistId1: string
 let todolistId2: string
-let startState: Array<TodolistType> = []
+let startState: Array<TodolistApp> = []
 
 beforeEach(() => {
   todolistId1 = v1()
@@ -57,7 +57,7 @@ test("correct todolist should be removed", () => {
 
 test("correct todolist should be added", () => {
   const date = new Date()
-  let todolist: TodolistServerType = {
+  let todolist: TodolistServer = {
     title: "New Todolist",
     id: "any id",
     addedDate: date,
@@ -105,7 +105,7 @@ test("todolists should be added", () => {
   expect(endState.length).toBe(2)
 })
 test("correct entity status of todolist should be changed", () => {
-  let newStatus: StatusType = "loading"
+  let newStatus: Status = "loading"
 
   const action = changeTodoStatusAC({ idTDL: todolistId2, todoStatus: newStatus })
 

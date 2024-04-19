@@ -1,20 +1,17 @@
-import React, { FC, useCallback } from "react"
-import { FilterValuesType, TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
+import React from "react"
+import { FilterValues, TodolistApp } from "features/pageTodolists/todolist/TodoListsReducer"
 import Button from "@mui/material/Button"
 import { useActions } from "common/hooks"
 
-type PropsType = {
-  todoList: TodolistType
+type Props = {
+  todoList: TodolistApp
   disabled: boolean
 }
 
-export const ButtonsElement: FC<PropsType> = ({ todoList, disabled }) => {
+export const ButtonsElement = ({ todoList, disabled }: Props) => {
   const { updateTodolistFilterTC: updateTodolistFilter } = useActions()
-  const onClickFilterHandler = useCallback(
-    (filter: FilterValuesType) => updateTodolistFilter({ idTDL: todoList.id, filter }),
-    [todoList.id, updateTodolistFilter],
-  )
-  const buttonELement = (color: "error" | "success" | "info", filter: FilterValuesType) => (
+  const onClickFilterHandler = (filter: FilterValues) => updateTodolistFilter({ idTDL: todoList.id, filter })
+  const buttonELement = (color: "error" | "success" | "info", filter: FilterValues) => (
     <Button
       size="small"
       onClick={() => onClickFilterHandler(filter)}

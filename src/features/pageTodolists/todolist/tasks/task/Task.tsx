@@ -1,19 +1,18 @@
-import React, { FC, memo } from "react"
+import React from "react"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
+import { TaskApp } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { useTask } from "features/pageTodolists/todolist/tasks/task/useTask"
-import { Checkbox } from "common/components/checkbox/Checkbox"
 import { EditableSpan } from "common/components/editableSpan/EditableSpan"
-import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
-import { TaskStatuses } from "common/enums"
+import { Checkbox } from "common/components/checkbox/Checkbox"
 
-type TaskPropsType = {
-  task: TaskType
+type Props = {
+  task: TaskApp
   todolistId: string
   todoStatus?: boolean
 }
 
-export const Task: FC<TaskPropsType> = memo(({ task, todolistId, todoStatus }) => {
+export const Task = ({ task, todolistId, todoStatus }: Props) => {
   const { onClickHandler, updateTaskHandler, onChangeHandler } = useTask(task, todolistId)
   const disabled = task.taskStatus === "loading" ? true : todoStatus
   return (
@@ -25,4 +24,4 @@ export const Task: FC<TaskPropsType> = memo(({ task, todolistId, todoStatus }) =
       </IconButton>
     </li>
   )
-})
+}

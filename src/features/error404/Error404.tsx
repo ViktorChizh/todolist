@@ -8,9 +8,7 @@ import { useActions, useAppSelector } from "common/hooks"
 export const Error404 = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const errorPage = useAppSelector(errorPageAppSelector)
-  const { setAppStatusAC, setAppErrorPageAC } = useActions()
-
-  setAppStatusAC({ status: "failed" })
+  const { setAppErrorPageAC } = useActions()
 
   if (errorPage && !isLoggedIn) {
     setAppErrorPageAC({ errorPage: false })

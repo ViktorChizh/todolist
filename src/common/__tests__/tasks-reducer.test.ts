@@ -9,7 +9,7 @@ import {
   tasksReducer,
   TasksStateType,
   updateTaskTC,
-} from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+} from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { clearDataAC } from "common/actions/common-actions"
 
 let startState: TasksStateType

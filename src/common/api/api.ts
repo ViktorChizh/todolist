@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios"
 import { resultCode, TaskPriorities, TaskStatuses } from "common/enums"
-import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { TaskApp } from "features/pageTodolists/todolist/tasks/TasksReducer"
 
 const settings = {
   withCredentials: true,
@@ -12,61 +12,59 @@ const instance = axios.create({
 })
 
 export const api = {
+  //login
   me() {
-    return instance.get<BaseResponseType<ResponseMeType>>("auth/me")
+    return instance.get<BaseResponse<ResponseMe>>("auth/me")
   },
-  login(params: LoginParamsType) {
-    return instance.post<ResponseLoginType>("auth/login", params)
+  login(params: LoginParams) {
+    return instance.post<ResponseLogin>("auth/login", params)
   },
   logout() {
-    return instance.delete<BaseResponseType>("auth/login")
+    return instance.delete<BaseResponse>("auth/login")
   },
-
+  //todolist
   getTodolists() {
-    return instance.get<TodolistServerType[]>("todo-lists")
+    return instance.get<TodolistServer[]>("todo-lists")
   },
   createTodolist(title: string) {
-    return instance.post<BaseResponseType<{ item: TodolistServerType }>>("todo-lists", { title: title })
+    return instance.post<BaseResponse<{ item: TodolistServer }>>("todo-lists", { title: title })
   },
   deleteTodolist(id: string) {
-    return instance.delete<BaseResponseType>(`todo-lists/${id}`)
+    return instance.delete<BaseResponse>(`todo-lists/${id}`)
   },
   updateTodolist(id: string, title: string) {
-    return instance.put<BaseResponseType>(`todo-lists/${id}`, { title: title })
+    return instance.put<BaseResponse>(`todo-lists/${id}`, { title: title })
   },
-
+  //tasks
   getTasks(todolistId: string) {
-    return instance.get<ResponseTasksType>(`todo-lists/${todolistId}/tasks`)
+    return instance.get<ResponseTasks>(`todo-lists/${todolistId}/tasks`)
   },
   createTask(todolistId: string, title: string) {
     return (
       instance
         // если надо указать типизацию третьего параметра, то надо указывать все три (но чаще хватит только первого)
         // при указании второго и третьего параметра, типизация первого игнорируется в пользу второго
-        .post<
-          BaseResponseType<{ item: TaskType }>,
-          AxiosResponse<BaseResponseType<{ item: TaskType }>>,
-          { title: string }
-        >(`todo-lists/${todolistId}/tasks/`, { title: title })
+        .post<BaseResponse<{ item: TaskApp }>, AxiosResponse<BaseResponse<{ item: TaskApp }>>, { title: string }>(
+          `todo-lists/${todolistId}/tasks/`,
+          { title: title },
+        )
     )
   },
   deleteTask(todolistId: string, id: string) {
-    return instance.delete<BaseResponseType>(`todo-lists/${todolistId}/tasks/${id}`)
+    return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${id}`)
   },
-  updateTask(todolistId: string, id: string, updateTask: UpdateServerTaskType) {
-    return instance.put<BaseResponseType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
+  updateTask(todolistId: string, id: string, updateTask: UpdateServerTask) {
+    return instance.put<BaseResponse>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
   },
 }
-
 // types
-
-export type TodolistServerType = {
+export type TodolistServer = {
   id: string
   title: string
   addedDate: Date
   order: number
 }
-export type TaskServerType = {
+export type TaskServer = {
   id: string
   title: string
   status: TaskStatuses
@@ -78,7 +76,7 @@ export type TaskServerType = {
   order: number
   priority: TaskPriorities
 }
-export type UpdateServerTaskType = {
+export type UpdateServerTask = {
   title: string
   description: string
   status: TaskStatuses
@@ -87,35 +85,35 @@ export type UpdateServerTaskType = {
   deadline: Date | null
 }
 
-export type BaseResponseType<T = {}> = {
+export type BaseResponse<T = {}> = {
   resultCode: resultCode
   messages: string[]
   data: T
-  fieldsErrors?: FieldErrorType[]
+  fieldsErrors?: FieldError[]
 }
-export type ResponseTasksType = {
-  items: TaskServerType[]
+export type ResponseTasks = {
+  items: TaskServer[]
   totalCount: number
   error: string
 }
-export type ResponseMeType = {
+export type ResponseMe = {
   id: number
   email: string
   login: string
 }
-export type ResponseLoginType = {
+export type ResponseLogin = {
   data: {}
   messages: string[]
-  fieldsErrors: FieldErrorType[]
+  fieldsErrors: FieldError[]
   resultCode: resultCode
 }
-export type FieldErrorType = {
+export type FieldError = {
   field: string
   error: string
 }
-export type LoginParamsType = {
-  email?: string
-  password?: string
-  rememberMe?: boolean
+export type LoginParams = {
+  email: string
+  password: string
+  rememberMe: boolean
   captcha?: string
 }

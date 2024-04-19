@@ -1,13 +1,13 @@
-import React, { FC } from "react"
+import React from "react"
 import { Task } from "features/pageTodolists/todolist/tasks/task/Task"
 import { useTasks } from "features/pageTodolists/todolist/tasks/useTasks"
-import { TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
+import { TodolistApp } from "features/pageTodolists/todolist/TodoListsReducer"
 
-type PropsType = {
-  todoList: TodolistType
+type Props = {
+  todoList: TodolistApp
   disabled: boolean
 }
-export const Tasks: FC<PropsType> = ({ todoList, disabled }) => {
+export const Tasks = ({ todoList, disabled }: Props) => {
   const { tasks, isTasksListEmpty } = useTasks(todoList)
   return (
     <ul style={{ flex: "1", overflowY: "auto" }}>

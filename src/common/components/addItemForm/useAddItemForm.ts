@@ -1,7 +1,4 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useState } from "react"
-/**
- * Вынесли всю логику в кастомный хук в качестве примера
- */
 
 export const useAddItemForm = (callBack: (title: string) => Promise<any>) => {
   let [title, setTitle] = useState("")
@@ -11,7 +8,13 @@ export const useAddItemForm = (callBack: (title: string) => Promise<any>) => {
     let newTitle = title.trim()
     if (newTitle !== "") {
       await callBack(newTitle)
-      if (newTitle.length <= 100) setTitle("")
+        .then((_) => setTitle(""))
+        .catch((err) => {
+          if (err?.resultCode) {
+            setError(err.messages[0])
+          }
+          setError(err.messages[0] || "Some error occurred")
+        })
     } else {
       setError("Title is required")
     }

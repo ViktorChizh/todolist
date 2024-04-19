@@ -1,12 +1,12 @@
-import { addTodolistTC, todoListsReducer, TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { addTodolistTC, todoListsReducer, TodolistApp } from "features/pageTodolists/todolist/TodoListsReducer"
+import { tasksReducer, TasksStateType } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { ActionTypeForTest } from "common/utils"
 
 test("ids should be equals", () => {
   const startTasksState: TasksStateType = {}
-  const startTodolistsState: Array<TodolistType> = []
+  const startTodolistsState: Array<TodolistApp> = []
   const date = new Date()
-  let todolist: TodolistType = {
+  let todolist: TodolistApp = {
     title: "new todolist",
     id: "any id",
     addedDate: date,

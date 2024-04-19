@@ -8,13 +8,10 @@ import FormLabel from "@mui/material/FormLabel"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import { Navigate } from "react-router-dom"
-import { useAppSelector } from "common/hooks"
-import { isLoggedInSelector } from "common/selectors"
 import { useLogin } from "features/login/useLogin"
 
 export const Login = () => {
-  const isLoggedIn = useAppSelector(isLoggedInSelector)
-  const { formik } = useLogin()
+  const { isLoggedIn, formik } = useLogin()
 
   if (isLoggedIn) return <Navigate to={"/todolists"} />
 

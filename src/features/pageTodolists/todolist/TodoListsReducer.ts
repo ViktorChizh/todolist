@@ -1,16 +1,16 @@
-import { StatusType } from "app/AppReducer"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { setTasksTC } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
-import { createAppAsyncThunk, thunkTryCatch, serverErrorHandler } from "common/utils"
+import { Status } from "app/AppReducer"
+import { createSlice, isRejected, PayloadAction } from "@reduxjs/toolkit"
+import { setTasksTC } from "features/pageTodolists/todolist/tasks/TasksReducer"
+import { createAppAsyncThunk } from "common/utils"
 import { actions } from "common/actions"
-import { api, TodolistServerType } from "common/api"
+import { api, TodolistServer } from "common/api"
 import { resultCode } from "common/enums"
 
 const slice = createSlice({
   name: "todolists",
-  initialState: [] as TodolistType[],
+  initialState: [] as TodolistApp[],
   reducers: {
-    changeTodoStatusAC(state, action: PayloadAction<{ idTDL: string; todoStatus: StatusType }>) {
+    changeTodoStatusAC(state, action: PayloadAction<{ idTDL: string; todoStatus: Status }>) {
       const index = state.findIndex((t) => t.id === action.payload.idTDL)
       state[index] = {
         ...state[index],
@@ -43,6 +43,10 @@ const slice = createSlice({
       .addCase(actions.clearDataAC, (_, action) => {
         return action.payload.todolists
       })
+      .addMatcher(isRejected(removeTodolistTC), (state, action) => {
+        const todo = state.find((todo) => todo.id === action.meta.arg)
+        if (todo) todo.todoStatus = "idle"
+      })
   },
   selectors: {
     todolistsSelector: (state) => state,
@@ -50,78 +54,59 @@ const slice = createSlice({
 })
 
 //thunks
-export const setTodolistTC = createAppAsyncThunk<{ todolists: TodolistServerType[] }, undefined>(
+export const setTodolistTC = createAppAsyncThunk<{ todolists: TodolistServer[] }, undefined>(
   `${slice.name}/setTodolistTC`,
-  async (_, thunkAPI) => {
-    const { dispatch } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-      let res = await api.getTodolists()
-      res.data.forEach((tl) => dispatch(setTasksTC(tl.id)))
-      return { todolists: res.data }
-    })
+  async (_, { dispatch }) => {
+    const res = await api.getTodolists()
+    res.data.forEach((tl) => dispatch(setTasksTC(tl.id)))
+    return { todolists: res.data }
   },
 )
 export const removeTodolistTC = createAppAsyncThunk<{ idTDL: string }, string>(
   `${slice.name}/removeTodolistTC`,
-  (idTDL: string, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "loading" }))
-      let res = await api.deleteTodolist(idTDL)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(changeTodoStatusAC({ idTDL, todoStatus: "succeeded" }))
-        return { idTDL }
-      } else {
-        serverErrorHandler(res.data, dispatch)
-        dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-        return rejectWithValue(res.data)
-      }
-    })
+  async (idTDL: string, { dispatch, rejectWithValue }) => {
+    dispatch(changeTodoStatusAC({ idTDL, todoStatus: "loading" }))
+    const res = await api.deleteTodolist(idTDL)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "succeeded" }))
+      return { idTDL }
+    } else {
+      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
+      return rejectWithValue(res.data)
+    }
   },
 )
-export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServerType }, string>(
+export const addTodolistTC = createAppAsyncThunk<{ todolist: TodolistServer }, string>(
   `${slice.name}/addTodolistTC`,
-  (title: string, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-      let res = await api.createTodolist(title)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        return { todolist: res.data.data.item }
-      } else {
-        serverErrorHandler<{ item: TodolistServerType }>(res.data, dispatch)
-        return rejectWithValue(res.data)
-      }
-    })
+  async (title: string, { dispatch, rejectWithValue }) => {
+    const res = await api.createTodolist(title)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      return { todolist: res.data.data.item }
+    } else {
+      return rejectWithValue(res.data)
+    }
   },
 )
 export const updateTodolistTitleTC = createAppAsyncThunk<paramT, paramT>(
   `${slice.name}/updateTodolistTitleTC`,
-  (param: { idTDL: string; title: string }, thunkAPI) => {
+  async (param: { idTDL: string; title: string }, { dispatch, rejectWithValue }) => {
     const { idTDL, title } = param
-    const { dispatch, rejectWithValue } = thunkAPI
-    return thunkTryCatch(thunkAPI, async () => {
-      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "loading" }))
-      let res = await api.updateTodolist(idTDL, title)
-      if (res.data.resultCode === resultCode.SUCCEEDED) {
-        dispatch(changeTodoStatusAC({ idTDL, todoStatus: "succeeded" }))
-        return { idTDL, title }
-      } else {
-        serverErrorHandler(res.data, dispatch)
-        dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
-        return rejectWithValue(res.data)
-      }
-    })
+    dispatch(changeTodoStatusAC({ idTDL, todoStatus: "loading" }))
+    const res = await api.updateTodolist(idTDL, title)
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "succeeded" }))
+      return { idTDL, title }
+    } else {
+      dispatch(changeTodoStatusAC({ idTDL, todoStatus: "failed" }))
+      return rejectWithValue(res.data)
+    }
   },
 )
 export const updateTodolistFilterTC = createAppAsyncThunk<paramF, paramF>(
   `${slice.name}/updateTodolistFilterTC`,
-  (param: { idTDL: string; filter: FilterValuesType }, thunkAPI) => {
-    const { idTDL, filter } = param
-    return thunkTryCatch(thunkAPI, async () => {
-      return { idTDL, filter }
-    })
-  },
+  async (param: { idTDL: string; filter: FilterValues }) => param,
 )
+
 export const todoListsReducer = slice.reducer
 export const { changeTodoStatusAC } = slice.actions
 export const { todolistsSelector } = slice.selectors
@@ -134,6 +119,6 @@ export const todolistsThunks = {
 }
 //types
 type paramT = { idTDL: string; title: string }
-type paramF = { idTDL: string; filter: FilterValuesType }
-export type FilterValuesType = "all" | "active" | "completed"
-export type TodolistType = TodolistServerType & { filter: FilterValuesType; todoStatus: StatusType }
+type paramF = { idTDL: string; filter: FilterValues }
+export type FilterValues = "all" | "active" | "completed"
+export type TodolistApp = TodolistServer & { filter: FilterValues; todoStatus: Status }

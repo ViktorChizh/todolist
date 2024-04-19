@@ -1,17 +1,18 @@
-import React, { FC, memo } from "react"
+import React from "react"
 import IconButton from "@mui/material/IconButton"
 import QueueSharpIcon from "@mui/icons-material/QueueSharp"
 import TextField from "@mui/material/TextField"
 import { useAddItemForm } from "common/components/addItemForm/useAddItemForm"
 
-type AddItemProps = {
+type Props = {
   callBack: (title: string) => Promise<any>
   placeholder: string
   style?: { [key: string]: string }
   disabled?: boolean
+  variant?: "outlined" | "filled" | "standard"
 }
 
-export const AddItemForm: FC<AddItemProps> = memo(({ callBack, placeholder, style, disabled }) => {
+export const AddItemForm = ({ callBack, placeholder, style, disabled, variant }: Props) => {
   const { title, error, addTask, onChangeHandler, onKeyPressHandler } = useAddItemForm(callBack)
 
   return (
@@ -27,7 +28,7 @@ export const AddItemForm: FC<AddItemProps> = memo(({ callBack, placeholder, styl
         placeholder={placeholder}
         id="outlined-basic"
         label={error ? error : placeholder}
-        variant="outlined"
+        variant={variant || "outlined"}
         size="small"
         value={title}
         error={!!error}
@@ -47,4 +48,4 @@ export const AddItemForm: FC<AddItemProps> = memo(({ callBack, placeholder, styl
       </IconButton>
     </div>
   )
-})
+}

@@ -1,29 +1,29 @@
-import React, { FC, memo } from "react"
+import React from "react"
 import TextField from "@mui/material/TextField"
 import { useEditableSpan } from "common/components/editableSpan/useEditableSpan"
 
-type EditableSpanProps = {
+type Props = {
   oldTitle: string
   callBack: (newTitle: string) => void
   disabled?: boolean
 }
 
-export const EditableSpan: FC<EditableSpanProps> = memo((props) => {
-  const { edit, newTitle, editFoo, onChangeHandler } = useEditableSpan(props.oldTitle, props.callBack)
+export const EditableSpan = ({ oldTitle, callBack, disabled }: Props) => {
+  const { edit, newTitle, editFoo, onChangeHandler } = useEditableSpan(oldTitle, callBack)
 
-  return edit && !props.disabled ? (
+  return edit && !disabled ? (
     <TextField
       id="outlined-basic"
-      label={props.oldTitle}
+      label={oldTitle}
       variant="outlined"
       size="small"
-      disabled={props.disabled}
+      disabled={disabled}
       onBlur={editFoo}
       value={newTitle}
       onChange={onChangeHandler}
       autoFocus
     />
   ) : (
-    <span onDoubleClick={editFoo}>{props.oldTitle}</span>
+    <span onDoubleClick={editFoo}>{oldTitle}</span>
   )
-})
+}

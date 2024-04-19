@@ -1,4 +1,5 @@
-import React, { memo, useCallback } from "react"
+import React from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -6,29 +7,23 @@ import Typography from "@mui/material/Typography"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import MenuIcon from "@mui/icons-material/Menu"
-import { useLocation, useNavigate } from "react-router-dom"
 import { useActions, useAppSelector } from "common/hooks"
 import { isLoggedInSelector } from "common/selectors"
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const { logoutTC: logout, setAppErrorPageAC } = useActions()
-  // строки 19-32 просто для тренировки использования новых хуков
   const navigate = useNavigate()
   const location = useLocation()
 
-  const onClickErrorHandler = useCallback(() => {
+  const onClickErrorHandler = () => {
     setAppErrorPageAC({ errorPage: false })
     if (isLoggedIn) {
       navigate("/todolists")
     } else {
       navigate("/login")
     }
-  }, [])
-
-  const onClickHandler = useCallback(() => {
-    logout()
-  }, [])
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -53,7 +48,7 @@ function ButtonAppBar() {
               color="inherit"
               aria-label="logout"
               style={{ marginLeft: "10px" }}
-              onClick={onClickHandler}>
+              onClick={logout}>
               LOGOUT
             </Button>
           )}
@@ -63,4 +58,4 @@ function ButtonAppBar() {
   )
 }
 
-export default memo(ButtonAppBar)
+export default ButtonAppBar

@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect } from "react"
+import React, { useEffect } from "react"
 import "./App.css"
 import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
 import LinearProgress from "@mui/material/LinearProgress"
@@ -11,9 +11,9 @@ import { Login } from "features/login/Login"
 import { isInitializedAppSelector, statusAppSelector } from "common/selectors"
 import { useActions, useAppSelector } from "common/hooks"
 
-type AppPropsType = { demo?: boolean }
+type Props = { demo?: boolean }
 
-export const App: FC<AppPropsType> = memo(({ demo = false }) => {
+export const App = ({ demo = false }: Props) => {
   const status = useAppSelector(statusAppSelector)
   const isInitialized = useAppSelector(isInitializedAppSelector)
   const { meTC: me } = useActions()
@@ -22,13 +22,7 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
   }, [])
   if (!isInitialized) {
     return (
-      <div
-        style={{
-          position: "fixed",
-          top: "30%",
-          textAlign: "center",
-          width: "100%",
-        }}>
+      <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
         <CircularProgress />
       </div>
     )
@@ -53,4 +47,4 @@ export const App: FC<AppPropsType> = memo(({ demo = false }) => {
       </div>
     </HashRouter>
   )
-})
+}

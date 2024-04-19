@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { api } from "common/api/api"
-import { TaskType } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { TaskApp } from "features/pageTodolists/todolist/tasks/TasksReducer"
 
 export default {
   title: "API",
@@ -154,7 +154,7 @@ export const UpdateTask = () => {
   const [state, setState] = useState<any>(null)
   const [todolistId, setTodolistId] = useState("")
   const [taskId, setTaskId] = useState("")
-  const [task, setTask] = useState<TaskType>({
+  const [task, setTask] = useState<TaskApp>({
     id: "id1",
     title: "HTML&CSS",
     status: 1,

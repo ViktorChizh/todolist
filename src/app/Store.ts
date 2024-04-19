@@ -1,5 +1,5 @@
 import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import { appReducer } from "./AppReducer"
 import { loginReducer } from "features/login/loginReducer"
@@ -14,13 +14,8 @@ export const store = configureStore({
   },
 })
 //types
-export type AppStateType = ReturnType<typeof store.getState>
-export type AppDispatchType = typeof store.dispatch
+export type AppState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
 //hooks
-export const useAppDispatch = useDispatch<AppDispatchType>
-export const useAppSelector: TypedUseSelectorHook<AppStateType> = useSelector
-
-//@ts-ignore
-window.store = store
-// типизация action в Redux (типизируется вoзврат колбэка в котором лежит thunk):
-// export type AppActionType<ReturnType = void> = ThunkAction<ReturnType, AppRootState, unknown, AnyAction>
+export const useAppDispatch = useDispatch<AppDispatch>
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector

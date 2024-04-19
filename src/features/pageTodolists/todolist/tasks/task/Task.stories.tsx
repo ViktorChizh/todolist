@@ -3,7 +3,7 @@ import { Task } from "features/pageTodolists/todolist/tasks/task/Task"
 import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { v1 } from "uuid"
 import { Meta, StoryObj } from "@storybook/react"
-import { StatusType } from "app/AppReducer"
+import { Status } from "app/AppReducer"
 
 const meta: Meta<typeof Task> = {
   title: "Task component",
@@ -31,7 +31,7 @@ export const TaskExample = () => {
     priority: 1,
     description: "",
     deadline: null,
-    taskStatus: "idle" as StatusType,
+    taskStatus: "idle" as Status,
   }
   const todolistId = "newTodolistId"
 

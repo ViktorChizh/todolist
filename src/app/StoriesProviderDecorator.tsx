@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
-import { AppStateType } from "./Store"
+import { AppState } from "./Store"
 import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReducer"
-import { tasksReducer } from "features/pageTodolists/todolist/tasks/task/TasksReducer"
+import { tasksReducer } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { v1 } from "uuid"
 import { appReducer } from "./AppReducer"
 import { thunk } from "redux-thunk"
@@ -9,7 +9,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import { loginReducer } from "features/login/loginReducer"
 import { Provider } from "react-redux"
 
-const initialState: AppStateType = {
+const initialState: AppState = {
   app: {
     status: "idle",
     error: null,

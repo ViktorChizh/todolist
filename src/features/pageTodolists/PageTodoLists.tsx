@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React from "react"
 import { Container, Grid, Paper } from "@mui/material"
 import { AddItemForm } from "common/components/addItemForm/AddItemForm"
 import { Todolist } from "./todolist/Todolist"
@@ -7,11 +7,11 @@ import { useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
 import { isLoggedInSelector } from "common/selectors"
 
-type PageTodoListsPropsType = {
+type Props = {
   demo?: boolean
 }
 
-export const PageTodoLists: FC<PageTodoListsPropsType> = ({ demo = false }) => {
+export const PageTodoLists = ({ demo = false }: Props) => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   let { todoLists, addTodolist } = usePageTodoList(demo)
   if (!isLoggedIn) {

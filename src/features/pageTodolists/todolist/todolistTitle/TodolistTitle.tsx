@@ -1,24 +1,19 @@
-import React, { FC, useCallback, useMemo } from "react"
+import React from "react"
 import IconButton from "@mui/material/IconButton"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { EditableSpan } from "common/components/editableSpan/EditableSpan"
 import { useActions } from "common/hooks"
-import { TodolistType } from "features/pageTodolists/todolist/TodoListsReducer"
+import { TodolistApp } from "features/pageTodolists/todolist/TodoListsReducer"
 
-type PropsType = {
-  todoList: TodolistType
+type Props = {
+  todoList: TodolistApp
   disabled: boolean
 }
-export const TodolistTitle: FC<PropsType> = ({ todoList, disabled }) => {
+export const TodolistTitle = ({ todoList, disabled }: Props) => {
   const { removeTodolistTC: removeTodoList, updateTodolistTitleTC: updateTodolistTitle } = useActions()
-  const removeTodolist = useCallback(() => removeTodoList(todoList.id), [todoList.id, removeTodoList])
+  const removeTodolist = () => removeTodoList(todoList.id)
+  const updateTodolistHandler = (title: string) => updateTodolistTitle({ idTDL: todoList.id, title })
 
-  const updateTodolistHandler = useCallback(
-    (title: string) => {
-      updateTodolistTitle({ idTDL: todoList.id, title })
-    },
-    [todoList.id, updateTodolistTitle],
-  )
   return (
     <>
       <IconButton
