@@ -1,4 +1,5 @@
 import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from "@reduxjs/toolkit"
+import { tasksThunks, todolistsThunks } from "common/thunks"
 import { AnyAction } from "redux"
 
 const initialState: AppState = {
@@ -6,7 +7,6 @@ const initialState: AppState = {
   error: null,
   errorPage: false,
 }
-
 const slice = createSlice({
   name: "app",
   initialState: initialState,
@@ -28,20 +28,17 @@ const slice = createSlice({
       })
       .addMatcher(isRejected, (state, action: AnyAction) => {
         state.status = "failed"
-        // if (
-        //   action.type === todolistsThunks.addTodolistTC.rejected.type ||
-        //   tasksThunks.addTaskTC.rejected.type ||
-        //   todolistsThunks.addTodolistTC.rejected.type ||
-        //   tasksThunks.addTaskTC.rejected.type ||
-        //   loginThunks.meTC.rejected.type
-        // )
-        //   return
-        if (action?.payload.messages[0] !== "You are not authorized") {
-          if (action.payload) {
-            state.error = action.payload.messages[0]
-          } else {
-            state.error = action.error.message ? action.error.message : "Some error occurred"
-          }
+        if (
+          action.type === todolistsThunks.addTodolistTC.rejected.type ||
+          todolistsThunks.addTodolistTC.rejected.type ||
+          tasksThunks.addTaskTC.rejected.type
+        )
+          return
+        if (action.payload) {
+          if (action.payload.messages[0] === "You are not authorized") return // удаляем очевидное оповещение
+          state.error = action.payload.messages[0]
+        } else {
+          state.error = action.error.message ? action.error.message : "Some error occurred"
         }
       })
   },
@@ -51,7 +48,6 @@ const slice = createSlice({
     errorPageAppSelector: (state) => state.errorPage,
   },
 })
-
 export const appReducer = slice.reducer
 export const { setAppErrorAC, setAppErrorPageAC } = slice.actions
 export const { statusAppSelector, errorAppSelector, errorPageAppSelector } = slice.selectors

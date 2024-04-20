@@ -24,9 +24,9 @@ export const TodolistTitle = ({ todoList, disabled }: Props) => {
         style={{ position: "absolute", top: "-5px", right: "-10px" }}>
         <DeleteIcon />
       </IconButton>
-      <h3 style={{ margin: "0 35px 10px 0", height: "10%", overflowY: "auto" }}>
+      <h4 style={{ margin: "0 35px 10px 0", height: "10%", overflowY: "auto", overflowX: "clip" }}>
         <EditableSpan oldTitle={todoList.title} callBack={updateTodolistHandler} disabled={disabled} />
-      </h3>
+      </h4>
     </>
   )
 }

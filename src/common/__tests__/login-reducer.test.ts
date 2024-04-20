@@ -1,5 +1,6 @@
 import { ActionTypeForTest } from "common/utils"
 import { loginReducer, loginTC, logoutTC, meTC } from "features/login/loginReducer"
+import { useLogin } from "features/login/useLogin"
 
 let startState: { isLoggedIn: boolean; isInitialized: boolean }
 beforeEach(() => (startState = { isLoggedIn: false, isInitialized: false }))

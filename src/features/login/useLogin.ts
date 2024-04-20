@@ -1,7 +1,7 @@
 import { useActions, useAppSelector } from "common/hooks"
 import { FormikHelpers, useFormik } from "formik"
 import { BaseResponse, LoginParams } from "common/api"
-import { isLoggedInSelector } from "features/login/loginReducer"
+import { isLoggedInSelector } from "common/selectors"
 
 export const useLogin = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
