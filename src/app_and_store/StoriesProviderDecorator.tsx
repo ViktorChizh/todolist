@@ -4,19 +4,21 @@ import {todoListsReducer} from '../features/pageTodolists/todolist/TodoListsRedu
 import {tasksReducer} from '../features/pageTodolists/todolist/task/TasksReducer';
 import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {v1} from 'uuid';
-import {appReducer} from './AppReducer';
+import { appReducer, StatusType } from "./AppReducer"
 import {thunk} from 'redux-thunk';
 import {AppStateType} from './Store';
+import { authReducer } from "../auth/authReducer"
 
 const rootReducer = combineReducers({
     todolists: todoListsReducer,
     tasks: tasksReducer,
-    app: appReducer
+    app: appReducer,
+    auth: authReducer
 })
 
 const initialState: AppStateType = {
     app:  {
-        status: 'idle',
+        status: 'idle' as StatusType,
         error: null,
         isInitialized: false,
         errorPageTimeout: 5000
@@ -63,7 +65,7 @@ const initialState: AppStateType = {
         ]
     }
 }
-
+//@ts-ignore
 let storeStorebook = legacy_createStore(rootReducer, initialState, applyMiddleware(thunk))
 
 export const StoriesProviderDecorator = (story: any) => {

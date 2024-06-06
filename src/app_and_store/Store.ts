@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
     auth: authReducer
 })
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
+export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk))
 //types
 export type AppStateType = ReturnType<typeof rootReducer>
 export type AppDispatchType = ThunkDispatch<AppStateType, unknown, StoreReducerActionType>
