@@ -36,5 +36,5 @@ export type AppReducerActionType =
 // actions
 export const setAppStatusAC = (status: StatusType) => ({type: 'app/SET-APP-STATUS', payload: {status}} as const)
 export const setAppErrorAC = (error: string | null) => ({type: 'app/SET-APP-ERROR', payload: {error}} as const)
-export const setAppIsInitializedAC = (value: boolean) => ({type: 'app/SET-ISINITIALIZED', payload: {value}} as const)
+export const setAppIsInitializedAC = (value: boolean) => ({type: 'app/SET-ISINITIALIZED' as const, payload: {value}})
 export const setAppTimeoutAC = (value: number | undefined) => ({type: 'app/SET-TIMEOUT', payload: {value}} as const)

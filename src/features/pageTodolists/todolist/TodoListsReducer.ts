@@ -1,9 +1,10 @@
-import {api, ErrorType, resultCode, TodolistServerType} from '../../../api/api';
-import {AppReducerActionType, setAppStatusAC, StatusType} from '../../../app_and_store/AppReducer';
-import {NetWorkErrorHandler, ServerErrorHandler} from '../../../utils/ErrorsHandler';
-import {AppThunkType} from '../../../app_and_store/Store';
-import axios from 'axios';
-import {fetchTasksTC} from './task/TasksReducer';
+import { api, ErrorType, resultCode, TodolistServerType } from "../../../api/api"
+import { AppReducerActionType, setAppStatusAC, StatusType } from "../../../app_and_store/AppReducer"
+import { NetWorkErrorHandler, ServerErrorHandler } from "../../../utils/ErrorsHandler"
+import { AppThunkType } from "../../../app_and_store/Store"
+import axios from "axios"
+import { fetchTasks } from "./task/TasksReducer"
+import { Dispatch } from "redux"
 
 export const todoListsReducer = (state = [] as TodolistType[], action: TodoListsReducerActionType): TodolistType[] => {
     switch (action.type) {
@@ -67,13 +68,13 @@ export const changeTodoStatusAC = (idTDL: string, todoStatus: StatusType) => ({
 })
 export const cleanTodolistAC = () => ({type: 'todolist/CLEAN-TODOLISTS' as const})
 //thunks
-export const setTodolistTC = (): AppThunkType => dispatch => {
+export const setTodolistTC = ()=> (dispatch: Dispatch) => {
     dispatch(setAppStatusAC('loading'))
     setTimeout(async () => {
         try {
             let res = await api.getTodolists()
             dispatch(setTodolistAC(res.data))
-            res.data.forEach(tl => dispatch(fetchTasksTC(tl.id)))
+            res.data.forEach(tl => dispatch(fetchTasks(tl.id)))
             dispatch(setAppStatusAC('succeeded'))
         } catch
             (e) {

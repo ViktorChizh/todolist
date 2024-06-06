@@ -1,14 +1,12 @@
-import React, {FC, memo, useEffect} from 'react';
-import {AddItemForm} from '../../../components/addItemForm/AddItemForm';
-import {EditableSpan} from '../../../components/editableSpan/EditableSpan';
-import IconButton from '@mui/material/IconButton'
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import {FilterValuesType, TodolistType} from './TodoListsReducer';
-import {Task} from './task/Task';
-import {useTodolist} from './useTodolist';
-import {fetchTasksTC} from './task/TasksReducer';
-import {useAppDispatch} from '../../../app_and_store/Store';
+import React, { FC, memo } from "react"
+import { AddItemForm } from "../../../components/addItemForm/AddItemForm"
+import { EditableSpan } from "../../../components/editableSpan/EditableSpan"
+import IconButton from "@mui/material/IconButton"
+import DeleteIcon from "@mui/icons-material/Delete"
+import Button from "@mui/material/Button"
+import { TodolistType } from "./TodoListsReducer"
+import { Task } from "./task/Task"
+import { useTodolist } from "./useTodolist"
 
 type PropsType = {
     todoList: TodolistType

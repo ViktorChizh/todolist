@@ -1,10 +1,16 @@
-import {todoListsReducer, TodoListsReducerActionType} from '../features/pageTodolists/todolist/TodoListsReducer';
-import {tasksReducer, TasksReducerActionType} from '../features/pageTodolists/todolist/task/TasksReducer';
-import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
-import {thunk, ThunkAction, ThunkDispatch} from 'redux-thunk';
-import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import {appReducer, AppReducerActionType} from './AppReducer';
-import {authReducer, AuthReducerActionsType} from '../auth/authReducer';
+import { todoListsReducer, TodoListsReducerActionType } from "../features/pageTodolists/todolist/TodoListsReducer"
+import {
+    tasksReducer,
+    TasksReducerActionType,
+    tasksWatcher
+} from "../features/pageTodolists/todolist/task/TasksReducer"
+import { applyMiddleware, combineReducers, legacy_createStore } from "redux"
+import { thunk, ThunkAction, ThunkDispatch } from "redux-thunk"
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
+import { appReducer, AppReducerActionType } from "./AppReducer"
+import { authReducer, AuthReducerActionsType, authWatcher } from "../auth/authReducer"
+import createSagaMiddlemare from "redux-saga"
+import { all } from "redux-saga/effects"
 
 const rootReducer = combineReducers({
     todolists: todoListsReducer,
@@ -13,7 +19,16 @@ const rootReducer = combineReducers({
     auth: authReducer
 })
 
-export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk))
+const sagaMiddleware = createSagaMiddlemare()
+
+export const store = legacy_createStore(rootReducer, {}, applyMiddleware(thunk, sagaMiddleware))
+
+sagaMiddleware.run(rootWatcher)
+
+function* rootWatcher() {
+    yield all([authWatcher(), tasksWatcher()])
+}
+
 //types
 export type AppStateType = ReturnType<typeof rootReducer>
 export type AppDispatchType = ThunkDispatch<AppStateType, unknown, StoreReducerActionType>
