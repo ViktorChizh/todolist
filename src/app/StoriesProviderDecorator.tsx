@@ -69,7 +69,7 @@ let storeStorebook = configureStore({
     tasks: tasksReducer,
   },
   preloadedState: initialState,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(thunk),
 })
 
 export const StoriesProviderDecorator = (story: () => ReactNode) => {
