@@ -1,1 +1,2 @@
-# 1-todolist
+# todolist
+## viktorchizh.github.io/todolist/

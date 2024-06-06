@@ -36,7 +36,6 @@ export const App = ({ demo = false }: Props) => {
         <Container fixed style={{ margin: "0", padding: "0", width: "100%", maxWidth: "100%" }}>
           <Routes>
             <Route path={"/login"} element={<Login />} />
-            <Route path={"/1-todolist"} element={<Navigate to={"/todolists"} />} />
             <Route path={"/"} element={<Navigate to={"/todolists"} />} />
             <Route path={"/todolists"} element={<PageTodoLists demo={demo} />} />
             <Route path={"/error404"} element={<Error404 />} />

@@ -1,6 +1,6 @@
 {
   "name": "it-incubator-todolist-ts",
-  "homepage": "https://ViktorChizh.github.io/1-todolist",
+  "homepage": "https://ViktorChizh.github.io/todolist",
   "jest": {
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
