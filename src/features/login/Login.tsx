@@ -60,6 +60,7 @@ export const Login = () => {
                 <div style={{ color: "red" }}>{formik.errors.captcha}</div>
               )}
               <Button
+                style={{marginTop: '20px'}}
                 type="submit"
                 variant="contained"
                 color="primary"
