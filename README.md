@@ -1,2 +1,2 @@
 # todolist
-## viktorchizh.github.io/todolist/
+## https://viktorchizh.github.io/todolist/
