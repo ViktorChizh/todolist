@@ -18,6 +18,7 @@ const initialState: AppState = {
   login: {
     isLoggedIn: false,
     isInitialized: false,
+    captchaUrl: ''
   },
   todolists: [
     {

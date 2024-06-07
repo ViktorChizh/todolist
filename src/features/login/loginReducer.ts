@@ -1,4 +1,4 @@
-import { createSlice, isFulfilled, isRejected } from "@reduxjs/toolkit"
+import { createSlice, isFulfilled, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk } from "common/utils"
 import { api, LoginParams } from "common/api"
 import { actions } from "common/actions"
@@ -9,13 +9,18 @@ const slice = createSlice({
   initialState: {
     isLoggedIn: false,
     isInitialized: false,
+    captchaUrl: ''
   },
-  reducers: {},
+  reducers: {
+    captchaAC(state, action: PayloadAction<{ url: string }>) {
+            state.captchaUrl = action.payload.url
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addMatcher(isFulfilled(meTC, loginTC, logoutTC), (state, action) => {
         state.isInitialized = true
-        state.isLoggedIn = action.payload.isLoggedIn
+        if(action.payload?.isLoggedIn !== undefined) state.isLoggedIn = action.payload.isLoggedIn
       })
       .addMatcher(isRejected(meTC), (state) => {
         state.isInitialized = true
@@ -24,6 +29,8 @@ const slice = createSlice({
   selectors: {
     isLoggedInSelector: (state) => state.isLoggedIn,
     isInitializedAppSelector: (state) => state.isInitialized,
+    captchaUrlAppSelector: (state) => state.captchaUrl,
+
   },
 })
 // thunks
@@ -38,13 +45,20 @@ export const meTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
     }
   },
 )
-export const loginTC = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParams>(
+export const loginTC = createAppAsyncThunk<{ isLoggedIn: boolean } | undefined, LoginParams>(
   `${slice.name}/loginTC`,
-  async (params, { rejectWithValue }) => {
+  async (params, props) => {
+    const { dispatch, rejectWithValue } = props
     let res = await api.login(params)
     if (res.data.resultCode === resultCode.SUCCEEDED) {
+      dispatch(slice.actions.captchaAC({url: ''}))
       return { isLoggedIn: true }
-    } else {
+    }
+    else if (res.data.resultCode === resultCode.CAPTCHA_ERROR) {
+      let captcha = await api.getCaptcha()
+        dispatch(slice.actions.captchaAC({url: captcha.data.url}))
+    }
+    else {
       return rejectWithValue(res.data)
     }
   },
@@ -63,5 +77,5 @@ export const logoutTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
 )
 
 export const loginReducer = slice.reducer
-export const { isLoggedInSelector, isInitializedAppSelector } = slice.selectors
+export const { isLoggedInSelector, isInitializedAppSelector, captchaUrlAppSelector } = slice.selectors
 export const loginThunks = { meTC, loginTC, logoutTC }
