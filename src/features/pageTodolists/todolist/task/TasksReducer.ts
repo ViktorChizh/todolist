@@ -1,20 +1,18 @@
 import { addTodolistACType, changeTodoStatusAC, removeTodolistACType, setTodolistACType } from "../TodoListsReducer"
 import {
-    api,
-    ErrorType,
+    api, ErrorType,
     priority,
     ResponseTasksType,
     ResponseType,
     resultCode,
     status,
-    TaskType
+    TaskType,
+    UpdateServerTaskType
 } from "../../../../api/api"
-import { AppThunkType } from "../../../../app_and_store/Store"
 import { AppReducerActionType, setAppStatusAC, StatusType } from "../../../../app_and_store/AppReducer"
-import { NetWorkErrorHandler, ServerErrorHandler } from "../../../../utils/ErrorsHandler"
 import axios, { AxiosResponse } from "axios"
-import { call, put, takeEvery } from "redux-saga/effects"
-import { Dispatch } from "redux"
+import { call, put, takeEvery, select } from "redux-saga/effects"
+import { NetWorkErrorHandlerSaga, ServerErrorHandlerSaga } from "../../../../utils/ErrorsHandler"
 
 export const tasksReducer = (state = {} as TasksStateType, action: TasksReducerActionType): TasksStateType => {
     switch (action.type) {
@@ -88,7 +86,7 @@ export const changeTaskStatusAC = (idTDL: string, taskId: string, taskStatus: St
     type: 'task/CHANGE-TASKSTATUS' as const,
     payload: {idTDL, taskId, taskStatus}
 })
-export const updateTaskAC = (idTDL: string, taskId: string, model: UpdateTaskType) => ({
+export const updateTaskAC = (idTDL: string, taskId: string, model: Partial<UpdateServerTaskType>) => ({
     type: 'task/UPDATE-TASK' as const,
     payload: {idTDL, taskId, model}
 })
@@ -96,105 +94,111 @@ export const setTasksAC = (tasks: TaskType[], idTDL: string) => ({type: 'task/SE
 export const cleanTasksAC = () => ({type: 'task/CLEAN-TASKS' as const})
 //sagas
 export function* fetchTasksWorkerSaga (action: ReturnType<typeof fetchTasks>){
-    // try {
+    try {
         yield put(setAppStatusAC('loading'))
 
-        let res:AxiosResponse<ResponseTasksType> = yield call(api.getTasks, action.idTDL)
-        yield put(setTasksAC(res.data.items.map(t => ({...t, taskStatus: 'idle'})), action.idTDL))
+        let res:ResponseTasksType = yield call(api.getTasks, action.idTDL)
+        yield put(setTasksAC(res.items.map(t => ({...t, taskStatus: 'idle'})), action.idTDL))
         yield put(setAppStatusAC('succeeded'))
-    // } catch (e) {
-    //     if (axios.isAxiosError<ErrorType>(e)) {
-    //         NetWorkErrorHandler(e, dispatch)
-    //     } else {
-    //         NetWorkErrorHandler(e as Error, dispatch)
-    //     }
-    // }
+    } catch (e) {
+        if (axios.isAxiosError<ErrorType>(e)) {
+           yield* NetWorkErrorHandlerSaga(e)
+        } else {
+            yield* NetWorkErrorHandlerSaga(e as Error)
+        }
+    }
 }
-
 export const fetchTasks= (idTDL: string) => ({type:'tasks/FETCH-TASKS', idTDL})
 
 export function* removeTaskWorkerSaga(action: ReturnType<typeof removeTask>) {
     yield put(setAppStatusAC('loading'))
     yield put(changeTaskStatusAC(action.idTDL, action.taskId, 'loading'))
-        // try {
+        try {
             let res: AxiosResponse<ResponseType> =  yield call(api.deleteTask, action.idTDL, action.taskId)
             if (res.data.resultCode === resultCode.SUCCEEDED) {
                 yield put(removeTaskAC(action.idTDL, action.taskId))
                 yield put(setAppStatusAC('succeeded'))
-        //     } else {
-        //         ServerErrorHandler<{}>(res.data, dispatch)
-        //         dispatch(changeTaskStatusAC(idTDL, taskId, 'failed'))
-        //     }
-        // } catch (e) {
-        //     if (axios.isAxiosError<ErrorType>(e)) {
-        //         NetWorkErrorHandler(e, dispatch)
-        //     } else {
-        //         NetWorkErrorHandler(e as Error, dispatch)
-        //     }
-    yield put(changeTodoStatusAC(action.idTDL, 'failed'))
-        }
-}
-
-export const removeTask= (idTDL: string, taskId: string)=> ({type:'tasks/REMOVE-TASKS', idTDL, taskId})
-
-export function* tasksWatcher() {
-    yield takeEvery("tasks/FETCH-TASKS", fetchTasksWorkerSaga)
-    yield takeEvery("tasks/REMOVE-TASKS", removeTaskWorkerSaga)
-}
-
-//thunks
-
-export const addTaskTC = (idTDL: string, title: string): AppThunkType => async dispatch => {
-    dispatch(setAppStatusAC('loading'))
-        try {
-            let res = await api.createTask(idTDL, title)
-            if (res.data.resultCode === resultCode.SUCCEEDED) {
-                dispatch(addTaskAC({...res.data.data.item, taskStatus: 'idle'}))
-                dispatch(setAppStatusAC('succeeded'))
             } else {
-                ServerErrorHandler<{ item: TaskType }>(res.data, dispatch)
+                put(changeTaskStatusAC(action.idTDL, action.taskId, 'failed'))
+                return ServerErrorHandlerSaga(res.data,)
             }
         } catch (e) {
-            if (axios.isAxiosError<ErrorType>(e)) {
-                NetWorkErrorHandler(e, dispatch)
-            } else {
-                NetWorkErrorHandler(e as Error, dispatch)
-            }
-            dispatch(changeTodoStatusAC(idTDL, 'failed'))
-        }
-}
-export const updateTaskTC = (idTDL: string, taskId: string, model: UpdateTaskType): AppThunkType =>
-    async (dispatch, getState) => {
-        let task = getState().tasks[idTDL].find(t => t.id === taskId)
-        if (!task) return
-        let updateTask = {
-            title: task.title,
-            description: task.description,
-            status: task.status,
-            priority: task.priority,
-            startDate: task.startDate,
-            deadline: task.deadline,
-            ...model
-        }
-        dispatch(setAppStatusAC('loading'))
-        dispatch(changeTaskStatusAC(idTDL, taskId, 'loading'))
-            try {
-                let res = await api.updateTask(idTDL, taskId, updateTask)
-                if (res.data.resultCode === resultCode.SUCCEEDED) {
-                    dispatch(updateTaskAC(idTDL, taskId, model))
-                    dispatch(setAppStatusAC('succeeded'))
-                    dispatch(changeTaskStatusAC(idTDL, taskId, 'succeeded'))
-                } else {
-                    ServerErrorHandler<{}>(res.data, dispatch)
-                    dispatch(changeTaskStatusAC(idTDL, taskId, 'failed'))
-                }
-            } catch (e) {
-                if (axios.isAxiosError<ErrorType>(e)) {
-                    NetWorkErrorHandler(e, dispatch)
-                } else {
-                    NetWorkErrorHandler(e as Error, dispatch)
-                }
-                dispatch(changeTodoStatusAC(idTDL, 'failed'))
-            }
-    }
+            yield put(changeTodoStatusAC(action.idTDL, 'failed'))
 
+            if (axios.isAxiosError<ErrorType>(e)) {
+                return NetWorkErrorHandlerSaga(e)
+            } else {
+               return NetWorkErrorHandlerSaga(e as Error)
+            }
+}
+}
+export const removeTask= (idTDL: string, taskId: string)=> ({type:'tasks/REMOVE-TASKS', idTDL, taskId})
+
+export function* addTaskWorkerSaga(action: ReturnType<typeof addTask>) {
+    yield put(setAppStatusAC('loading'))
+    try {
+        let res: AxiosResponse<ResponseType<{ item: TaskType }>>  = yield call(api.createTask, action.idTDL, action.title)
+        if (res.data.resultCode === resultCode.SUCCEEDED) {
+            yield put(addTaskAC({...res.data.data.item, taskStatus: 'idle'}))
+            yield put(setAppStatusAC('succeeded'))
+        } else {
+            return ServerErrorHandlerSaga(res.data)
+        }
+    } catch (e) {
+        yield put(changeTodoStatusAC(action.idTDL, 'failed'))
+
+        if (axios.isAxiosError<ErrorType>(e)) {
+           return NetWorkErrorHandlerSaga(e)
+        } else {
+           return NetWorkErrorHandlerSaga(e as Error)
+        }
+
+    }
+}
+export const addTask = (idTDL: string, title: string)=> ({type:'tasks/ADD-TASKS', idTDL, title})
+
+export function* updateTaskWorkerSaga(action: ReturnType<typeof updateTask>){
+      const tasks: TaskType[] = yield select(state=> state.tasks[action.idTDL])
+      let task: TaskType | undefined = tasks.find(t => t.id === action.taskId)
+      if (!task) return
+      let newTask: UpdateServerTaskType = {
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          priority: task.priority,
+          startDate: task.startDate,
+          deadline: task.deadline,
+          ...action.model
+      }
+    yield put(setAppStatusAC('loading'))
+    yield put(changeTaskStatusAC(action.idTDL, action.taskId, 'loading'))
+      try {
+          let res: AxiosResponse<ResponseType> = yield call(api.updateTask, action.idTDL, action.taskId, newTask)
+          if (res.data.resultCode === resultCode.SUCCEEDED) {
+              yield put(updateTaskAC(action.idTDL, action.taskId, action.model))
+              yield put(setAppStatusAC('succeeded'))
+              yield put(changeTaskStatusAC(action.idTDL, action.taskId, 'succeeded'))
+          }
+          else {
+              ServerErrorHandlerSaga(res.data)
+              put(changeTaskStatusAC(action.idTDL, action.taskId, 'failed'))
+          }
+      } catch (e) {
+          put(changeTodoStatusAC(action.idTDL, 'failed'))
+
+          if (axios.isAxiosError<ErrorType>(e)) {
+              NetWorkErrorHandlerSaga(e)
+          } else {
+              NetWorkErrorHandlerSaga(e as Error)
+          }
+
+      }
+  }
+export const updateTask = (idTDL: string, taskId: string, model: UpdateTaskType) => ({type:'tasks/UPDATE-TASKS', idTDL, taskId, model})
+
+export function* tasksWatcher(){
+    yield takeEvery("tasks/FETCH-TASKS", fetchTasksWorkerSaga)
+    yield takeEvery("tasks/REMOVE-TASKS", removeTaskWorkerSaga)
+    yield takeEvery("tasks/ADD-TASKS", addTaskWorkerSaga)
+    yield takeEvery("tasks/UPDATE-TASKS", updateTaskWorkerSaga)
+}

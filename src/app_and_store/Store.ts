@@ -1,8 +1,7 @@
 import { todoListsReducer, TodoListsReducerActionType } from "../features/pageTodolists/todolist/TodoListsReducer"
 import {
     tasksReducer,
-    TasksReducerActionType,
-    tasksWatcher
+    TasksReducerActionType, tasksWatcher
 } from "../features/pageTodolists/todolist/task/TasksReducer"
 import { applyMiddleware, combineReducers, legacy_createStore } from "redux"
 import { thunk, ThunkAction, ThunkDispatch } from "redux-thunk"
