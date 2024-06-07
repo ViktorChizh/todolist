@@ -1,6 +1,11 @@
 import { AppReducerActionType, setAppIsInitializedAC, setAppStatusAC } from "../app_and_store/AppReducer"
-import { api, ErrorType, LoginParamsType, ResponseType, resultCode } from "../api/api"
-import { NetWorkErrorHandler, ServerErrorHandler } from "../utils/ErrorsHandler"
+import { api, ErrorType, LoginParamsType, ResponseMeType, ResponseType, resultCode } from "../api/api"
+import {
+    NetWorkErrorHandler,
+    NetWorkErrorHandlerSaga,
+    ServerErrorHandler,
+    ServerErrorHandlerSaga
+} from "../utils/ErrorsHandler"
 import axios, { AxiosResponse } from "axios"
 import { cleanTodolistAC } from "../features/pageTodolists/todolist/TodoListsReducer"
 import { AppThunkType } from "../app_and_store/Store"
@@ -65,19 +70,18 @@ export const logoutTC = (): AppThunkType => async dispatch => {
 export function* meWorkerSaga() {
     yield put(setAppStatusAC('loading'))
     try {
-        const res:AxiosResponse<ResponseType> = yield call(api.me)
-        if (res.data.resultCode === 0) {
+        const res:ResponseType = yield call(api.me)
+        if (res.resultCode === 0) {
             yield put(setIsLoggedInAC(true))
             yield put(setAppStatusAC('succeeded'))
-            // }
-            //     else {
-            //         ServerErrorHandler<ResponseMeType>(res.data, dispatch)
-            //     }
-            // } catch (e) {
-            //     if (axios.isAxiosError<ErrorType>(e)) {
-            //         NetWorkErrorHandler(e, dispatch)
-            //     } else {
-            //         NetWorkErrorHandler(e as Error, dispatch)
+            } else {
+            return ServerErrorHandlerSaga(res)
+                }
+            } catch (e) {
+                if (axios.isAxiosError<ErrorType>(e)) {
+                    return NetWorkErrorHandlerSaga(e)
+                } else {
+                    return NetWorkErrorHandlerSaga(e as Error)
                 }
             } finally {
         yield put(setAppIsInitializedAC(true))

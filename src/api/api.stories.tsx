@@ -74,7 +74,7 @@ export const GetTasks = () => {
     const [todolistId, setTodolistId] = useState('')
     const onClickHandler = () => {
         todolistId && api.getTasks(todolistId)
-            .then((res) => setState(res.data.items))
+            .then((res) => setState(res.items))
     }
     return (<>
         <div>{JSON.stringify(state)}</div>

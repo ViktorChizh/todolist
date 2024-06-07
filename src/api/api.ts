@@ -14,7 +14,7 @@ const instanse = axios.create({
 
 export const api = {
     me() {
-        return instanse.get<ResponseType<ResponseMeType>>('auth/me')
+        return instanse.get<ResponseType<ResponseMeType>>('auth/me').then(res=> res.data)
     },
     login(params: LoginParamsType) {
         return instanse.post<ResponseType<{userId?: number}>>('auth/login', params)
@@ -37,7 +37,7 @@ export const api = {
     },
 
     getTasks(todolistId: string) {
-        return instanse.get<ResponseTasksType>(`todo-lists/${todolistId}/tasks`)
+        return instanse.get<ResponseTasksType>(`todo-lists/${todolistId}/tasks`).then(res=>res.data)
     },
     createTask(todolistId: string, title: string) {
         return instanse
@@ -105,6 +105,7 @@ export type TaskServerType = {
     addedDate: Date
 }
 export type TaskType = TaskServerType & { taskStatus: StatusType }
+
 export type UpdateServerTaskType = {
     title: string
     description: string
