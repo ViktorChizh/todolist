@@ -1,10 +1,12 @@
 import { useActions, useAppSelector } from "common/hooks"
 import { FormikHelpers, useFormik } from "formik"
 import { BaseResponse, LoginParams } from "common/api"
-import { isLoggedInSelector } from "common/selectors"
+import { isLoggedInSelector, captchaUrlAppSelector } from "common/selectors"
+
 
 export const useLogin = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
+  const captchaUrl = useAppSelector(captchaUrlAppSelector)
   let { loginTC: login } = useActions()
 
   const formik = useFormik({
@@ -12,6 +14,7 @@ export const useLogin = () => {
       email: "free@samuraijs.com",
       password: "free",
       rememberMe: false,
+      captcha: ''
     },
     validate: (values) => {
       const errors: Partial<LoginParams> = {}
@@ -36,5 +39,5 @@ export const useLogin = () => {
       }
     },
   })
-  return { isLoggedIn, formik }
+  return { isLoggedIn, formik, captchaUrl }
 }

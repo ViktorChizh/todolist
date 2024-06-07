@@ -11,7 +11,7 @@ import { Navigate } from "react-router-dom"
 import { useLogin } from "features/login/useLogin"
 
 export const Login = () => {
-  const { isLoggedIn, formik } = useLogin()
+  const { isLoggedIn, formik, captchaUrl } = useLogin()
 
   if (isLoggedIn) return <Navigate to={"/todolists"} />
 
@@ -52,7 +52,8 @@ export const Login = () => {
                 label="Remember me"
                 control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
               />
-              {!!formik.values.captcha && (
+              {captchaUrl && <img src={captchaUrl} width='100%' height='100px' alt=''/>}
+              {captchaUrl  && (
                 <TextField label="captcha" margin="normal" {...formik.getFieldProps("captcha")} />
               )}
               {formik.touched.captcha && formik.errors.captcha && (

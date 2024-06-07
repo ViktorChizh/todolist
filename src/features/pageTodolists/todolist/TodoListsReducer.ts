@@ -1,10 +1,13 @@
 import { Status } from "app/AppReducer"
-import { createSlice, isRejected, PayloadAction } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, isRejected, PayloadAction } from "@reduxjs/toolkit"
 import { setTasksTC } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { createAppAsyncThunk } from "common/utils"
 import { actions } from "common/actions"
 import { api, TodolistServer } from "common/api"
 import { resultCode } from "common/enums"
+import { ThunkDispatch } from "redux-thunk"
+import { AppState } from "app/Store"
+import { AnyAction } from "redux"
 
 const slice = createSlice({
   name: "todolists",
@@ -54,9 +57,8 @@ const slice = createSlice({
 })
 
 //thunks
-export const setTodolistTC = createAppAsyncThunk<{ todolists: TodolistServer[] }, undefined>(
-  `${slice.name}/setTodolistTC`,
-  async (_, { dispatch }) => {
+export const setTodolistTC = createAsyncThunk< { todolists: TodolistServer[] }, undefined,
+    {dispatch: ThunkDispatch<AppState, unknown, AnyAction>}>(`${slice.name}/setTodolistTC`, async (_, { dispatch }) => {
     const res = await api.getTodolists()
     res.data.forEach((tl) => dispatch(setTasksTC(tl.id)))
     return { todolists: res.data }
