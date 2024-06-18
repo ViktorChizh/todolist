@@ -42,7 +42,7 @@ export const Login = () => {
               </p>
             </FormLabel>
             <FormGroup>
-              <TextField label="Email" margin="normal" {...formik.getFieldProps("email")} />
+              <TextField type="email" label="Email" margin="normal" {...formik.getFieldProps("email")} />
               {formik.touched.email && formik.errors.email && <div style={{ color: "red" }}>{formik.errors.email}</div>}
               <TextField type="password" label="Password" margin="normal" {...formik.getFieldProps("password")} />
               {formik.touched.password && formik.errors.password && (
