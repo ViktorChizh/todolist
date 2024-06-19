@@ -16,7 +16,7 @@ export const api = {
   me() {
     return instance.get<BaseResponse<ResponseMe>>("auth/me")
   },
-  login(params: LoginParams): Promise<AxiosResponse<ResponseLogin>> {
+  login(params: LoginParams) {
     return instance.post<ResponseLogin>("auth/login", params)
   },
   logout() {

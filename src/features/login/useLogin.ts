@@ -1,14 +1,15 @@
 import { useActions, useAppSelector } from "common/hooks"
 import { FormikHelpers, useFormik } from "formik"
 import { BaseResponse, LoginParams } from "common/api"
-import { isLoggedInSelector, captchaUrlAppSelector } from "common/selectors"
+import { captchaUrlAppSelector, isLoggedInSelector } from "common/selectors"
+import { useState } from "react"
 
 
 export const useLogin = () => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
   const captchaUrl = useAppSelector(captchaUrlAppSelector)
   let { loginTC: login } = useActions()
-
+  const [someError, setSomeError] = useState('')
   const formik = useFormik({
     initialValues: {
       email: "free@samuraijs.com",
@@ -33,11 +34,12 @@ export const useLogin = () => {
     onSubmit: async (values: LoginParams, formikHelpers: FormikHelpers<LoginParams>) => {
       try {
         await login(values).unwrap()
-      } catch (error) {
+      } catch (error: any) {
+        if (error.messages[0]) {setSomeError(error.messages[0])}
         let err = error as BaseResponse
-        err.fieldsErrors && err.fieldsErrors.forEach((e) => formikHelpers.setFieldError(`${e.field}`, `${e.error}`))
+        err.fieldsErrors && err?.fieldsErrors?.forEach((e) => formikHelpers.setFieldError(`${e.field}`, `${e.error}`))
       }
     },
   })
-  return { isLoggedIn, formik, captchaUrl }
+  return { isLoggedIn, formik, captchaUrl, someError}
 }

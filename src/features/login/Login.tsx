@@ -11,7 +11,7 @@ import { Navigate } from "react-router-dom"
 import { useLogin } from "features/login/useLogin"
 
 export const Login = () => {
-  const { isLoggedIn, formik, captchaUrl } = useLogin()
+  const { isLoggedIn, formik, captchaUrl, someError } = useLogin()
 
   if (isLoggedIn) return <Navigate to={"/todolists"} />
 
@@ -67,6 +67,7 @@ export const Login = () => {
                 disabled={!(!formik.errors.email && !formik.errors.password)}>
                 LOGIN
               </Button>
+              {someError && <div style={{ color: "red", margin:'20px auto' }}><b>{someError}</b></div>}
             </FormGroup>
           </FormControl>
         </form>
