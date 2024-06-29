@@ -19,9 +19,9 @@ export const PageTodoLists = ({ demo = false }: Props) => {
   }
 
   return (
-    <Container fixed style={{ maxWidth: "100%" }}>
-      <Grid container>
-        <Paper elevation={5} style={{ width: "100%", padding: "20px  6px 20px 20px", margin: "20px auto" }}>
+    <Container fixed style={{ maxWidth: "100%", padding: '0' }}>
+      <Grid container >
+        <Paper elevation={5} style={{ width: "100%", padding: "20px  6px 20px 20px", margin: "20px 0" }}>
           <h3 style={{ textAlign: "center" }}>Add Todolist</h3>
           <AddItemForm
             callBack={addTodolist}

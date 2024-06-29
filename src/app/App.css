@@ -14,5 +14,7 @@
   opacity: 0.5;
 }
 .App {
+  max-width: 1440px;
   width: 100%;
+  margin: 0 auto;
 }

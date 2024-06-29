@@ -38,7 +38,7 @@ export const meTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
   `${slice.name}/meTC`,
   async (_, { rejectWithValue }) => {
     let res = await api.me()
-    if (res.data.resultCode === 0) {
+    if (res.data.resultCode === resultCode.SUCCEEDED) {
       return { isLoggedIn: true }
     } else {
       return rejectWithValue(res.data)
