@@ -12,12 +12,11 @@ import { isLoggedInSelector } from "common/selectors"
 
 function ButtonAppBar() {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
-  const { logoutTC: logout, setAppErrorPageAC } = useActions()
+  const { logoutTC: logout } = useActions()
   const navigate = useNavigate()
   const location = useLocation()
 
   const onClickErrorHandler = () => {
-    setAppErrorPageAC({ errorPage: false })
     if (isLoggedIn) {
       navigate("/todolists")
     } else {

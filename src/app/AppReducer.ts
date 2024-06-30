@@ -5,7 +5,6 @@ import { AnyAction } from "redux"
 const initialState: AppState = {
   status: "idle",
   error: null,
-  errorPage: false,
 }
 const slice = createSlice({
   name: "app",
@@ -13,9 +12,6 @@ const slice = createSlice({
   reducers: {
     setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
       state.error = action.payload.error
-    },
-    setAppErrorPageAC(state, action: PayloadAction<{ errorPage: boolean }>) {
-      state.errorPage = action.payload.errorPage
     },
   },
   extraReducers: (builder) => {
@@ -45,16 +41,14 @@ const slice = createSlice({
   selectors: {
     statusAppSelector: (state) => state.status,
     errorAppSelector: (state) => state.error,
-    errorPageAppSelector: (state) => state.errorPage,
   },
 })
 export const appReducer = slice.reducer
-export const { setAppErrorAC, setAppErrorPageAC } = slice.actions
-export const { statusAppSelector, errorAppSelector, errorPageAppSelector } = slice.selectors
+export const { setAppErrorAC } = slice.actions
+export const { statusAppSelector, errorAppSelector } = slice.selectors
 //types
 export type Status = "idle" | "loading" | "succeeded" | "failed"
 export type AppState = {
   status: Status
   error: string | null
-  errorPage: boolean
 }
