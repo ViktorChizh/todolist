@@ -32,9 +32,7 @@ function ButtonAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} textAlign="center" color="secondary">
-            <h1 style={{ fontSize: "50px", lineHeight: "50px", margin: "0" }}>
-              <i>Todolists</i>
-            </h1>
+            <h1 style={{ fontSize: "50px", lineHeight: "50px", margin: "0" }}><i>Todolists</i></h1>
           </Typography>
           {location.pathname === "/error404" && (
             <Button variant="contained" color="secondary" aria-label="logout" onClick={onClickErrorHandler}>
