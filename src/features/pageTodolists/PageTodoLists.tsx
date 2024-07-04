@@ -1,19 +1,26 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Container, Grid, Paper } from "@mui/material"
 import { AddItemForm } from "common/components/addItemForm/AddItemForm"
 import { Todolist } from "./todolist/Todolist"
-import { usePageTodoList } from "./usePageTodoList"
 import { useAppSelector } from "app/Store"
 import { Navigate } from "react-router-dom"
-import { isLoggedInSelector } from "common/selectors"
+import { isLoggedInSelector, todolistsSelector } from "common/selectors"
+import { useActions } from "common/hooks"
 
-type Props = {
-  demo?: boolean
-}
+type Props = {demo?: boolean}
 
 export const PageTodoLists = ({ demo = false }: Props) => {
   const isLoggedIn = useAppSelector(isLoggedInSelector)
-  let { todoLists, addTodolist } = usePageTodoList(demo)
+  const todoLists = useAppSelector(todolistsSelector)
+  const { addTodolistTC: addTodoList, setTodolistTC: setTodolist } = useActions()
+
+  const addTodolist = async (title: string) => addTodoList(title).unwrap()
+
+  useEffect(() => {
+    if (demo || !isLoggedIn) return
+    setTodolist()
+  }, [])
+
   if (!isLoggedIn) {
     return <Navigate to={"/login"} />
   }
@@ -29,16 +36,13 @@ export const PageTodoLists = ({ demo = false }: Props) => {
             style={{ width: "100%", maxWidth: "100%" }}
           />
           {!todoLists.length && (
-            <span
-              style={{ color: "red", display: "block", marginTop: "15px", fontWeight: "bold", fontStyle: "italic" }}>
-              TodoLists are empty
+            <span style={{ color: "red", display: "block", marginTop: "15px"}}>
+              <b><i>TodoLists are empty</i></b>
             </span>
           )}
         </Paper>
       </Grid>
-      <Grid
-        container
-        style={{ width: "100%", height: "380px", padding: "10px", flexWrap: "nowrap", overflowX: "auto", gap: "10px" }}>
+      <Grid container style={{padding: "10px", flexWrap: "nowrap", overflowX: "auto", gap: "10px" }}>
         {todoLists.map((tl) => {
           return (
             <Grid key={tl.id} style={{ margin: "0 auto" }}>
