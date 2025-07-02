@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react"
+import { Meta } from "@storybook/react"
 import { StoriesProviderDecorator } from "app/StoriesProviderDecorator"
 import { Todolist } from "features/pageTodolists/todolist/Todolist"
 import { FilterValues, TodolistApp } from "features/pageTodolists/todolist/TodoListsReducer"
@@ -17,8 +17,6 @@ const meta: Meta<typeof Todolist> = {
 }
 
 export default meta
-
-type Story = StoryObj<typeof Todolist>
 
 export const TodolistExample = () => {
   let todolist: TodolistApp = {
