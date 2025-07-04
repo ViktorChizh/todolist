@@ -85,8 +85,8 @@ const initialState: AppStoreType = {
   },
 }
 
-let storeStorebook = legacy_createStore(rootReducer, initialState as AppStoreType & undefined)
+let storeStorybook = legacy_createStore(rootReducer, initialState as AppStoreType & undefined)
 
 export const StoriesProviderDecorator = (story: any) => {
-  return <Provider store={storeStorebook}>{story()}</Provider>
+  return <Provider store={storeStorybook}>{story()}</Provider>
 }

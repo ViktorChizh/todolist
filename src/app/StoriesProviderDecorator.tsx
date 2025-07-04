@@ -4,7 +4,6 @@ import { todoListsReducer } from "features/pageTodolists/todolist/TodoListsReduc
 import { tasksReducer } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { v1 } from "uuid"
 import { appReducer } from "./AppReducer"
-import { thunk } from "redux-thunk"
 import { configureStore } from "@reduxjs/toolkit"
 import { loginReducer } from "features/login/loginReducer"
 import { Provider } from "react-redux"
@@ -17,7 +16,7 @@ const initialState: AppState = {
   login: {
     isLoggedIn: false,
     isInitialized: false,
-    captchaUrl: ''
+    captchaUrl: "",
   },
   todolists: [
     {
@@ -61,7 +60,7 @@ const initialState: AppState = {
   },
 }
 
-let storeStorebook = configureStore({
+let storeStorybook = configureStore({
   reducer: {
     app: appReducer,
     login: loginReducer,
@@ -72,5 +71,5 @@ let storeStorebook = configureStore({
 })
 
 export const StoriesProviderDecorator = (story: () => ReactNode) => {
-  return <Provider store={storeStorebook}>{story()}</Provider>
+  return <Provider store={storeStorybook}>{story()}</Provider>
 }
