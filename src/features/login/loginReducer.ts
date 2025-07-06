@@ -33,7 +33,7 @@ const slice = createSlice({
 
   },
 })
-// thunks
+
 export const meTC = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
   `${slice.name}/meTC`,
   async (_, { rejectWithValue }) => {
