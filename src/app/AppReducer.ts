@@ -46,7 +46,7 @@ const slice = createSlice({
 export const appReducer = slice.reducer
 export const { setAppErrorAC } = slice.actions
 export const { statusAppSelector, errorAppSelector } = slice.selectors
-//types
+
 export type Status = "idle" | "loading" | "succeeded" | "failed"
 export type AppState = {
   status: Status
