@@ -13,9 +13,9 @@ export const store = configureStore({
     todolists: todoListsReducer,
   },
 })
-//types
+
 export type AppState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-//hooks
+
 export const useAppDispatch = useDispatch<AppDispatch>
 export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector

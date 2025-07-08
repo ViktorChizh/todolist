@@ -60,7 +60,7 @@ export const api = {
     return instance.put<BaseResponse>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
   },
 }
-// types
+
 export type TodolistServer = {
   id: string
   title: string
@@ -87,7 +87,6 @@ export type UpdateServerTask = {
   startDate: Date | null
   deadline: Date | null
 }
-
 export type BaseResponse<T = {}> = {
   resultCode: resultCode
   messages: string[]
