@@ -24,7 +24,7 @@ export const Login = () => {
               <p>
                 To log in get registered &nbsp;
                 <a href={"https://social-network.samuraijs.com/"} target={"_blank"} rel="noreferrer">
-                  here
+                  here &nbsp;
                 </a>
               </p>
               <p style={{ color: "lightgreen" }}>or use common test account credentials:</p>
@@ -52,22 +52,24 @@ export const Login = () => {
                 label="Remember me"
                 control={<Checkbox {...formik.getFieldProps("rememberMe")} checked={formik.values.rememberMe} />}
               />
-              {captchaUrl && <img src={captchaUrl} width='100%' height='100px' alt=''/>}
-              {captchaUrl  && (
-                <TextField label="captcha" margin="normal" {...formik.getFieldProps("captcha")} />
-              )}
+              {captchaUrl && <img src={captchaUrl} width="100%" height="100px" alt="" />}
+              {captchaUrl && <TextField label="captcha" margin="normal" {...formik.getFieldProps("captcha")} />}
               {formik.touched.captcha && formik.errors.captcha && (
                 <div style={{ color: "red" }}>{formik.errors.captcha}</div>
               )}
               <Button
-                style={{marginTop: '20px'}}
+                style={{ marginTop: "20px" }}
                 type="submit"
                 variant="contained"
                 color="primary"
                 disabled={!(!formik.errors.email && !formik.errors.password)}>
                 LOGIN
               </Button>
-              {someError && <div style={{ color: "red", margin:'20px auto' }}><b>{someError}</b></div>}
+              {someError && (
+                <div style={{ color: "red", margin: "20px auto" }}>
+                  <b>{someError}</b>
+                </div>
+              )}
             </FormGroup>
           </FormControl>
         </form>
