@@ -1,9 +1,9 @@
 import { ActionTypeForTest } from "common/utils"
 import { loginReducer, loginTC, logoutTC, meTC } from "features/login/loginReducer"
-import { useLogin } from "features/login/useLogin"
 
-let startState: { isLoggedIn: boolean; isInitialized: boolean }
-beforeEach(() => (startState = { isLoggedIn: false, isInitialized: false }))
+
+let startState: { isLoggedIn: boolean; isInitialized: boolean; captchaUrl: string }
+beforeEach(() => (startState = { isLoggedIn: false, isInitialized: false, captchaUrl: "" }))
 
 test("loginTC should return isLoggedIn=true", () => {
   const action: ActionTypeForTest<typeof loginTC.fulfilled> = {

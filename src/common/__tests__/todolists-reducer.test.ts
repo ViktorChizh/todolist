@@ -12,9 +12,7 @@ import { v1 } from "uuid"
 import { Status } from "app/AppReducer"
 import { TodolistServer } from "common/api/api"
 import { ActionTypeForTest } from "common/utils"
-import { tasksReducer } from "features/pageTodolists/todolist/tasks/TasksReducer"
 import { clearDataAC } from "common/actions/common-actions"
-import { createAction } from "@reduxjs/toolkit"
 
 let todolistId1: string
 let todolistId2: string
