@@ -44,7 +44,7 @@ export type TaskType = {
   order: number
   addedDate: Date
 }
-export type UpdateServerTaskType = {
+export type UpdateTaskServerType = {
   title: string
   description: string
   status: status
@@ -87,7 +87,7 @@ export const api = {
   deleteTask(todolistId: string, id: string) {
     return instanse.delete<TaskType>(`todo-lists/${todolistId}/tasks/${id}`)
   },
-  updateTask(todolistId: string, id: string, updateTask: UpdateServerTaskType) {
+  updateTask(todolistId: string, id: string, updateTask: UpdateTaskServerType) {
     return instanse.put<TaskType>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
   },
 }

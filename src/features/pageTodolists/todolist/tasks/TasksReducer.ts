@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { createAppAsyncThunk } from "common/utils"
 import { resultCode } from "common/enums"
 import { actions } from "common/actions"
-import { api, TaskServer, UpdateServerTask } from "common/api"
+import { api, TaskServer, UpdateTaskServer } from "common/api"
 import { Status } from "app/AppReducer"
 
 const slice = createSlice({
@@ -125,5 +125,5 @@ export const tasksThunks = { setTasksTC, removeTaskTC, addTaskTC, updateTaskTC }
 //types
 export type TaskApp = TaskServer & { taskStatus: Status }
 export type TasksState = { [key: string]: TaskApp[] }
-export type UpdateTaskModel = Partial<UpdateServerTask>
+export type UpdateTaskModel = Partial<UpdateTaskServer>
 type typeParam = { idTDL: string; taskId: string; model: UpdateTaskModel }

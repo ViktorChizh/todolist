@@ -56,7 +56,7 @@ export const api = {
   deleteTask(todolistId: string, id: string) {
     return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${id}`)
   },
-  updateTask(todolistId: string, id: string, updateTask: UpdateServerTask) {
+  updateTask(todolistId: string, id: string, updateTask: UpdateTaskServer) {
     return instance.put<BaseResponse>(`todo-lists/${todolistId}/tasks/${id}`, updateTask)
   },
 }
@@ -79,7 +79,7 @@ export type TaskServer = {
   order: number
   priority: TaskPriorities
 }
-export type UpdateServerTask = {
+export type UpdateTaskServer = {
   title: string
   description: string
   status: TaskStatuses
